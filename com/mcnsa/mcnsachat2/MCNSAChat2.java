@@ -36,20 +36,25 @@ public class MCNSAChat2 extends JavaPlugin {
 		log.info("[MCNSAChat2] " + info);
 	}
 	
+	// for error reporting
+	public void error(String info) {
+		log.info("[MCNSAChat2] <ERROR> " + info);
+	}
+	
 	// for debugging
 	// (disable for final release)
 	public void debug(String info) {
-		log.info("[MCNSAChat2:DEBUG] " + info);
+		log.info("[MCNSAChat2] <DEBUG> " + info);
 	}
 
 	// load the permissions plugin
 	public void setupPermissions() {
 		if(Bukkit.getServer().getPluginManager().isPluginEnabled("PermissionsEx")) {
 			this.permissions = PermissionsEx.getPermissionManager();
-			log.info("[MCNSARanks] PermissionsEx successfully loaded!");
+			log.info("permissions successfully loaded!");
 		}
 		else {
-			log.warning("[MCNSARanks] ERROR: PermissionsEx not found!");
+			error("PermissionsEx not found!");
 		}
 	}
 	
