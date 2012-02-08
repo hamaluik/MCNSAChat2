@@ -1,2 +1,6 @@
 MCNSAChat is the second coming of MCNSAChat. It is being re-written to be better, more efficient, and
 provide multiworld support and modern-day permissions.
+
+Some new features could potentially include:
+	- Per-user suppression of various messages (including notifications from other plugins)
+	- '*' user selections (for example, to move all users to 'G' with a single command)
