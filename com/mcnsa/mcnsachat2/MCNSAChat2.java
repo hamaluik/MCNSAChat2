@@ -15,6 +15,9 @@ public class MCNSAChat2 extends JavaPlugin {
 	// keep track of permissions
 	public PermissionManager permissions = null;
 	
+	// keep track of configuration options
+	ConfigManager config = new ConfigManager(this);
+	
 	public void onEnable() {
 		// set up permissions
 		this.setupPermissions();
