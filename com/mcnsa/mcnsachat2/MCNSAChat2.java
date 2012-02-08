@@ -1,5 +1,8 @@
 package com.mcnsa.mcnsachat2;
 
+import com.mcnsa.mcnsachat2.commands.*;
+import com.mcnsa.mcnsachat2.util.*;
+
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,6 +24,9 @@ public class MCNSAChat2 extends JavaPlugin {
 	public void onEnable() {
 		// set up permissions
 		this.setupPermissions();
+		
+		// load configuration
+		config.load("MCNSAChat2/MCNSAChat2.yml");
 		
 		// import the plugin manager
 		PluginManager pm = this.getServer().getPluginManager();
