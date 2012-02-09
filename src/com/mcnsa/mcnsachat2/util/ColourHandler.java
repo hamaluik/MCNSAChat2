@@ -1,7 +1,7 @@
 package com.mcnsa.mcnsachat2.util;
 
 public class ColourHandler {
-	// make it a static class: private constructor, static methods
+	// make it a static class) private constructor, static methods
 	private ColourHandler() {}
 
 	public static String translateName(String name) {
@@ -9,39 +9,37 @@ public class ColourHandler {
 		String colour = new String("&f");
 		
 		// map it!
-		switch(name.toLowerCase()) {
-			case "black": colour = "&0"; break;
-			case "dblue": colour = "&1"; break;
-			case "dark blue": colour = "&1"; break;
-			case "dgreen": colour = "&2"; break;
-			case "dark green": colour = "&2"; break;
-			case "dteal": colour = "&3"; break;
-			case "dark teal": colour = "&3"; break;
-			case "daqua": colour = "&3"; break;
-			case "dark aqua": colour = "&3"; break;
-			case "dred": colour = "&4"; break;
-			case "dark red": colour = "&4"; break;
-			case "purple": colour = "&5"; break;
-			case "dpink": colour = "&5"; break;
-			case "dark pink": colour = "&5"; break;
-			case "gold": colour = "&6"; break;
-			case "orange": colour = "&6"; break;
-			case "grey": colour = "&7"; break;
-			case "gray": colour = "&7"; break;
-			case "dgrey": colour = "&8"; break;
-			case "dark grey": colour = "&8"; break;
-			case "dgray": colour = "&8"; break;
-			case "dark gray": colour = "&8"; break;
-			case "blue": colour = "&9"; break;
-			case "green": colour = "&a"; break;
-			case "bright green": colour = "&a"; break;
-			case "teal": colour = "&b"; break;
-			case "aqua": colour = "&b"; break;
-			case "red": colour = "&c"; break;
-			case "pink": colour = "&d"; break;
-			case "yellow": colour = "&e"; break;
-			case "white": colour = "&f"; break;
-		}
+		if(name.equalsIgnoreCase("black")) colour = "&0";
+		else if(name.equalsIgnoreCase("dblue")) colour = "&1";
+		else if(name.equalsIgnoreCase("dark blue")) colour = "&1";
+		else if(name.equalsIgnoreCase("dgreen")) colour = "&2";
+		else if(name.equalsIgnoreCase("dark green")) colour = "&2";
+		else if(name.equalsIgnoreCase("dteal")) colour = "&3";
+		else if(name.equalsIgnoreCase("dark teal")) colour = "&3";
+		else if(name.equalsIgnoreCase("daqua")) colour = "&3";
+		else if(name.equalsIgnoreCase("dark aqua")) colour = "&3";
+		else if(name.equalsIgnoreCase("dred")) colour = "&4";
+		else if(name.equalsIgnoreCase("dark red")) colour = "&4";
+		else if(name.equalsIgnoreCase("purple")) colour = "&5";
+		else if(name.equalsIgnoreCase("dpink")) colour = "&5";
+		else if(name.equalsIgnoreCase("dark pink")) colour = "&5";
+		else if(name.equalsIgnoreCase("gold")) colour = "&6";
+		else if(name.equalsIgnoreCase("orange")) colour = "&6";
+		else if(name.equalsIgnoreCase("grey")) colour = "&7";
+		else if(name.equalsIgnoreCase("gray")) colour = "&7";
+		else if(name.equalsIgnoreCase("dgrey")) colour = "&8";
+		else if(name.equalsIgnoreCase("dark grey")) colour = "&8";
+		else if(name.equalsIgnoreCase("dgray")) colour = "&8";
+		else if(name.equalsIgnoreCase("dark gray")) colour = "&8";
+		else if(name.equalsIgnoreCase("blue")) colour = "&9";
+		else if(name.equalsIgnoreCase("green")) colour = "&a";
+		else if(name.equalsIgnoreCase("bright green")) colour = "&a";
+		else if(name.equalsIgnoreCase("teal")) colour = "&b";
+		else if(name.equalsIgnoreCase("aqua")) colour = "&b";
+		else if(name.equalsIgnoreCase("red")) colour = "&c";
+		else if(name.equalsIgnoreCase("pink")) colour = "&d";
+		else if(name.equalsIgnoreCase("yellow")) colour = "&e";
+		else if(name.equalsIgnoreCase("white")) colour = "&f";
 		
 		return colour;
 	}

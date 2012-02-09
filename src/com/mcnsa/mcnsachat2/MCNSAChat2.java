@@ -1,6 +1,5 @@
 package com.mcnsa.mcnsachat2;
 
-import com.mcnsa.mcnsachat2.commands.*;
 import com.mcnsa.mcnsachat2.util.*;
 
 import java.util.logging.Logger;

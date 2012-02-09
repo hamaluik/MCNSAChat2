@@ -5,11 +5,6 @@ import com.mcnsa.mcnsachat2.MCNSAChat2;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class ConfigManager {
 	// store the main plugin for later access
@@ -28,7 +23,7 @@ public class ConfigManager {
 		options.defaultChannel = config.getString("default-channel");
 		plugin.debug("default channel: " + options.defaultChannel);
 		options.defaultColour = ColourHandler.translateName(config.getString("default-colour"));
-		plugin.debug("default colour: " + options.options.defaultColour.toString());
+		plugin.debug("default colour: " + options.defaultColour.toString());
 		options.announceTimeouts = config.getBoolean("announce-timeouts");
 		plugin.debug("local chat radius: " + options.localChatRadius.toString());
 	}
