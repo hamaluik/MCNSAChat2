@@ -9,7 +9,7 @@ default-channel: G
 default-colour: grey
 
 # announce timeout to the entire server?
-announce-timouts: yes
+announce-timeouts: yes
 
 # anti-spam settings
 spam:
