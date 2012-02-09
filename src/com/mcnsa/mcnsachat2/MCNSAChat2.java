@@ -29,7 +29,7 @@ public class MCNSAChat2 extends JavaPlugin {
 		this.setupPermissions();
 		
 		// load configuration
-		config.load("MCNSAChat2/MCNSAChat2.yml");
+		config.load();
 		
 		// import the plugin manager
 		PluginManager pm = this.getServer().getPluginManager();

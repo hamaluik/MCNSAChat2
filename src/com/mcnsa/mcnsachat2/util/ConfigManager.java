@@ -20,16 +20,14 @@ public class ConfigManager {
 		// see if it exists by trying to open it
 		File configFile = new File(file);
 		Boolean exists = configFile.exists();
-		// close up
-		configFile.close();
 		return exists;
 	}
-	
+
 	public Boolean load() {
 		// make sure the config exists before we try to load it!
 		if(!configExists(plugin.getDataFolder() + "/config.yml")) {
 			// save the file
-			plugin.info("configuration did not exist, creating default..");
+			plugin.log("configuration did not exist, creating default..");
 			// create the file
 			new File(plugin.getDataFolder().toString()).mkdir();
 			if(!save()) {
@@ -44,7 +42,7 @@ public class ConfigManager {
 	}
 
 	public Boolean save() {
-		plugin.info("saving configuration...");
+		plugin.log("saving configuration...");
 		// open the file
 		File configFile = new File(plugin.getDataFolder() + "/config.yml");
 		try {
@@ -60,11 +58,10 @@ public class ConfigManager {
 
 			// and close up shop
 			out.close();
-			configFile.close();
 		}
 		catch(IOException ex) {
 			// something went wrong!
-			log.error("something went wrong when saving the configuration!");
+			plugin.error("something went wrong when saving the configuration!");
 			return false;
 		}
 		return true;
