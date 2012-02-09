@@ -13,11 +13,13 @@ public class PListener extends PlayerListener {
 		plugin = instance;
 	}
 
+	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		// a player joined!
 		// sort out their channel etc
 	}
 
+	@Override
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		// if the event is cancelled,
 		// get out of here!

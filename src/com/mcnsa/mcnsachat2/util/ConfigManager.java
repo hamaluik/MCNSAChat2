@@ -2,6 +2,8 @@ package com.mcnsa.mcnsachat2.util;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
 
+import java.util.HashMap;
+
 public class ConfigManager {
 	// store the main plugin for later access
 	static MCNSAChat2 plugin = null;
@@ -19,8 +21,8 @@ public class ConfigManager {
 		public Float localChatRadius = new Float(200);
 		public String defaultChannel = new String("");
 		public ColourHandler defaultColour = new ColourHandler("grey");
-		public Boolean announceTimeouts = new Boolean(True);
-		public SpamConfig spamConfig = new SpamConfig(5, 3, 5);
+		public Boolean announceTimeouts = true;
+		public SpamConfig spamConfig = new SpamConfig(5.0f, 3.0f, 5.0f);
 	}
 
 	// hard-channel configurations
@@ -28,10 +30,10 @@ public class ConfigManager {
 		public String name = new String("");
 		public ColourHandler colour = new ColourHandler("grey");
 		public String permissions = new String("channel");
-		public Boolean local = new Boolean(false);
+		public Boolean local = false;
 		public String alias = new String("");
 
-		public ChannelHardConfig(String _name, ColourHandler _colour, String _perms, Boolean _local, String _alias) {
+		public ChannelHardConfig(String _name, ColourHandler _colour, String _permissions, Boolean _local, String _alias) {
 			name = _name;
 			colour = _colour;
 			permissions = _permissions;
