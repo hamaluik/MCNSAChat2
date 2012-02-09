@@ -19,11 +19,11 @@ public class CommandChannel implements Command {
 	}
 
 	public String getCommand() {
-		return "*";
+		return "ch";
 	}
 
 	public String getArguments() {
-		return "";
+		return "<channel>";
 	}
 
 	public String getDescription() {
