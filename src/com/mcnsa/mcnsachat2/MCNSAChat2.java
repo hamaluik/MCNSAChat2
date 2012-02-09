@@ -1,14 +1,13 @@
 package com.mcnsa.mcnsachat2;
 
+import com.mcnsa.mcnsachat2.listeners.PlayerListener;
 import com.mcnsa.mcnsachat2.util.*;
 
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.entity.Player;
-import org.bukkit.command.CommandSender;
 
 import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
@@ -23,15 +22,29 @@ public class MCNSAChat2 extends JavaPlugin {
 	// keep track of configuration options
 	ConfigManager config = new ConfigManager(this);
 	
+	// keep track of listeners
+	PlayerListener playerListener = null;
+	
+	// and keep track of the chat and channel handlers
+	ChannelHandler channelHandler = null;
+	
 	public void onEnable() {
 		// set up permissions
 		this.setupPermissions();
 		
 		// load configuration
+		// and save it again (for defaults)
+		this.getConfig().options().copyDefaults(true);
 		config.load(getConfig());
+		this.saveConfig();
 		
-		// import the plugin manager
-		PluginManager pm = this.getServer().getPluginManager();
+		// set up listeners
+		playerListener = new PlayerListener(this);
+		
+		// set up the channel handler
+		channelHandler = new ChannelHandler(config);
+		
+		// 
 		
 		// routines for when the plugin gets enabled
 		log("plugin enabled!");
@@ -62,7 +75,7 @@ public class MCNSAChat2 extends JavaPlugin {
 	public void setupPermissions() {
 		if(Bukkit.getServer().getPluginManager().isPluginEnabled("PermissionsEx")) {
 			this.permissions = PermissionsEx.getPermissionManager();
-			log.info("permissions successfully loaded!");
+			log("permissions successfully loaded!");
 		}
 		else {
 			error("PermissionsEx not found!");
@@ -88,15 +101,5 @@ public class MCNSAChat2 extends JavaPlugin {
 	// strip colour tags from strings..
 	public String stripColours(String str) {
 		return str.replaceAll("(&([a-f0-9]))", "");
-	}
-	
-	// return a message to a command sender
-	public void returnMessage(CommandSender sender, String message) {
-		if(sender instanceof Player) {
-			sender.sendMessage(processColours(message));
-		}
-		else {
-			sender.sendMessage(stripColours(message));
-		}
 	}
 }
