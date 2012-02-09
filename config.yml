@@ -1,0 +1,37 @@
+---
+# radius of local chat channel (in blocks)
+local-chat-radius: 200
+
+# default chat channel that new users will join
+default-channel: G
+
+# default new channel colour
+default-colour: grey
+
+# announce timeout to the entire server?
+announce-timouts: yes
+
+# anti-spam settings
+spam:
+    limit: 5
+    period: 3
+    timeout: 5
+
+# hard channels
+hard-channels:
+    G:
+        colour: grey
+        alias: g
+        permission: global
+    L:
+       colour: pink
+       alias: lo
+       permission: local
+    MOD:
+       colour: purple
+       alias: m
+       permission: mod
+    ADMIN:
+       colour: green
+       alias: a
+       permission: admin

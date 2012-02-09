@@ -56,4 +56,4 @@ env = Environment(
 env.Java('classes', 'src')
 
 # assemble the jar
-env.Jar(target = 'bin/MCNSAChat2.jar', source = ['classes', 'plugin.yml'])
+env.Jar(target = 'bin/MCNSAChat2.jar', source = ['classes', 'plugin.yml', 'config.yml'])

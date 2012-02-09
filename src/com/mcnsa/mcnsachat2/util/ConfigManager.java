@@ -2,6 +2,8 @@ package com.mcnsa.mcnsachat2.util;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
 
+import org.bukkit.configuration.file.FileConfiguration;
+
 import java.util.HashMap;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,55 +18,9 @@ public class ConfigManager {
 		plugin = instance;
 	}
 
-	public Boolean configExists(String file) {
-		// see if it exists by trying to open it
-		File configFile = new File(file);
-		Boolean exists = configFile.exists();
-		return exists;
-	}
-
-	public Boolean load() {
-		// make sure the config exists before we try to load it!
-		if(!configExists(plugin.getDataFolder() + "/config.yml")) {
-			// save the file
-			plugin.log("configuration did not exist, creating default..");
-			// create the file
-			new File(plugin.getDataFolder().toString()).mkdir();
-			if(!save()) {
-				// if the save failed,
-				// get out of here!
-				plugin.error("failed to save the configuration!");
-				return false;
-			}
-		}
-		// TODO: load the config!
-		return true;
-	}
-
-	public Boolean save() {
-		plugin.log("saving configuration...");
-		// open the file
-		File configFile = new File(plugin.getDataFolder() + "/config.yml");
-		try {
-			if(!configFile.exists()) {
-				// make the file if it doesn't exist
-				configFile.createNewFile();
-			}
-			// now write out to it
-			FileWriter out = new FileWriter(plugin.getDataFolder() + "/config.yml");
-
-			// the header
-			out.write("---\r\n");
-
-			// and close up shop
-			out.close();
-		}
-		catch(IOException ex) {
-			// something went wrong!
-			plugin.error("something went wrong when saving the configuration!");
-			return false;
-		}
-		return true;
+	// load the configuration
+	public void load(FileConfiguration config) {
+		
 	}
 
 	// create a "class" in here to store config options!
