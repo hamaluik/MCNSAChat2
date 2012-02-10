@@ -6,7 +6,7 @@ public class ColourHandler {
 
 	public static String translateName(String name) {
 		// default colour will be white.
-		String colour = new String("&f");
+		String colour = new String("");
 		
 		// map it!
 		if(name.equalsIgnoreCase("black")) colour = "&0";
