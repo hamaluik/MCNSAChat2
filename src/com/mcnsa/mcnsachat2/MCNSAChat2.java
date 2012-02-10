@@ -15,27 +15,27 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 public class MCNSAChat2 extends JavaPlugin {
 	// load the minecraft logger
 	Logger log = Logger.getLogger("Minecraft");
-	
+
 	// keep track of permissions
 	public PermissionManager permissions = null;
-	
+
 	// keep track of configuration options
 	public ConfigManager config = new ConfigManager(this);
-	
+
 	// and commands
 	public CommandManager commandManager = new CommandManager(this);
-	
+
 	// keep track of listeners
 	public PlayerListener playerListener = null;
-	
+
 	// and keep track of the chat and channel handlers
 	public ChannelManager channelManager = null;
 	public ChatManager chatManager = null;
-	
+
 	public void onEnable() {
 		// set up permissions
 		this.setupPermissions();
-		
+
 		// load configuration
 		// and save it again (for defaults)
 		this.getConfig().options().copyDefaults(true);
@@ -46,35 +46,35 @@ public class MCNSAChat2 extends JavaPlugin {
 			getServer().getPluginManager().disablePlugin(this);
 		}
 		this.saveConfig();
-		
+
 		// set up listeners
 		playerListener = new PlayerListener(this);
-		
+
 		// set up the channel handler
 		channelManager = new ChannelManager(this, config);
-		
+
 		// and finally, the chat manager
 		chatManager = new ChatManager(this, channelManager);
-		
+
 		// routines for when the plugin gets enabled
 		log("plugin enabled!");
 	}
-	
+
 	public void onDisable() {
 		// shut the plugin down
 		log("plugin disabled!");
 	}
-	
+
 	// for simpler logging
 	public void log(String info) {
 		log.info("[MCNSAChat2] " + info);
 	}
-	
+
 	// for error reporting
 	public void error(String info) {
 		log.info("[MCNSAChat2] <ERROR> " + info);
 	}
-	
+
 	// for debugging
 	// (disable for final release)
 	public void debug(String info) {
@@ -91,7 +91,7 @@ public class MCNSAChat2 extends JavaPlugin {
 			error("PermissionsEx not found!");
 		}
 	}
-	
+
 	// just an interface function for checking permissions
 	// if permissions are down, default to OP status.
 	public boolean hasPermission(Player player, String permission) {
@@ -102,12 +102,12 @@ public class MCNSAChat2 extends JavaPlugin {
 			return player.isOp();
 		}
 	}
-	
+
 	// allow for colour tags to be used in strings..
 	public String processColours(String str) {
 		return str.replaceAll("(&([a-f0-9]))", "\u00A7$2");
 	}
-	
+
 	// strip colour tags from strings..
 	public String stripColours(String str) {
 		return str.replaceAll("(&([a-f0-9]))", "");
