@@ -9,21 +9,21 @@ import com.mcnsa.mcnsachat2.MCNSAChat2;
 public class ChatManager {
 	MCNSAChat2 plugin = null;
 	ChannelManager channelManager = null;
-	
+
 	public ChatManager(MCNSAChat2 instance, ChannelManager cm) {
 		plugin = instance;
 		channelManager = cm;
 	}
-	
+
 	public void handleChat(Player player, String message) {
 		// figure out which channel the player is in
 		String channel = channelManager.getPlayerChannel(player);
-		
+
 		// and get a list of everyone who is listening in
 		ArrayList<String> listeners = channelManager.getAllListeners(channel, player);
-		
+
 		// TODO: check for spam
-		
+
 		// now send the message out!
 		String outgoing = new String(plugin.config.options.chatFormat);
 		outgoing = outgoing.replace("%channel", channelManager.getChannelColour(channel) + channel);
@@ -41,7 +41,7 @@ public class ChatManager {
 				recipient.sendMessage(outgoing);
 			}
 		}
-		
+
 		// and log it
 		plugin.log("<" + channel + "> " + player.getName() + ": " + message);
 	}
