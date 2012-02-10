@@ -78,7 +78,7 @@ public class ChannelManager {
 			return true;
 		}
 		// we didn't remove anything
-		plugin.debug("channel " + channel + " WAS NOT empty and so stuck around");
+		plugin.debug("channel " + channel + " WAS NOT empty (or was hard) and so stuck around");
 		return false;
 	}
 	
@@ -97,13 +97,8 @@ public class ChannelManager {
 		if(players.containsKey(player.getName())) {
 			plugin.debug("player " + player.getName() + " was already in a channel!");
 			
-			// remove them from their first channel
-			channels.get(players.get(player.getName())).players.remove(player.getName());
-			// and remove them from the tracked user list
-			players.remove(player.getName());
-			
-			// and clear out empty channels
-			removeChannelIfEmpty(channel);
+			// remove them from the channel
+			removePlayer(player);
 		}
 		
 		// add them to their new channel
@@ -116,6 +111,28 @@ public class ChannelManager {
 		
 		// success!
 		return true;
+	}
+	
+	// remove a player from all channels (i.e. leaving the game?)
+	public void removePlayer(Player player) {
+		// make sure they're tracked
+		if(!players.containsKey(player.getName())) {
+			plugin.debug("player " + player.getName() + " was not tracked, ignoring removal...");
+			return;
+		}
+		
+		// get their channel
+		String channel = getPlayerChannel(player);
+		
+		// remove them from their first channel
+		channels.get(players.get(player.getName())).players.remove(player.getName());
+		// and remove them from the tracked user list
+		players.remove(player.getName());
+		
+		plugin.debug("player " + player.getName() + " removed from channel " + channel);
+		
+		// and clear out empty channels
+		removeChannelIfEmpty(channel);
 	}
 	
 	// get a list of everyone who can hear the chat

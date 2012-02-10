@@ -93,7 +93,7 @@ public class ConfigManager {
 	}
 
 	// create a "class" in here to store config options!
-	class ConfigOptions {
+	public class ConfigOptions {
 		public HashMap<String, ChannelHardConfig> hardChannels = new HashMap<String, ChannelHardConfig>();
 		public Float localChatRadius = new Float(200);
 		public String defaultChannel = new String("");
