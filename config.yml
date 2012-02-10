@@ -2,6 +2,14 @@
 # default-channel: default chat channel that new users will join
 # default-colour: default new channel colour
 # announce-timeouts: announce timeout to the entire server?
+# chat-format: the format chat will be printed in
+# emote-format: the format emotes will be printed in
+# 	** for the above 2, use the following substitutions:
+#		%channel	the players channel
+#		%prefix		the players prefix (from PermissionsEx)
+#		%suffix		the players suffix (from PermissionsEx)
+#		%player		the players name
+#		%message	the message
 # spam:
 #     limit: number of messages sent
 #     period: within the given time period
@@ -10,6 +18,8 @@ local-chat-radius: 200
 default-channel: G
 default-colour: grey
 announce-timeouts: true
+chat-format: <%channel&f> [%prefix%suffix&f] %player: &7%message
+emote-format: <%channel&f> [%prefix%suffix&f] *&7%player %message
 spam:
   limit: 5
   period: 3
@@ -27,12 +37,15 @@ hard-channels:
     colour: purple
     alias: bc
     permission: broadcast
+    listeners: broadcast
     broadcast: true
   MOD:
     colour: purple
     alias: m
     permission: mod
+    listeners: mod
   ADMIN:
     colour: green
     alias: a
     permission: admin
+    listeners: admin

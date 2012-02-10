@@ -20,13 +20,17 @@ public class MCNSAChat2 extends JavaPlugin {
 	public PermissionManager permissions = null;
 	
 	// keep track of configuration options
-	ConfigManager config = new ConfigManager(this);
+	public ConfigManager config = new ConfigManager(this);
+	
+	// and commands
+	public CommandManager commandManager = new CommandManager(this);
 	
 	// keep track of listeners
-	PlayerListener playerListener = null;
+	public PlayerListener playerListener = null;
 	
 	// and keep track of the chat and channel handlers
-	ChannelHandler channelHandler = null;
+	public ChannelManager channelManager = null;
+	public ChatManager chatManager = null;
 	
 	public void onEnable() {
 		// set up permissions
@@ -35,16 +39,22 @@ public class MCNSAChat2 extends JavaPlugin {
 		// load configuration
 		// and save it again (for defaults)
 		this.getConfig().options().copyDefaults(true);
-		config.load(getConfig());
+		if(!config.load(getConfig())) {
+			// shit
+			// BAIL
+			error("configuration failed - bailing");
+			getServer().getPluginManager().disablePlugin(this);
+		}
 		this.saveConfig();
 		
 		// set up listeners
 		playerListener = new PlayerListener(this);
 		
 		// set up the channel handler
-		channelHandler = new ChannelHandler(config);
+		channelManager = new ChannelManager(this, config);
 		
-		// 
+		// and finally, the chat manager
+		chatManager = new ChatManager(this, channelManager);
 		
 		// routines for when the plugin gets enabled
 		log("plugin enabled!");
@@ -86,7 +96,7 @@ public class MCNSAChat2 extends JavaPlugin {
 	// if permissions are down, default to OP status.
 	public boolean hasPermission(Player player, String permission) {
 		if(permissions != null) {
-			return permissions.has(player, permission);
+			return permissions.has(player, "mcnsachat2." + permission);
 		}
 		else {
 			return player.isOp();

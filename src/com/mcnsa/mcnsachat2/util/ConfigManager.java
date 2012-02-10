@@ -18,7 +18,7 @@ public class ConfigManager {
 	}
 
 	// load the configuration
-	public void load(FileConfiguration config) {
+	public Boolean load(FileConfiguration config) {
 		// load the chat radius
 		plugin.debug("loading options...");
 		
@@ -33,6 +33,12 @@ public class ConfigManager {
 		
 		options.announceTimeouts = config.getBoolean("announce-timeouts");
 		plugin.debug("announce timeouts: " + options.announceTimeouts.toString());
+		
+		options.chatFormat = config.getString("chat-format");
+		plugin.debug("chat format: " + options.chatFormat);
+		
+		options.emoteFormat = config.getString("emote-format");
+		plugin.debug("emote format: " + options.emoteFormat);
 
 		options.spamConfig.messageLimit = (float)config.getDouble("spam.limit");
 		plugin.debug("spam message limit: " + options.spamConfig.messageLimit);
@@ -60,8 +66,11 @@ public class ConfigManager {
 			channelConfig.alias = channelSection.getString(channelName + ".alias", "");
 			plugin.debug("\tchannel alias: " + channelConfig.alias);
 			
-			channelConfig.permission = channelSection.getString(channelName + ".permission", "allchannels");
+			channelConfig.permission = channelSection.getString(channelName + ".permission", "");
 			plugin.debug("\tchannel permission: " + channelConfig.permission);
+			
+			channelConfig.listeners = channelSection.getString(channelName + ".listeners", "");
+			plugin.debug("\tchannel listeners: " + channelConfig.listeners);
 			
 			channelConfig.local = channelSection.getBoolean(channelName + ".local", false);
 			plugin.debug("\tchannel local: " + channelConfig.local.toString());
@@ -72,20 +81,31 @@ public class ConfigManager {
 			// and add it!
 			options.hardChannels.put(channelName, channelConfig);
 		}
+		
+		// now make sure our default channel is there
+		if(!options.hardChannels.containsKey(options.defaultChannel)) {
+			plugin.error("default channel doesn't exist!");
+			return false;
+		}
+		
+		// successful
+		return true;
 	}
 
 	// create a "class" in here to store config options!
-	private class ConfigOptions {
+	class ConfigOptions {
 		public HashMap<String, ChannelHardConfig> hardChannels = new HashMap<String, ChannelHardConfig>();
 		public Float localChatRadius = new Float(200);
 		public String defaultChannel = new String("");
 		public String defaultColour = new String("grey");
 		public Boolean announceTimeouts = true;
+		public String chatFormat = new String("<%channel&f> [%prefix%suffix&f] %player: &7%message");
+		public String emoteFormat = new String("<%channel&f> [%prefix%suffix&f] %player: &7%message");
 		public SpamConfig spamConfig = new SpamConfig(5.0f, 3.0f);
 	}
 
 	// spam configurations
-	private class SpamConfig {
+	public class SpamConfig {
 		public Float messageLimit = new Float(5);
 		public Float messagePeriod = new Float(3);
 
@@ -96,11 +116,11 @@ public class ConfigManager {
 	}
 
 	// hard-channel configurations
-	private class ChannelHardConfig {
-		@SuppressWarnings("unused")
+	public class ChannelHardConfig {
 		public String name = new String("");
 		public String colour = new String("grey");
-		public String permission = new String("channel");
+		public String permission = new String("");
+		public String listeners = new String("");
 		public Boolean local = false;
 		public String alias = new String("");
 		public Boolean broadcast = false;
