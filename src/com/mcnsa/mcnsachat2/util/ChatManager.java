@@ -26,12 +26,14 @@ public class ChatManager {
 		
 		// now send the message out!
 		String outgoing = new String(plugin.config.options.chatFormat);
-		outgoing.replace("%channel", channel);
-		// TODO: load prefix & suffix from PermissionEx
-		outgoing.replace("%prefix", "");
-		outgoing.replace("%prefix", "");
-		outgoing.replace("%player", player.getName());
-		outgoing.replace("%message", message);
+		outgoing = outgoing.replace("%channel", channelManager.getChannelColour(channel) + channel);
+		outgoing = outgoing.replace("%prefix", plugin.permissions.getUser(player).getPrefix());
+		outgoing = outgoing.replace("%suffix", plugin.permissions.getUser(player).getSuffix());
+		outgoing = outgoing.replace("%player", player.getName());
+		outgoing = outgoing.replace("%message", message);
+		// now process colours..
+		outgoing = plugin.processColours(outgoing);
+		// now send it
 		for(int i = 0; i < listeners.size(); i++) {
 			// get the player associated with this name
 			Player recipient = plugin.getServer().getPlayer(listeners.get(i));
