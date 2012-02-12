@@ -1,6 +1,8 @@
 package com.mcnsa.mcnsachat2.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import org.bukkit.entity.Player;
@@ -219,9 +221,26 @@ public class ChannelManager {
 		return channels.get(channel).colour;
 	}
 	
+	public Channel[] listChannels() {
+		// create the list
+		Channel[] chList = new Channel[channels.size()];
+		
+		// get them all!
+		int i = 0;
+		for(String ch: channels.keySet()) {
+			chList[i] = channels.get(ch);
+			i += 1;
+		}
+		
+		// sort the array
+		Arrays.sort(chList, new ChannelComp());
+		
+		// and return!
+		return chList;
+	}
+	
 	// a channel
-	@SuppressWarnings("unused")
-	private class Channel {
+	public class Channel {
 		public String name = new String("");
 		public Boolean hard = false;
 		public String colour = new String("&f");
@@ -235,6 +254,12 @@ public class ChannelManager {
 		
 		public Channel(String _name) {
 			name = _name;
+		}
+	}
+	
+	class ChannelComp implements Comparator<Channel> {
+		public int compare(Channel a, Channel b) {
+			return a.name.compareTo(b.name);
 		}
 	}
 }
