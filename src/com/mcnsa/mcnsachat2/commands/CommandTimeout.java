@@ -35,9 +35,7 @@ public class CommandTimeout implements Command {
 			if(plugin.config.options.announceTimeouts) {
 				Player[] players = plugin.getServer().getOnlinePlayers();
 				for(int i = 0; i < players.length; i++) {
-					if(!players[i].getName().equals(player.getName()) && !players[i].getName().equals(targetPlayer.getName())) {
-						players[i].sendMessage("Attention&7: &f" + targetPlayer.getName() + " &7has been placed in timeout for being &cnaughty&7!");
-					}
+					players[i].sendMessage(plugin.processColours("Attention&7: &f" + targetPlayer.getName() + " &7has been placed in timeout for being &cnaughty&7!"));
 				}
 			}
 		}
@@ -50,9 +48,7 @@ public class CommandTimeout implements Command {
 			if(plugin.config.options.announceTimeouts) {
 				Player[] players = plugin.getServer().getOnlinePlayers();
 				for(int i = 0; i < players.length; i++) {
-					if(!players[i].getName().equals(player.getName()) && !players[i].getName().equals(targetPlayer.getName())) {
-						players[i].sendMessage("Attention&7: &f" + targetPlayer.getName() + " &7has been removed from timeout for being &anice&7!");
-					}
+					players[i].sendMessage(plugin.processColours("Attention&7: &f" + targetPlayer.getName() + " &7has been removed from timeout for being &anice&7!"));
 				}
 			}
 		}
