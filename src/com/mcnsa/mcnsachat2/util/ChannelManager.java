@@ -18,6 +18,9 @@ public class ChannelManager {
 	// and the configuration..
 	ConfigManager config = null;
 	
+	// a list of all players that have seeAll on
+	private ArrayList<String> seeAll = new ArrayList<String>();
+	
 	public ChannelManager(MCNSAChat2 instance, ConfigManager _config) {
 		plugin = instance;
 		config = _config;
@@ -170,6 +173,7 @@ public class ChannelManager {
 		
 		// add the sender
 		listeners.add(player.getName());
+		plugin.debug("Added " + player.getName() + " for being the sender");
 		
 		// handle broadcast channels
 		if(channels.get(channel).broadcast) {
@@ -177,6 +181,7 @@ public class ChannelManager {
 			for(int i = 0; i < players.length; i++) {
 				if(!listeners.contains(players[i].getName())) {
 					listeners.add(players[i].getName());
+					plugin.debug("Added " + players[i].getName() + " for being in broadcast");
 				}
 			}
 		}
@@ -189,6 +194,7 @@ public class ChannelManager {
 					// make sure they're within range
 					if(plugin.playerWithinRadius(player, plugin.getServer().getPlayer(channels.get(channel).players.get(i)), plugin.config.options.localChatRadius.intValue())) {
 						listeners.add(channels.get(channel).players.get(i));
+						plugin.debug("Added " + channels.get(channel).players.get(i) + " for being in local radius");
 					}
 				}
 			}
@@ -201,6 +207,7 @@ public class ChannelManager {
 				if(!listeners.contains(channels.get(channel).players.get(i))) {
 					// add them!
 					listeners.add(channels.get(channel).players.get(i));
+					plugin.debug("Added " + channels.get(channel).players.get(i) + " for being in the same channel");
 				}
 			}
 		}
@@ -230,10 +237,16 @@ public class ChannelManager {
 		for(int i = 0; i < players.length; i++) {
 			// make sure they're not already on the list
 			if(!listeners.contains(players[i].getName())) {
-				// check their permissions!
-				if(plugin.hasPermission(players[i], "listen." + channels.get(channel).listeners)) {
+				// check their permissions and seeall status!
+				if(!channels.get(channel).listeners.equals("") && plugin.hasPermission(players[i], "listen." + channels.get(channel).listeners)) {
 					// add them!
 					listeners.add(players[i].getName());
+					plugin.debug("Added " + players[i].getName() + " for being a listener");
+				}
+				else if(seeAll.contains(players[i].getName())) {
+					// add them!
+					listeners.add(players[i].getName());
+					plugin.debug("Added " + players[i].getName() + " for having seeAll on");
 				}
 			}
 		}
@@ -314,6 +327,18 @@ public class ChannelManager {
 		ArrayList<String> players = channels.get(channel).players;
 		for(int i = 0; i < players.size(); i++) {
 			plugin.getServer().getPlayer(players.get(i)).sendMessage(plugin.processColours("&7Channel &f" + channel + "&7's colour has been changed to: " + colour + ColourHandler.translateColour(colour)));
+		}
+	}
+	
+	// toggle whether a player has seeall on or not
+	public Boolean toggleSeeAll(Player player) {
+		if(seeAll.contains(player.getName())) {
+			seeAll.remove(player.getName());
+			return false;
+		}
+		else {
+			seeAll.add(player.getName());
+			return true;
 		}
 	}
 	

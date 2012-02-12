@@ -5,6 +5,8 @@ import com.mcnsa.mcnsachat2.MCNSAChat2;
 import com.mcnsa.mcnsachat2.commands.*;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import org.bukkit.entity.Player;
@@ -27,6 +29,9 @@ public class CommandManager {
 		registerCommand(new CommandMe(plugin));
 		registerCommand(new CommandList(plugin));
 		registerCommand(new CommandColour(plugin));
+		registerCommand(new CommandHelp(plugin));
+		registerCommand(new CommandSeeAll(plugin));
+		registerCommand(new CommandTimeout(plugin));
 	}
 
 	// register new command
@@ -149,14 +154,39 @@ public class CommandManager {
 			return;
 		}
 		
-		// TODO: if non-empty message, don't change channel
-		if(!message.trim().equals("")) return;
+		// if non-empty message, don't change channel
+		if(!message.trim().equals("")) {
+			// broadcast their message!
+			plugin.chatManager.handleChat(player, message, false, channel);
+			
+			// return, we're not changing channels
+			return;
+		}
 		
 		// ok, change their channel
 		plugin.channelManager.movePlayer(channel, player);
 	}
+	
+	// return a sorted list of commands
+	public InternalCommand[] listCommands() {
+		// create the list
+		InternalCommand[] cList = new InternalCommand[commands.size()];
+		
+		// get them all!
+		int i = 0;
+		for(String c: commands.keySet()) {
+			cList[i] = commands.get(c);
+			i += 1;
+		}
+		
+		// sort the array
+		Arrays.sort(cList, new CommandComp());
+		
+		// and return!
+		return cList;
+	}
 
-	private class InternalCommand {
+	public class InternalCommand {
 		public String alias = new String("");
 		public String permissions = new String("");
 		public String usage = new String("");
@@ -169,6 +199,12 @@ public class CommandManager {
 			usage = _usage;
 			description = _desc;
 			command = _command;
+		}
+	}
+	
+	class CommandComp implements Comparator<InternalCommand> {
+		public int compare(InternalCommand a, InternalCommand b) {
+			return a.alias.compareTo(b.alias);
 		}
 	}
 }
