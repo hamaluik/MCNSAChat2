@@ -7,7 +7,7 @@ import com.mcnsa.mcnsachat2.util.ChannelManager.Channel;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
-@CommandInfo(alias = "clist", permission = "list", usage = "", description = "lists all available channels")
+@CommandInfo(alias = "chlist", permission = "list", usage = "", description = "lists all available channels")
 public class CommandList implements Command {
 	private static MCNSAChat2 plugin = null;
 	public CommandList(MCNSAChat2 instance) {

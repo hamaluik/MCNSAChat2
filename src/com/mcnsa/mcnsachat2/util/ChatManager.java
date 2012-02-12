@@ -47,9 +47,12 @@ public class ChatManager {
 		outgoing = outgoing.replace("%prefix", plugin.permissions.getUser(player).getPrefix());
 		outgoing = outgoing.replace("%suffix", plugin.permissions.getUser(player).getSuffix());
 		outgoing = outgoing.replace("%player", player.getName());
-		outgoing = outgoing.replace("%message", message);
 		// now process colours..
 		outgoing = plugin.processColours(outgoing);
+		outgoing = outgoing.replace("%message", message);
+		// now see if they have permission to write with colour
+		if(plugin.hasPermission(player, "colour"))
+			outgoing = plugin.processColours(outgoing);
 		// now send it
 		for(int i = 0; i < listeners.size(); i++) {
 			// get the player associated with this name

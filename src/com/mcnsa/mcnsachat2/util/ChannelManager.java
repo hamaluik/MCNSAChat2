@@ -119,13 +119,14 @@ public class ChannelManager {
 		player.sendMessage(plugin.processColours("&7Welcome to the " + channels.get(channel).colour + channels.get(channel).name + " &7channel!"));
 		
 		// and to everyone in the channel
-		ArrayList<String> listeners = getListeners(channel, player);
+		// TODO: sort this out
+		/*ArrayList<String> listeners = getListeners(channel, player);
 		for(int i = 0; i < listeners.size(); i++) {
 			// make sure we don't tell them that they joined it!
 			if(!listeners.get(i).equals(player.getName())) {
 				plugin.getServer().getPlayer(listeners.get(i)).sendMessage(plugin.processColours(listeners.get(i) + " &7has joined the channel!"));
 			}
-		}
+		}*/
 		
 		// and log it!
 		plugin.log(player.getName() + " moved into channel " + channel);

@@ -9,7 +9,7 @@ import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 import com.mcnsa.mcnsachat2.util.CommandManager.InternalCommand;
 
-@CommandInfo(alias = "chelp", permission = "", usage = "[page #]", description = "views the chat help menus (option: [page#])")
+@CommandInfo(alias = "chhelp", permission = "", usage = "[page #]", description = "views the chat help menus (option: [page#])")
 public class CommandHelp implements Command {
 	private static MCNSAChat2 plugin = null;
 	public CommandHelp(MCNSAChat2 instance) {
