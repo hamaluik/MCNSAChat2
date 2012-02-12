@@ -78,7 +78,7 @@ public class MCNSAChat2 extends JavaPlugin {
 	// for debugging
 	// (disable for final release)
 	public void debug(String info) {
-		log.info("[MCNSAChat2] <DEBUG> " + info);
+		//log.info("[MCNSAChat2] <DEBUG> " + info);
 	}
 
 	// load the permissions plugin
@@ -110,6 +110,6 @@ public class MCNSAChat2 extends JavaPlugin {
 
 	// strip colour tags from strings..
 	public String stripColours(String str) {
-		return str.replaceAll("(&([a-f0-9]))", "");
+		return str.replaceAll("(&([a-f0-9]))", "").replaceAll("(\u00A7([a-f0-9]))", "");
 	}
 }

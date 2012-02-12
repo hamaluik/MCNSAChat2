@@ -15,7 +15,7 @@ public class ChatManager {
 		channelManager = cm;
 	}
 
-	public void handleChat(Player player, String message) {
+	public void handleChat(Player player, String message, Boolean emote) {
 		// figure out which channel the player is in
 		String channel = channelManager.getPlayerChannel(player);
 
@@ -26,6 +26,9 @@ public class ChatManager {
 
 		// now send the message out!
 		String outgoing = new String(plugin.config.options.chatFormat);
+		// change the format if it's an emote
+		if(emote)
+			outgoing = plugin.config.options.emoteFormat;
 		outgoing = outgoing.replace("%channel", channelManager.getChannelColour(channel) + channel);
 		outgoing = outgoing.replace("%prefix", plugin.permissions.getUser(player).getPrefix());
 		outgoing = outgoing.replace("%suffix", plugin.permissions.getUser(player).getSuffix());
@@ -43,6 +46,6 @@ public class ChatManager {
 		}
 
 		// and log it
-		plugin.log("<" + channel + "> " + player.getName() + ": " + message);
+		plugin.log(plugin.stripColours(outgoing));
 	}
 }

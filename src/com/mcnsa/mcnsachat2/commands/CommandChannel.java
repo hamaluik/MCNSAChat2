@@ -13,7 +13,8 @@ public class CommandChannel implements Command {
 		plugin = instance;
 	}
 
-	public Boolean handle(String sArgs, Player player) {
+	public Boolean handle(Player player, String sArgs) {
+		player.sendMessage(plugin.processColours("&cwut?"));
 		return true;
 	}
 }

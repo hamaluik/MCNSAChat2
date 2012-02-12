@@ -154,6 +154,7 @@ public class ChannelManager {
 		listeners.add(player.getName());
 		
 		// add everyone in the channel
+		// TODO: sort based on local
 		for(int i = 0; i < channels.get(channel).players.size(); i++) {
 			// only add them if they're not already there
 			if(!listeners.contains(channels.get(channel).players.get(i))) {
@@ -219,6 +220,7 @@ public class ChannelManager {
 	}
 	
 	// a channel
+	@SuppressWarnings("unused")
 	private class Channel {
 		public String name = new String("");
 		public Boolean hard = false;

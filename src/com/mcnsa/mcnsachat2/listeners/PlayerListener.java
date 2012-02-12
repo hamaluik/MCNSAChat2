@@ -4,6 +4,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -34,9 +35,21 @@ public class PlayerListener implements Listener {
 		if(event.isCancelled()) return;
 		
 		// now intercept the chat
-		plugin.chatManager.handleChat(event.getPlayer(), event.getMessage());
+		plugin.chatManager.handleChat(event.getPlayer(), event.getMessage(), false);
 		
 		// and cancel the event!
 		event.setCancelled(true);
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void preprocessHandler(PlayerCommandPreprocessEvent event) {
+		// if the command is cancelled, back out
+		if(event.isCancelled()) return;
+		
+		// intercept the command
+		if(plugin.commandManager.handleCommand(event.getPlayer(), event.getMessage())) {
+			// we handled it, cancel it
+			event.setCancelled(true);
+		}
 	}
 }
