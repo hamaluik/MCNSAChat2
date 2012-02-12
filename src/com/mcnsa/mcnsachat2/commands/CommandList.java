@@ -21,7 +21,8 @@ public class CommandList implements Command {
 		// loop through them and make sure the player has permission to see each one
 		String chStr = new String("Available channels: ");
 		for(int i = 0; i < channels.length; i++) {
-			if(!channels[i].permission.equals("") && plugin.hasPermission(player, "channel." + channels[i].permission)) {
+			plugin.debug("channel " + channels[i].name + " has permission: mcnsachat2.channel." + channels[i].permission);
+			if(channels[i].permission.equals("") || plugin.hasPermission(player, "channel." + channels[i].permission)) {
 				// the channel has permissions and we have them!
 				chStr += channels[i].colour + channels[i].name + "&7, ";
 			}

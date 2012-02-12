@@ -86,7 +86,7 @@ public class CommandManager {
 		}
 		
 		// make sure they have permission first
-		if(!plugin.hasPermission(player, commands.get(tokens[0]).permissions)) {
+		if(!commands.get(tokens[0]).permissions.equals("") && !plugin.hasPermission(player, commands.get(tokens[0]).permissions)) {
 			// return a message if they don't have permission
 			plugin.log(player.getName() + " attempted to use command: " + tokens[0] + " without permission!");
 			player.sendMessage(plugin.processColours("&cYou don't have permission to do that!"));

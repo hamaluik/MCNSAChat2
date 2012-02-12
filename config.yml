@@ -27,11 +27,9 @@ hard-channels:
   G:
     colour: grey
     alias: g
-    permission: global
   L:
     colour: pink
     alias: lo
-    permission: local
     local: true
   Broadcast:
     colour: purple
