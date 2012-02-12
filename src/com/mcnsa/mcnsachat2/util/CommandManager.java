@@ -26,6 +26,7 @@ public class CommandManager {
 		registerCommand(new CommandChannel(plugin));
 		registerCommand(new CommandMe(plugin));
 		registerCommand(new CommandList(plugin));
+		registerCommand(new CommandColour(plugin));
 	}
 
 	// register new command

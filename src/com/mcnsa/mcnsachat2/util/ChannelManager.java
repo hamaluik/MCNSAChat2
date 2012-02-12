@@ -296,6 +296,27 @@ public class ChannelManager {
 		return channels.get(channel).permission;
 	}
 	
+	// set a channel's colour
+	public void setColour(String channel, String colour) {
+		// trim the channel name to be sure
+		channel = channel.trim();
+		
+		// make sure the channel exists and that it's valid
+		if(!channels.containsKey(channel) || channel.equals("")) {
+			plugin.error("attempted to set colour for non-existant channel: " + channel);
+			return;
+		}
+		
+		// and set the colour!
+		channels.get(channel).colour = colour;
+		
+		// and announce it
+		ArrayList<String> players = channels.get(channel).players;
+		for(int i = 0; i < players.size(); i++) {
+			plugin.getServer().getPlayer(players.get(i)).sendMessage(plugin.processColours("&7Channel &f" + channel + "&7's colour has been changed to: " + colour + ColourHandler.translateColour(colour)));
+		}
+	}
+	
 	// a channel
 	public class Channel {
 		public String name = new String("");

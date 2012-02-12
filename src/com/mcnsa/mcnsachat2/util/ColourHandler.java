@@ -4,6 +4,30 @@ public class ColourHandler {
 	// make it a static class) private constructor, static methods
 	private ColourHandler() {}
 
+	public static String translateColour(String name) {
+		String colour = new String("???");
+		
+		// map it!
+		if(name.equalsIgnoreCase("&0")) colour = "black";
+		else if(name.equalsIgnoreCase("&1")) colour = "dark blue";
+		else if(name.equalsIgnoreCase("&2")) colour = "dark green";
+		else if(name.equalsIgnoreCase("&3")) colour = "dark teal";
+		else if(name.equalsIgnoreCase("&4")) colour = "dark red";
+		else if(name.equalsIgnoreCase("&5")) colour = "purple";
+		else if(name.equalsIgnoreCase("&6")) colour = "gold";
+		else if(name.equalsIgnoreCase("&7")) colour = "grey";
+		else if(name.equalsIgnoreCase("&8")) colour = "dark grey";
+		else if(name.equalsIgnoreCase("&9")) colour = "blue";
+		else if(name.equalsIgnoreCase("&a")) colour = "green";
+		else if(name.equalsIgnoreCase("&b")) colour = "teal";
+		else if(name.equalsIgnoreCase("&c")) colour = "red";
+		else if(name.equalsIgnoreCase("&d")) colour = "pink";
+		else if(name.equalsIgnoreCase("&e")) colour = "yellow";
+		else if(name.equalsIgnoreCase("&f")) colour = "white";
+		
+		return colour;
+	}
+
 	public static String translateName(String name) {
 		// default colour will be white.
 		String colour = new String("");
