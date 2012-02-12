@@ -108,6 +108,18 @@ public class ChannelManager {
 		// and track their channel!
 		players.put(player.getName(), channel);
 		
+		// report it to the player!
+		player.sendMessage(plugin.processColours("&7Welcome to the " + channels.get(channel).colour + channels.get(channel).name + " &7channel!"));
+		
+		// and to everyone in the channel
+		ArrayList<String> listeners = getListeners(channel, player);
+		for(int i = 0; i < listeners.size(); i++) {
+			// make sure we don't tell them that they joined it!
+			if(!listeners.get(i).equals(player.getName())) {
+				plugin.getServer().getPlayer(listeners.get(i)).sendMessage(plugin.processColours(listeners.get(i) + " &7has joined the channel!"));
+			}
+		}
+		
 		// and log it!
 		plugin.log(player.getName() + " moved into channel " + channel);
 		
@@ -155,15 +167,40 @@ public class ChannelManager {
 		// add the sender
 		listeners.add(player.getName());
 		
-		// add everyone in the channel
-		// TODO: sort based on local
-		for(int i = 0; i < channels.get(channel).players.size(); i++) {
-			// only add them if they're not already there
-			if(!listeners.contains(channels.get(channel).players.get(i))) {
-				// add them!
-				listeners.add(channels.get(channel).players.get(i));
+		// handle broadcast channels
+		if(channels.get(channel).broadcast) {
+			Player[] players = plugin.getServer().getOnlinePlayers();
+			for(int i = 0; i < players.length; i++) {
+				if(!listeners.contains(players[i].getName())) {
+					listeners.add(players[i].getName());
+				}
 			}
 		}
+		// handle local channels
+		else if(channels.get(channel).local) {
+			// add everyone in the channel who is local
+			for(int i = 0; i < channels.get(channel).players.size(); i++) {
+				// only add them if they're not already there
+				if(!listeners.contains(channels.get(channel).players.get(i))) {
+					// make sure they're within range
+					if(plugin.playerWithinRadius(player, plugin.getServer().getPlayer(channels.get(channel).players.get(i)), plugin.config.options.localChatRadius.intValue())) {
+						listeners.add(channels.get(channel).players.get(i));
+					}
+				}
+			}
+		}
+		// handle normal channels
+		else {
+			// add everyone in the channel
+			for(int i = 0; i < channels.get(channel).players.size(); i++) {
+				// only add them if they're not already there
+				if(!listeners.contains(channels.get(channel).players.get(i))) {
+					// add them!
+					listeners.add(channels.get(channel).players.get(i));
+				}
+			}
+		}
+		
 		
 		// and return!
 		return listeners;
@@ -221,6 +258,7 @@ public class ChannelManager {
 		return channels.get(channel).colour;
 	}
 	
+	// return a sorted list of channels
 	public Channel[] listChannels() {
 		// create the list
 		Channel[] chList = new Channel[channels.size()];
@@ -237,6 +275,21 @@ public class ChannelManager {
 		
 		// and return!
 		return chList;
+	}
+	
+	// get a channel's permission
+	public String getPermission(String channel) {
+		// trim the channel name to be sure
+		channel = channel.trim();
+		
+		// make sure the channel exists and that it's valid
+		if(!channels.containsKey(channel) || channel.equals("")) {
+			plugin.error("attempted to get permission for non-existant channel: " + channel);
+			return "sdjkhf289h2fudsasfh28";
+		}
+		
+		// and return the perms
+		return channels.get(channel).permission;
 	}
 	
 	// a channel

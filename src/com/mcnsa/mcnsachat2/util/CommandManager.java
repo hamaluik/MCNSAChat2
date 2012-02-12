@@ -15,6 +15,8 @@ public class CommandManager {
 
 	// and the commands
 	private HashMap<String, InternalCommand> commands = new HashMap<String, InternalCommand>();
+	// and the aliases
+	private HashMap<String, String> aliases = new HashMap<String, String>();
 
 	public CommandManager(MCNSAChat2 instance) {
 		plugin = instance;
@@ -57,7 +59,10 @@ public class CommandManager {
 
 	// quick method to register a new alias (for a channel)
 	public void registerAlias(String alias, String channel) {
-		// TODO: register alias
+		plugin.debug("registering alias: " + alias);
+		
+		// add it to the list!
+		aliases.put(alias, channel);
 	}
 	
 	// handle commands
@@ -76,9 +81,24 @@ public class CommandManager {
 			// we're not handling it
 			return false;
 		}
+		tokens[0] = tokens[0].toLowerCase();
+		
+		// check to see if it's an alias first
+		if(aliases.containsKey(tokens[0])) {
+			// handle the alias
+			plugin.debug("handling alias: " + tokens[0]);
+			// get the arguments
+			String args = new String("");
+			if(command.length() > 2 + tokens[0].length()) {
+				args = command.substring(1 + tokens[0].length());
+			}
+			// and handle the alias!
+			handleAlias(player, tokens[0], args);
+			// we handled it!
+			return true;
+		}
 		
 		// find the command
-		tokens[0] = tokens[0].toLowerCase();
 		if(!commands.containsKey(tokens[0])) {
 			// we're not handling it
 			plugin.debug("not handling command: " + tokens[0]);
@@ -115,6 +135,24 @@ public class CommandManager {
 		plugin.debug("command " + tokens[0] + " NOT handled successfully");
 		player.sendMessage(plugin.processColours("&cInvalid usage! &aCorrect usage: &6/" + commands.get(tokens[0]).alias + " &e" + commands.get(tokens[0]).usage + " &7(" + commands.get(tokens[0]).description + ")"));
 		return true;
+	}
+	
+	private void handleAlias(Player player, String alias, String message) {
+		// first up: check their perms]
+		String channel = aliases.get(alias);
+		String perm = plugin.channelManager.getPermission(channel);
+		if(!perm.equals("") && !plugin.hasPermission(player, "channel." + perm)) {
+			// return a message if they don't have permission
+			plugin.log(player.getName() + " attempted to change to channel: " + channel + " without permission!");
+			player.sendMessage(plugin.processColours("&cYou don't have permission to do that!"));
+			return;
+		}
+		
+		// TODO: if non-empty message, don't change channel
+		if(!message.trim().equals("")) return;
+		
+		// ok, change their channel
+		plugin.channelManager.movePlayer(channel, player);
 	}
 
 	private class InternalCommand {

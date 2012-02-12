@@ -3,10 +3,12 @@ package com.mcnsa.mcnsachat2;
 import com.mcnsa.mcnsachat2.listeners.PlayerListener;
 import com.mcnsa.mcnsachat2.util.*;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import ru.tehkode.permissions.PermissionManager;
@@ -111,5 +113,20 @@ public class MCNSAChat2 extends JavaPlugin {
 	// strip colour tags from strings..
 	public String stripColours(String str) {
 		return str.replaceAll("(&([a-f0-9]))", "").replaceAll("(\u00A7([a-f0-9]))", "");
+	}
+	
+	public boolean playerWithinRadius(Player player1, Player player2, Integer radius) {
+		// make sure they're in the same world
+		if(player1.getWorld() != player2.getWorld()) return false;
+		
+		List<Entity> nearby = player1.getNearbyEntities(radius, radius, radius);
+		for(int i = 0; i < nearby.size(); i++) {
+			if(nearby.get(i) instanceof Player) {
+				if(((Player)nearby.get(i)).getName().equals(player2.getName())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
