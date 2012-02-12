@@ -23,6 +23,7 @@ public class CommandManager {
 		// TODO: dynamically load commands ALA CommandBook
 		registerCommand(new CommandChannel(plugin));
 		registerCommand(new CommandMe(plugin));
+		registerCommand(new CommandList(plugin));
 	}
 
 	// register new command
