@@ -54,6 +54,10 @@ public class ChannelManager {
 		}
 	}
 	
+	public Boolean channelExists(String channelName) {
+		return channels.containsKey(channelName);
+	}
+	
 	public Boolean createChannelIfNotExists(String channelName) {
 		// return false if it already existed
 		if(channels.containsKey(channelName)) {

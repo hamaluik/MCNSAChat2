@@ -14,7 +14,24 @@ public class CommandChannel implements Command {
 	}
 
 	public Boolean handle(Player player, String sArgs) {
-		player.sendMessage(plugin.processColours("&cwut?"));
+		// get the channel name
+		String channel = sArgs.trim();
+		
+		// create the channel if it doesn't exist
+		plugin.channelManager.createChannelIfNotExists(channel);
+		
+		// first up: check their perms
+		String perm = plugin.channelManager.getPermission(channel);
+		if(!perm.equals("") && !plugin.hasPermission(player, "channel." + perm)) {
+			// return a message if they don't have permission
+			plugin.log(player.getName() + " attempted to change to channel: " + channel + " without permission!");
+			player.sendMessage(plugin.processColours("&cYou don't have permission to do that!"));
+			return true;
+		}
+		
+		// now move into it!
+		plugin.channelManager.movePlayer(channel, player);
+		
 		return true;
 	}
 }
