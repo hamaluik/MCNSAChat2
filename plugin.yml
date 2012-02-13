@@ -2,4 +2,4 @@ name: MCNSAChat2
 main: com.mcnsa.mcnsachat2.MCNSAChat2
 version: 1.0.0
 author: FuzzyWuzzie
-softdepend: [PermissionsEx]
+depend: [PermissionsEx]
