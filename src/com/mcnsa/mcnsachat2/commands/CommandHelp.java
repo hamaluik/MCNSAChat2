@@ -19,9 +19,11 @@ public class CommandHelp implements Command {
 	public Boolean handle(Player player, String sArgs) {
 		// see if we have args
 		sArgs = sArgs.trim();
+		plugin.debug("sArgs: " + sArgs);
 		Integer page = 0;
 		try {
 			page = Integer.parseInt(sArgs) - 1;
+			plugin.debug("page: " + page);
 		}
 		catch(Exception e) {
 			

@@ -14,6 +14,15 @@
 #     limit: number of messages sent
 #     period: within the given time period
 # hard channels
+#	channel name:
+#		colour: <colour name>
+#		alias: <alias> (for example, alias = "g", type "/g" to switch to channel G
+#		local: <true/false> (optional)
+#		broadcast: <true/false> (optional)
+#		permission: <permission node> permission node to get into the channel (optional)
+#						final permission string will be: "mcnsachat2.channel.<permission node>"
+#		listeners: <permission node> permission node to automatically listen in on the channel (optional)
+#						final permission string will be: "mcnsachat2.listen.<permission node>"
 local-chat-radius: 200
 default-channel: G
 default-colour: grey

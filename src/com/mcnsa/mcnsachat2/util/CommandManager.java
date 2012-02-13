@@ -95,7 +95,7 @@ public class CommandManager {
 			plugin.debug("handling alias: " + tokens[0]);
 			// get the arguments
 			String args = new String("");
-			if(command.length() > 2 + tokens[0].length()) {
+			if(command.length() > 1 + tokens[0].length()) {
 				args = command.substring(1 + tokens[0].length());
 			}
 			// and handle the alias!
@@ -124,7 +124,7 @@ public class CommandManager {
 		String sArgs = new String("");
 		plugin.debug("handling command: " + tokens[0]);
 		// make sure we have args
-		if(command.length() > (2 + tokens[0].length())) {
+		if(command.length() > (1 + tokens[0].length())) {
 			// substring out the args
 			sArgs = command.substring(1 + tokens[0].length());
 			plugin.debug("with arguments: " + sArgs);

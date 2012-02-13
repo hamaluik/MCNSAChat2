@@ -80,7 +80,7 @@ public class MCNSAChat2 extends JavaPlugin {
 	// for debugging
 	// (disable for final release)
 	public void debug(String info) {
-		//log.info("[MCNSAChat2] <DEBUG> " + info);
+		log.info("[MCNSAChat2] <DEBUG> " + info);
 	}
 
 	// load the permissions plugin
