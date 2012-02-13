@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
 
@@ -65,6 +66,16 @@ public class PersistanceHandler {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	public void readPersistance() {
+		String test = new String("{\"players\":{\"FuzzyWuzzie\":\"G\"},\"onTimeout\":[\"FuzzyWuzzie\"],\"seeAll\":[]}");
+		Map<String, Object> obj = (HashMap<String, Object>)JSONValue.parse(test);
+		JSONArray timeout = (JSONArray)obj.get("onTimeout");
+		plugin.debug("looking for players in timeout...");
+		for(int i = 0; i < timeout.size(); i++) {
+			plugin.debug("Found player in timeout: " + timeout.get(i));
 		}
 	}
 }

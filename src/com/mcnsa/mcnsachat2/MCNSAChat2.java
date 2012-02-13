@@ -57,6 +57,10 @@ public class MCNSAChat2 extends JavaPlugin {
 
 		// and finally, the chat manager
 		chatManager = new ChatManager(this, channelManager);
+		
+		// and load the persistance
+		PersistanceHandler ph = new PersistanceHandler(this);
+		ph.readPersistance();
 
 		// routines for when the plugin gets enabled
 		log("plugin enabled!");
