@@ -6,7 +6,7 @@ import com.mcnsa.mcnsachat2.MCNSAChat2;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
-@CommandInfo(alias = "cht", permission = "timeout", usage = "<player>", description = "toggles whether a player is in timeout or not")
+@CommandInfo(alias = "cht", permission = "timeout", usage = "[player]", description = "toggles whether a player is in timeout, or lists those in timeout if no arguments are given")
 public class CommandTimeout implements Command {
 	private static MCNSAChat2 plugin = null;
 	public CommandTimeout(MCNSAChat2 instance) {
@@ -14,6 +14,19 @@ public class CommandTimeout implements Command {
 	}
 
 	public Boolean handle(Player player, String sArgs) {
+		// list the players in timeout if there are no args
+		if(sArgs.trim().equals("")) {
+			String inTimeout = new String("&7Players in timeout: ");
+			for(int i = 0; i < plugin.chatManager.onTimeout.size(); i++) {
+				inTimeout += "&f" + plugin.chatManager.onTimeout.get(i) + "&7, ";
+			}
+			// and alert them
+			player.sendMessage(plugin.processColours(inTimeout));
+			
+			// we handled it
+			return true;
+		}		
+		
 		// get the targeted player
 		Player targetPlayer = plugin.getServer().getPlayer(sArgs.trim());
 		// make sure they're a valid player
