@@ -63,6 +63,12 @@ public class MCNSAChat2 extends JavaPlugin {
 	}
 
 	public void onDisable() {
+		PersistanceHandler ph = new PersistanceHandler(this);
+		ph.updateSeeAll(channelManager.seeAll);
+		ph.updateTimeout(chatManager.onTimeout);
+		ph.updatePlayers(channelManager.players);
+		ph.writePersistance();
+		
 		// shut the plugin down
 		log("plugin disabled!");
 	}

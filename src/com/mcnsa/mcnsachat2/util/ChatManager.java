@@ -10,7 +10,7 @@ public class ChatManager {
 	MCNSAChat2 plugin = null;
 	ChannelManager channelManager = null;
 	// a list of all players that are on timeout
-	private ArrayList<String> onTimeout = new ArrayList<String>();
+	public ArrayList<String> onTimeout = new ArrayList<String>();
 
 	public ChatManager(MCNSAChat2 instance, ChannelManager cm) {
 		plugin = instance;

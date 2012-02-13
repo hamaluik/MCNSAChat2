@@ -12,14 +12,14 @@ import com.mcnsa.mcnsachat2.MCNSAChat2;
 public class ChannelManager {
 	private MCNSAChat2 plugin = null;
 	// keep track of channels
-	private HashMap<String, Channel> channels = new HashMap<String, Channel>();
+	public HashMap<String, Channel> channels = new HashMap<String, Channel>();
 	// and the channel that each player is in!
-	private HashMap<String, String> players = new HashMap<String, String>();
+	public HashMap<String, String> players = new HashMap<String, String>();
 	// and the configuration..
 	ConfigManager config = null;
 	
 	// a list of all players that have seeAll on
-	private ArrayList<String> seeAll = new ArrayList<String>();
+	public ArrayList<String> seeAll = new ArrayList<String>();
 	
 	public ChannelManager(MCNSAChat2 instance, ConfigManager _config) {
 		plugin = instance;
