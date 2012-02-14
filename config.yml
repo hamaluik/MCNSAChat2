@@ -28,7 +28,7 @@ default-channel: G
 default-colour: grey
 announce-timeouts: true
 chat-format: "<%channel&f> [%prefix%suffix&f] %player: &7%message"
-emote-format: "<%channel&f> [%prefix%suffix&f] *&7%player %message"
+emote-format: "<%channel&f> [%prefix%suffix&f] *%player &7%message"
 spam:
   limit: 5
   period: 3
