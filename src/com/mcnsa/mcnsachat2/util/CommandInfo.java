@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 public @interface CommandInfo {
 	public String alias();
 	public String permission() default "";
-	public String usage();
+	public String usage() default "";
 	public String description() default "";
+	public boolean visible() default true;
 }

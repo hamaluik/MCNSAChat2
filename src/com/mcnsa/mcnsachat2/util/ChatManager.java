@@ -2,6 +2,9 @@ package com.mcnsa.mcnsachat2.util;
 
 import java.util.ArrayList;
 
+import net.minecraft.server.Packet3Chat;
+
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
@@ -11,6 +14,8 @@ public class ChatManager {
 	ChannelManager channelManager = null;
 	// a list of all players that are on timeout
 	public ArrayList<String> onTimeout = new ArrayList<String>();
+	// a list of all players that have VoxelChat installed
+	public ArrayList<String> voxelChat = new ArrayList<String>();
 
 	public ChatManager(MCNSAChat2 instance, ChannelManager cm) {
 		plugin = instance;
@@ -48,11 +53,13 @@ public class ChatManager {
 		outgoing = outgoing.replace("%suffix", plugin.permissions.getUser(player).getSuffix());
 		outgoing = outgoing.replace("%player", player.getName());
 		// now process colours..
-		outgoing = plugin.processColours(outgoing);
+		if(!plugin.hasPermission(player, "colour")) {
+			message =  plugin.stripColours(message);
+		}
+		// and add it
 		outgoing = outgoing.replace("%message", message);
-		// now see if they have permission to write with colour
-		if(plugin.hasPermission(player, "colour"))
-			outgoing = plugin.processColours(outgoing);
+		// now process the colours
+		outgoing = plugin.processColours(outgoing);
 		// now send it
 		for(int i = 0; i < listeners.size(); i++) {
 			// get the player associated with this name
@@ -77,7 +84,21 @@ public class ChatManager {
 				}
 			}
 		}
-
+		
+		// now, take care of those who have VoxelChat
+		if(!emote) {
+			for(int i = 0; i < voxelChat.size(); i++) {
+				// get the player info
+				Player pl = plugin.getServer().getPlayer(voxelChat.get(i));
+				
+				plugin.debug("Sending VoxelChat data to player " + pl.getName());
+				
+				// do this so this manual queueing so we don't overflow the 119 character limit
+				((CraftPlayer)pl).getHandle().netServerHandler.networkManager.queue(new Packet3Chat((new StringBuilder()).append("\247b\247d\247c\247b\247d\247cq?=$name=").append(player.getName()).toString()));
+				((CraftPlayer)pl).getHandle().netServerHandler.networkManager.queue(new Packet3Chat((new StringBuilder()).append("\247b\247d\247c\247b\247d\247cq?=$message=").append(message).toString()));
+			}
+		}
+		
 		// and log it
 		plugin.log(plugin.stripColours(outgoing));
 	}
@@ -91,6 +112,22 @@ public class ChatManager {
 		else {
 			onTimeout.add(player.getName());
 			return true;
+		}
+	}
+	
+	// enable VoxelChat for a player
+	public void enableVoxelChat(Player player) {
+		if(!voxelChat.contains(player.getName())) {
+			plugin.debug("player " + player.getName() + " has enabled VoxelChat!");
+			voxelChat.add(player.getName());
+		}
+	}
+	
+	// and remove VoxelChatters when they log off
+	public void disableVoxelChat(Player player) {
+		if(voxelChat.contains(player.getName())) {
+			plugin.debug("player " + player.getName() + " has disabled VoxelChat!");
+			voxelChat.remove(player.getName());
 		}
 	}
 }

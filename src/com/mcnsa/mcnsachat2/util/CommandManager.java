@@ -32,6 +32,7 @@ public class CommandManager {
 		registerCommand(new CommandHelp(plugin));
 		registerCommand(new CommandSeeAll(plugin));
 		registerCommand(new CommandTimeout(plugin));
+		registerCommand(new CommandVoxelChat(plugin));
 	}
 
 	// register new command
@@ -52,9 +53,10 @@ public class CommandManager {
 				plugin.debug("with perms: " + ci.permission());
 				plugin.debug("with usage: " + ci.usage());
 				plugin.debug("with description: " + ci.description());
+				plugin.debug("with visibility: " + ci.visible());
 				
 				// create the internal command
-				InternalCommand ic = new InternalCommand(ci.alias(), ci.permission(), ci.usage(), ci.description(), command);
+				InternalCommand ic = new InternalCommand(ci.alias(), ci.permission(), ci.usage(), ci.description(), ci.visible(), command);
 				commands.put(ci.alias(), ic);
 				
 				// we're done
@@ -169,14 +171,25 @@ public class CommandManager {
 	
 	// return a sorted list of commands
 	public InternalCommand[] listCommands() {
+		// count the number of invisible commands
+		Integer numInvisible = 0;
+		for(int i = 0; i < commands.size(); i++) {
+			if(!commands.get(i).visible) {
+				numInvisible++;
+			}
+		}
+		
 		// create the list
-		InternalCommand[] cList = new InternalCommand[commands.size()];
+		InternalCommand[] cList = new InternalCommand[commands.size() - numInvisible];
 		
 		// get them all!
 		int i = 0;
 		for(String c: commands.keySet()) {
-			cList[i] = commands.get(c);
-			i += 1;
+			// add only the visible ones!
+			if(commands.get(c).visible) {
+				cList[i] = commands.get(c);
+				i += 1;
+			}
 		}
 		
 		// sort the array
@@ -191,13 +204,15 @@ public class CommandManager {
 		public String permissions = new String("");
 		public String usage = new String("");
 		public String description = new String("");
+		public Boolean visible = new Boolean(true);
 		public Command command = null;
 	
-		public InternalCommand(String _alias, String _perms, String _usage, String _desc, Command _command) {
+		public InternalCommand(String _alias, String _perms, String _usage, String _desc, Boolean _visible, Command _command) {
 			alias = _alias;
 			permissions = _perms;
 			usage = _usage;
 			description = _desc;
+			visible = _visible;
 			command = _command;
 		}
 	}
