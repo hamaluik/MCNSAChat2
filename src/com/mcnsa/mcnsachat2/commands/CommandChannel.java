@@ -17,6 +17,13 @@ public class CommandChannel implements Command {
 		// get the channel name
 		String channel = sArgs.trim();
 		
+		// make sure they're not locked
+		if(plugin.channelManager.isLocked(player)) {
+			// they can't change channels!
+			player.sendMessage(plugin.processColours("&cYou have been locked in your channel and cannot change channels!"));
+			return true;
+		}
+		
 		// create the channel if it doesn't exist
 		plugin.channelManager.createChannelIfNotExists(channel);
 		

@@ -16,6 +16,8 @@ public class ChannelManager {
 	public HashMap<String, Channel> channels = new HashMap<String, Channel>();
 	// and the channel that each player is in!
 	public HashMap<String, String> players = new HashMap<String, String>();
+	// keep track of who is locked in their channels
+	public ArrayList<String> locked = new ArrayList<String>();
 	// and the configuration..
 	ConfigManager config = null;
 	
@@ -383,6 +385,31 @@ public class ChannelManager {
 		Arrays.sort(plArr, new PlayerRankComparator());
 		
 		return plArr;
+	}
+	
+	public boolean toggleLocked(Player player) {
+		if(locked.contains(player.getName())) {
+			plugin.debug("player " + player.getName() + " has been unlocked from their channel!");
+			locked.remove(player.getName());
+			return false;
+		}
+		else {
+			plugin.debug("player " + player.getName() + " has been locked in their channel!");
+			locked.add(player.getName());
+			return true;
+		}
+	}
+	
+	public boolean isLocked(Player player) {
+		return locked.contains(player.getName());
+	}
+	
+	public String[] listLocked() {
+		String[] lockedArray = new String[locked.size()];
+		for(int i = 0; i < locked.size(); i++) {
+			lockedArray[i] = locked.get(i);
+		}
+		return lockedArray;
 	}
 	
 	// a channel

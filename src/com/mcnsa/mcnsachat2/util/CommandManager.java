@@ -39,6 +39,8 @@ public class CommandManager {
 		registerCommand(new CommandSearch(plugin));
 		registerCommand(new CommandVerbosity(plugin));
 		registerCommand(new CommandMute(plugin));
+		registerCommand(new CommandLock(plugin));
+		registerCommand(new CommandMove(plugin));
 		plugin.debug("commands all registered!");
 	}
 
@@ -153,7 +155,14 @@ public class CommandManager {
 	}
 	
 	private void handleAlias(Player player, String alias, String message) {
-		// first up: check their perms]
+		// make sure they're not locked
+		if(plugin.channelManager.isLocked(player)) {
+			// they can't change channels!
+			player.sendMessage(plugin.processColours("&cYou have been locked in your channel and cannot change channels!"));
+			return;
+		}
+		
+		// check their perms
 		String channel = aliases.get(alias);
 		String perm = plugin.channelManager.getPermission(channel);
 		if(!perm.equals("") && !plugin.hasPermission(player, "channel." + perm)) {
