@@ -7,7 +7,7 @@ import com.mcnsa.mcnsachat2.util.ChatManager.Verbosity;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
-@CommandInfo(alias = "cverbosity", usage = "<all|some|none>", description = "changes your notification verbosity level")
+@CommandInfo(alias = "cverbosity", usage = "[all|some|none]", description = "changes your notification verbosity level or lists your current level")
 public class CommandVerbosity implements Command {
 	private static MCNSAChat2 plugin = null;
 	public CommandVerbosity(MCNSAChat2 instance) {

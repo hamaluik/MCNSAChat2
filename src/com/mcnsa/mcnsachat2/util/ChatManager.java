@@ -96,14 +96,17 @@ public class ChatManager {
 		// now, take care of those who have VoxelChat
 		if(!emote) {
 			for(int i = 0; i < voxelChat.size(); i++) {
-				// get the player info
-				Player pl = plugin.getServer().getPlayer(voxelChat.get(i));
-				
-				plugin.debug("Sending VoxelChat data to player " + pl.getName());
-				
-				// do this so this manual queueing so we don't overflow the 119 character limit
-				((CraftPlayer)pl).getHandle().netServerHandler.networkManager.queue(new Packet3Chat((new StringBuilder()).append("\247b\247d\247c\247b\247d\247cq?=$name=").append(player.getName()).toString()));
-				((CraftPlayer)pl).getHandle().netServerHandler.networkManager.queue(new Packet3Chat((new StringBuilder()).append("\247b\247d\247c\247b\247d\247cq?=$message=").append(message).toString()));
+				// make sure that voxelChat player is listening!
+				if(listeners.contains(voxelChat.get(i))) {
+					// get the player info
+					Player pl = plugin.getServer().getPlayer(voxelChat.get(i));
+					
+					plugin.debug("Sending VoxelChat data to player " + pl.getName());
+					
+					// do this so this manual queueing so we don't overflow the 119 character limit
+					((CraftPlayer)pl).getHandle().netServerHandler.networkManager.queue(new Packet3Chat((new StringBuilder()).append("\247b\247d\247c\247b\247d\247cq?=$name=").append(player.getName()).toString()));
+					((CraftPlayer)pl).getHandle().netServerHandler.networkManager.queue(new Packet3Chat((new StringBuilder()).append("\247b\247d\247c\247b\247d\247cq?=$message=").append(message).toString()));
+				}
 			}
 		}
 		

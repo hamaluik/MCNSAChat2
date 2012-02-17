@@ -68,19 +68,19 @@ public class MCNSAChat2 extends JavaPlugin {
 		chatManager.setChannelManager(channelManager);
 		
 		// and load the persistance
-		PersistanceHandler ph = new PersistanceHandler(this);
-		ph.readPersistance();
+		/*PersistanceHandler ph = new PersistanceHandler(this);
+		ph.readPersistance();*/
 
 		// routines for when the plugin gets enabled
 		log("plugin enabled!");
 	}
 
 	public void onDisable() {
-		PersistanceHandler ph = new PersistanceHandler(this);
+		/*PersistanceHandler ph = new PersistanceHandler(this);
 		ph.updateSeeAll(channelManager.seeAll);
 		ph.updateTimeout(chatManager.onTimeout);
 		ph.updatePlayers(channelManager.players);
-		ph.writePersistance();
+		ph.writePersistance();*/
 		
 		// shut the plugin down
 		log("plugin disabled!");
@@ -99,7 +99,7 @@ public class MCNSAChat2 extends JavaPlugin {
 	// for debugging
 	// (disable for final release)
 	public void debug(String info) {
-		log.info("[MCNSAChat2] <DEBUG> " + info);
+		//log.info("[MCNSAChat2] <DEBUG> " + info);
 	}
 
 	// load the permissions plugin
