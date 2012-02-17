@@ -19,6 +19,8 @@ public class ChatManager {
 	public ArrayList<String> voxelChat = new ArrayList<String>();
 	// keep track of the verbosity level for players
 	public HashMap<String, Verbosity> verbosity = new HashMap<String, Verbosity>();
+	// keep track of who has who muted
+	public HashMap<String, ArrayList<String>> muted = new HashMap<String, ArrayList<String>>();
 
 	public ChatManager(MCNSAChat2 instance) {
 		plugin = instance;
@@ -166,6 +168,60 @@ public class ChatManager {
 		}
 		plugin.debug("Player has verbosity: " + verbosity.get(player.getName()));
 		return verbosity.get(player.getName());
+	}
+	
+	// toggle if a player has someone muted or not
+	public boolean toggleMuted(Player player, Player targetPlayer) {
+		if(muted.containsKey(player.getName())) {
+			// we're already tracking their muted list
+			ArrayList<String> muteList = muted.get(player.getName());
+			// now toggle their status
+			if(muteList.contains(targetPlayer.getName())) {
+				// they're now unmuted!
+				muteList.remove(targetPlayer.getName());
+				muted.put(player.getName(), muteList);
+				return false;
+			}
+			else {
+				// they're now muted!
+				muteList.add(targetPlayer.getName());
+				muted.put(player.getName(), muteList);
+				return true;
+			}
+		}
+		else {
+			// we're not tracking them yet, add them!
+			ArrayList<String> muteList = new ArrayList<String>();
+			muteList.add(targetPlayer.getName());
+			muted.put(player.getName(), muteList);
+			return true;
+		}
+	}
+	
+	public String[] mutedList(Player player) {
+		// make sure we have a muted list for them
+		if(!muted.containsKey(player.getName())) {
+			return new String[0];
+		}
+		
+		ArrayList<String> muteList = muted.get(player.getName());
+		// and transform to an array
+		String[] muteArray = new String[muteList.size()];
+		for(int i = 0; i < muteList.size(); i++) {
+			muteArray[i] = muteList.get(i);
+		}
+		
+		return muteArray;
+	}
+	
+	public boolean isPlayerMuted(String muter, String mutee) {
+		if(!muted.containsKey(muter)) {
+			// they obviously can't have them muted because they don't exist in our records!
+			return false;
+		}
+		
+		// return whether they're on the list or not!
+		return muted.get(muter).contains(mutee);
 	}
 	
 	// keep track of player verbosity

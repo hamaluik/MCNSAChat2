@@ -38,6 +38,7 @@ public class CommandManager {
 		registerCommand(new CommandToggleVoxelChat(plugin));
 		registerCommand(new CommandSearch(plugin));
 		registerCommand(new CommandVerbosity(plugin));
+		registerCommand(new CommandMute(plugin));
 		plugin.debug("commands all registered!");
 	}
 

@@ -208,8 +208,11 @@ public class ChannelManager {
 				if(!listeners.contains(channels.get(channel).players.get(i))) {
 					// make sure they're within range
 					if(plugin.playerWithinRadius(player, plugin.getServer().getPlayer(channels.get(channel).players.get(i)), plugin.config.options.localChatRadius.intValue())) {
-						listeners.add(channels.get(channel).players.get(i));
-						plugin.debug("Added " + channels.get(channel).players.get(i) + " for being in local radius");
+						// make sure they're not muted
+						if(!plugin.chatManager.isPlayerMuted(channels.get(channel).players.get(i), player.getName())) {
+							listeners.add(channels.get(channel).players.get(i));
+							plugin.debug("Added " + channels.get(channel).players.get(i) + " for being in local radius");
+						}
 					}
 				}
 			}
@@ -220,9 +223,12 @@ public class ChannelManager {
 			for(int i = 0; i < channels.get(channel).players.size(); i++) {
 				// only add them if they're not already there
 				if(!listeners.contains(channels.get(channel).players.get(i))) {
-					// add them!
-					listeners.add(channels.get(channel).players.get(i));
-					plugin.debug("Added " + channels.get(channel).players.get(i) + " for being in the same channel");
+					// make sure they're not muted
+					if(!plugin.chatManager.isPlayerMuted(channels.get(channel).players.get(i), player.getName())) {
+						// add them!
+						listeners.add(channels.get(channel).players.get(i));
+						plugin.debug("Added " + channels.get(channel).players.get(i) + " for being in the same channel");
+					}
 				}
 			}
 		}
