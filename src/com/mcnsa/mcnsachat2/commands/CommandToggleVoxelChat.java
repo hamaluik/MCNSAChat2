@@ -14,7 +14,7 @@ public class CommandToggleVoxelChat implements Command {
 	}
 
 	public Boolean handle(Player player, String sArgs) {
-		Boolean voxelChat = plugin.chatManager.toggleVoxelChat(player);
+		boolean voxelChat = plugin.chatManager.toggleVoxelChat(player);
 		
 		// and alert them to their status
 		if(voxelChat) {

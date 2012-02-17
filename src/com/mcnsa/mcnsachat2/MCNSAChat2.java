@@ -58,11 +58,14 @@ public class MCNSAChat2 extends JavaPlugin {
 		// set up listeners
 		playerListener = new PlayerListener(this);
 
+		// and the chat manager
+		chatManager = new ChatManager(this);
+
 		// set up the channel handler
 		channelManager = new ChannelManager(this, config);
-
-		// and finally, the chat manager
-		chatManager = new ChatManager(this, channelManager);
+		
+		// and set the chat manager's channel manager
+		chatManager.setChannelManager(channelManager);
 		
 		// and load the persistance
 		PersistanceHandler ph = new PersistanceHandler(this);

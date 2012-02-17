@@ -1,5 +1,6 @@
 package com.mcnsa.mcnsachat2.listeners;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -9,6 +10,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
+import com.mcnsa.mcnsachat2.util.ChatManager.Verbosity;
 
 public class PlayerListener implements Listener {
 	MCNSAChat2 plugin = null;
@@ -21,6 +23,22 @@ public class PlayerListener implements Listener {
 	public void joinHandler(PlayerJoinEvent event) {
 		// move them into a channel!
 		plugin.channelManager.movePlayer(plugin.config.options.defaultChannel, event.getPlayer());
+		
+		// set their verbosity level
+		plugin.chatManager.setVerbosity(event.getPlayer(), Verbosity.SHOWALL);
+		
+		// turn off the global join notification
+		event.setJoinMessage("");
+		
+		// and do our own custom notification
+		Player[] players = plugin.getServer().getOnlinePlayers();
+		for(int i = 0; i < players.length; i++) {
+			if(plugin.chatManager.getVerbosity(players[i]).compareTo(Verbosity.SHOWSOME) >= 0) {
+				// they want these messages! show them!
+				// TODO: custom join / leave messages
+				players[i].sendMessage(plugin.processColours(plugin.permissions.getUser(event.getPlayer()).getPrefix() + event.getPlayer().getName() + " &ehas joined the game!"));
+			}
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -29,6 +47,19 @@ public class PlayerListener implements Listener {
 		plugin.channelManager.removePlayer(event.getPlayer());
 		// and remove them from the VoxelChat list
 		plugin.chatManager.disableVoxelChat(event.getPlayer());
+		
+		// turn off the global join notification
+		event.setQuitMessage("");
+		
+		// and do our own custom notification
+		Player[] players = plugin.getServer().getOnlinePlayers();
+		for(int i = 0; i < players.length; i++) {
+			if(plugin.chatManager.getVerbosity(players[i]).compareTo(Verbosity.SHOWSOME) >= 0) {
+				// they want these messages! show them!
+				// TODO: custom join / leave messages
+				players[i].sendMessage(plugin.processColours(plugin.permissions.getUser(event.getPlayer()).getPrefix() + event.getPlayer().getName() + " &ehas left the game!"));
+			}
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST)

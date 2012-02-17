@@ -1,6 +1,7 @@
 package com.mcnsa.mcnsachat2.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.server.Packet3Chat;
 
@@ -16,9 +17,14 @@ public class ChatManager {
 	public ArrayList<String> onTimeout = new ArrayList<String>();
 	// a list of all players that have VoxelChat installed
 	public ArrayList<String> voxelChat = new ArrayList<String>();
+	// keep track of the verbosity level for players
+	public HashMap<String, Verbosity> verbosity = new HashMap<String, Verbosity>();
 
-	public ChatManager(MCNSAChat2 instance, ChannelManager cm) {
+	public ChatManager(MCNSAChat2 instance) {
 		plugin = instance;
+	}
+	
+	public void setChannelManager(ChannelManager cm) {
 		channelManager = cm;
 	}
 
@@ -132,7 +138,7 @@ public class ChatManager {
 	}
 	
 	// and toggle VoxelChat manually
-	public Boolean toggleVoxelChat(Player player) {
+	public boolean toggleVoxelChat(Player player) {
 		if(voxelChat.contains(player.getName())) {
 			plugin.debug("player " + player.getName() + " has disabled VoxelChat!");
 			voxelChat.remove(player.getName());
@@ -143,5 +149,27 @@ public class ChatManager {
 			voxelChat.add(player.getName());
 			return true;
 		}
+	}
+	
+	// set a player's verbosity
+	public void setVerbosity(Player player, Verbosity level) {
+		plugin.debug("Seeing player " + player.getName() + "'s verbosity to: " + level);
+		verbosity.put(player.getName(), level);
+	}
+	
+	// set a player's verbosity
+	public Verbosity getVerbosity(Player player) {
+		plugin.debug("Getting verbosity for " + player.getName());
+		if(!verbosity.containsKey(player.getName())) {
+			plugin.debug("Player did not have verbosity set!");
+			setVerbosity(player, Verbosity.SHOWALL);
+		}
+		plugin.debug("Player has verbosity: " + verbosity.get(player.getName()));
+		return verbosity.get(player.getName());
+	}
+	
+	// keep track of player verbosity
+	public enum Verbosity {
+		SHOWNONE, SHOWSOME, SHOWALL
 	}
 }

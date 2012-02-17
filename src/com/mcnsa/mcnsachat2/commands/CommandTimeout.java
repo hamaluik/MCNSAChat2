@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import com.mcnsa.mcnsachat2.MCNSAChat2;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
+import com.mcnsa.mcnsachat2.util.ChatManager.Verbosity;
 
 @CommandInfo(alias = "ct", permission = "timeout", usage = "[player]", description = "toggles whether a player is in timeout, or lists those in timeout if no arguments are given")
 public class CommandTimeout implements Command {
@@ -25,7 +26,7 @@ public class CommandTimeout implements Command {
 			
 			// we handled it
 			return true;
-		}		
+		}
 		
 		// get the targeted player
 		Player targetPlayer = plugin.getServer().getPlayer(sArgs.trim());
@@ -48,7 +49,9 @@ public class CommandTimeout implements Command {
 			if(plugin.config.options.announceTimeouts) {
 				Player[] players = plugin.getServer().getOnlinePlayers();
 				for(int i = 0; i < players.length; i++) {
-					players[i].sendMessage(plugin.processColours("Attention&7: &f" + targetPlayer.getName() + " &7has been placed in timeout for being &cnaughty&7!"));
+					if(plugin.chatManager.getVerbosity(players[i]).compareTo(Verbosity.SHOWALL) >= 0) {
+						players[i].sendMessage(plugin.processColours("Attention&7: &f" + targetPlayer.getName() + " &7has been placed in timeout for being &cnaughty&7!"));
+					}
 				}
 			}
 		}
@@ -61,7 +64,9 @@ public class CommandTimeout implements Command {
 			if(plugin.config.options.announceTimeouts) {
 				Player[] players = plugin.getServer().getOnlinePlayers();
 				for(int i = 0; i < players.length; i++) {
-					players[i].sendMessage(plugin.processColours("Attention&7: &f" + targetPlayer.getName() + " &7has been removed from timeout for being &anice&7!"));
+					if(plugin.chatManager.getVerbosity(players[i]).compareTo(Verbosity.SHOWALL) >= 0) {
+						players[i].sendMessage(plugin.processColours("Attention&7: &f" + targetPlayer.getName() + " &7has been removed from timeout for being &anice&7!"));
+					}
 				}
 			}
 		}

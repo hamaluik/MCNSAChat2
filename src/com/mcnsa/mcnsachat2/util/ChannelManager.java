@@ -8,6 +8,7 @@ import java.util.HashMap;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
+import com.mcnsa.mcnsachat2.util.ChatManager.Verbosity;
 
 public class ChannelManager {
 	private MCNSAChat2 plugin = null;
@@ -116,16 +117,20 @@ public class ChannelManager {
 		players.put(player.getName(), channel);
 		
 		// report it to the player!
-		player.sendMessage(plugin.processColours("&7Welcome to the " + channels.get(channel).colour + channels.get(channel).name + " &7channel!"));
+		if(plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWSOME) >= 0) {
+			player.sendMessage(plugin.processColours("&7Welcome to the " + channels.get(channel).colour + channels.get(channel).name + " &7channel!"));
+		}
 
 		// let them know who's here
-		Player[] channelPlayers = listPlayers(channel);
-		String message = new String("&7Players here: ");
-		for(int i = 0; i < channelPlayers.length; i++) {
-			// add the players prefix (colour)
-			message += plugin.permissions.getUser(channelPlayers[i]).getPrefix() + channelPlayers[i].getName() + "&7, ";
+		if(plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWALL) >= 0) {
+			Player[] channelPlayers = listPlayers(channel);
+			String message = new String("&7Players here: ");
+			for(int i = 0; i < channelPlayers.length; i++) {
+				// add the players prefix (colour)
+				message += plugin.permissions.getUser(channelPlayers[i]).getPrefix() + channelPlayers[i].getName() + "&7, ";
+			}
+			player.sendMessage(plugin.processColours(message));
 		}
-		player.sendMessage(plugin.processColours(message));
 		
 		// and to everyone in the channel
 		// TODO: sort this out
@@ -336,7 +341,9 @@ public class ChannelManager {
 		// and announce it
 		ArrayList<String> players = channels.get(channel).players;
 		for(int i = 0; i < players.size(); i++) {
-			plugin.getServer().getPlayer(players.get(i)).sendMessage(plugin.processColours("&7Channel &f" + channel + "&7's colour has been changed to: " + colour + ColourHandler.translateColour(colour)));
+			if(plugin.chatManager.getVerbosity(plugin.getServer().getPlayer(players.get(i))).compareTo(Verbosity.SHOWALL) >= 0) {
+				plugin.getServer().getPlayer(players.get(i)).sendMessage(plugin.processColours("&7Channel &f" + channel + "&7's colour has been changed to: " + colour + ColourHandler.translateColour(colour)));
+			}
 		}
 	}
 	

@@ -36,6 +36,8 @@ public class CommandManager {
 		registerCommand(new CommandVoxelChat(plugin));
 		registerCommand(new CommandWho(plugin));
 		registerCommand(new CommandToggleVoxelChat(plugin));
+		registerCommand(new CommandSearch(plugin));
+		registerCommand(new CommandVerbosity(plugin));
 		plugin.debug("commands all registered!");
 	}
 
