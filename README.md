@@ -83,6 +83,13 @@ Here is the default configuration file:
 |/cmute \<player\>|mcnsachat2.mute|toggles whether you have personally muted \<player\>|
 |/clock [player]|mcnsachat2.lock|toggle whether a player is locked from changing channels (or lists who is currently locked if no arguments are given)|
 
+### Verbosity Levels ##
+|**Level**|**Effect**|
+|:--------|:---------|
+|All|Shows game join / leave notifications, shows channel join / leave notifications, shows player timeout broadcasts, shows channel join message, shows who is in channel upon entering it, shows channel colour change notifications, shows per-player mute notifications, shows channel lock notifications, shows channel move notifications|
+|Some|Shows game join / leave notifications, shows channel join message, shows per-player mute notifications, shows channel lock notifications, shows channel move notifications|
+|None|Shows none of the above|
+
 ### As Of Yet Unimplemented Commands
 |**Command**|**Effect**|
 |:----------|:---------|
@@ -95,9 +102,16 @@ Here is the default configuration file:
 |:------------------|:---------|
 |mcnsachat2.colour|Allows a player to use colour tags in their message (ie: &a, &c, etc)|
 
-## Verbosity Levels ##
-|**Level**|**Effect**|
-|:--------|:---------|
-|All|Shows game join / leave notifications, shows channel join / leave notifications, shows player timeout broadcasts, shows channel join message, shows who is in channel upon entering it, shows channel colour change notifications, shows per-player mute notifications, shows channel lock notifications, shows channel move notifications|
-|Some|Shows game join / leave notifications, shows channel join message, shows per-player mute notifications, shows channel lock notifications, shows channel move notifications|
-|None|Shows none of the above|
+## TODO List ##
+* Implement '*' player selector
+* Implement data peristance across relogs & reloads
+* Implement auto-timed timeouts
+* Implement mod poofing in channels
+* Implement per-channel listening
+* Potentially make verbosity levels finer?
+* Add multiple aliases to commands (/c, /ch, do the same thing, etc)
+* Add configuration lines for player joined / left the game messages
+* Add / fix "<player> has joined the channel messages"
+* Colours, names, ranks in chat bubbles?
+* Hard list of players who have VoxelChat bubbles, only allow manual enabling for them?
+* Add fun commands like /rtd, etc
