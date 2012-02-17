@@ -22,10 +22,10 @@ public class MCNSAChat2 extends JavaPlugin {
 	public PermissionManager permissions = null;
 
 	// keep track of configuration options
-	public ConfigManager config = new ConfigManager(this);
+	public ConfigManager config = null;
 
 	// and commands
-	public CommandManager commandManager = new CommandManager(this);
+	public CommandManager commandManager = null;
 
 	// keep track of listeners
 	public PlayerListener playerListener = null;
@@ -37,6 +37,12 @@ public class MCNSAChat2 extends JavaPlugin {
 	public void onEnable() {
 		// set up permissions
 		this.setupPermissions();
+		
+		// set up
+		debug("loading configuration manager..");
+		config = new ConfigManager(this);
+		debug("loading command manager..");
+		commandManager = new CommandManager(this);
 
 		// load configuration
 		// and save it again (for defaults)

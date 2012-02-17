@@ -16,15 +16,16 @@ public class CommandManager {
 	public MCNSAChat2 plugin = null;
 
 	// and the commands
-	private HashMap<String, InternalCommand> commands = new HashMap<String, InternalCommand>();
+	public HashMap<String, InternalCommand> commands = new HashMap<String, InternalCommand>();
 	// and the aliases
-	private HashMap<String, String> aliases = new HashMap<String, String>();
+	public HashMap<String, String> aliases = new HashMap<String, String>();
 
 	public CommandManager(MCNSAChat2 instance) {
 		plugin = instance;
 
 		// develop the list of all commands here!
 		// TODO: dynamically load commands ALA CommandBook
+		plugin.debug("registering commands...");
 		registerCommand(new CommandChannel(plugin));
 		registerCommand(new CommandMe(plugin));
 		registerCommand(new CommandList(plugin));
@@ -33,6 +34,9 @@ public class CommandManager {
 		registerCommand(new CommandSeeAll(plugin));
 		registerCommand(new CommandTimeout(plugin));
 		registerCommand(new CommandVoxelChat(plugin));
+		registerCommand(new CommandWho(plugin));
+		registerCommand(new CommandToggleVoxelChat(plugin));
+		plugin.debug("commands all registered!");
 	}
 
 	// register new command
@@ -172,27 +176,31 @@ public class CommandManager {
 	// return a sorted list of commands
 	public InternalCommand[] listCommands() {
 		// count the number of invisible commands
-		Integer numInvisible = 0;
-		for(int i = 0; i < commands.size(); i++) {
-			if(!commands.get(i).visible) {
+		plugin.debug("counting number of invisible commands");
+		int numInvisible = 0;
+		for(String cmd: commands.keySet()) {
+			if(!commands.get(cmd).visible) {
 				numInvisible++;
 			}
 		}
 		
 		// create the list
+		plugin.debug("creating command list array");
 		InternalCommand[] cList = new InternalCommand[commands.size() - numInvisible];
 		
 		// get them all!
 		int i = 0;
-		for(String c: commands.keySet()) {
+		plugin.debug("getting all visible commands");
+		for(String cmd: commands.keySet()) {
 			// add only the visible ones!
-			if(commands.get(c).visible) {
-				cList[i] = commands.get(c);
+			if(commands.get(cmd).visible) {
+				cList[i] = commands.get(cmd);
 				i += 1;
 			}
 		}
 		
 		// sort the array
+		plugin.debug("sorting command list");
 		Arrays.sort(cList, new CommandComp());
 		
 		// and return!
@@ -207,7 +215,7 @@ public class CommandManager {
 		public Boolean visible = new Boolean(true);
 		public Command command = null;
 	
-		public InternalCommand(String _alias, String _perms, String _usage, String _desc, Boolean _visible, Command _command) {
+		public InternalCommand(String _alias, String _perms, String _usage, String _desc, boolean _visible, Command _command) {
 			alias = _alias;
 			permissions = _perms;
 			usage = _usage;

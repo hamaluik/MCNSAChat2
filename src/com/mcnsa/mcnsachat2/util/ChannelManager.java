@@ -117,6 +117,15 @@ public class ChannelManager {
 		
 		// report it to the player!
 		player.sendMessage(plugin.processColours("&7Welcome to the " + channels.get(channel).colour + channels.get(channel).name + " &7channel!"));
+
+		// let them know who's here
+		Player[] channelPlayers = listPlayers(channel);
+		String message = new String("&7Players here: ");
+		for(int i = 0; i < channelPlayers.length; i++) {
+			// add the players prefix (colour)
+			message += plugin.permissions.getUser(channelPlayers[i]).getPrefix() + channelPlayers[i].getName() + "&7, ";
+		}
+		player.sendMessage(plugin.processColours(message));
 		
 		// and to everyone in the channel
 		// TODO: sort this out
@@ -343,6 +352,26 @@ public class ChannelManager {
 		}
 	}
 	
+	public Player[] listPlayers(String channel) {
+		ArrayList<Player> pl = new ArrayList<Player>();
+		for(String player: players.keySet()) {
+			if(players.get(player).equalsIgnoreCase(channel)) {
+				pl.add(plugin.getServer().getPlayer(player));
+			}
+		}
+		
+		// make it into an array
+		Player[] plArr = new Player[pl.size()];
+		for(int i = 0; i < pl.size(); i++) {
+			plArr[i] = pl.get(i);
+		}
+		
+		// and sort
+		Arrays.sort(plArr, new PlayerRankComparator());
+		
+		return plArr;
+	}
+	
 	// a channel
 	public class Channel {
 		public String name = new String("");
@@ -364,6 +393,22 @@ public class ChannelManager {
 	class ChannelComp implements Comparator<Channel> {
 		public int compare(Channel a, Channel b) {
 			return a.name.compareTo(b.name);
+		}
+	}
+
+	// create a comparator class for the group rankings
+	class PlayerRankComparator implements Comparator<Player> {
+		public int compare(Player a, Player b) {
+			int ra = plugin.permissions.getUser(a).getOptionInteger("rank", "", 9999);
+			int rb = plugin.permissions.getUser(b).getOptionInteger("rank", "", 9999);
+			
+			if(ra < rb)
+				return 1;
+			else if(ra == rb)
+				return 0;
+			else {
+				return -1;
+			}
 		}
 	}
 }

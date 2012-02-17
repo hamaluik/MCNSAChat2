@@ -6,7 +6,7 @@ import com.mcnsa.mcnsachat2.MCNSAChat2;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
-@CommandInfo(alias = "cht", permission = "timeout", usage = "[player]", description = "toggles whether a player is in timeout, or lists those in timeout if no arguments are given")
+@CommandInfo(alias = "ct", permission = "timeout", usage = "[player]", description = "toggles whether a player is in timeout, or lists those in timeout if no arguments are given")
 public class CommandTimeout implements Command {
 	private static MCNSAChat2 plugin = null;
 	public CommandTimeout(MCNSAChat2 instance) {

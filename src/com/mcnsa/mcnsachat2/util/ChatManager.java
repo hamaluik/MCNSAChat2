@@ -130,4 +130,18 @@ public class ChatManager {
 			voxelChat.remove(player.getName());
 		}
 	}
+	
+	// and toggle VoxelChat manually
+	public Boolean toggleVoxelChat(Player player) {
+		if(voxelChat.contains(player.getName())) {
+			plugin.debug("player " + player.getName() + " has disabled VoxelChat!");
+			voxelChat.remove(player.getName());
+			return false;
+		}
+		else {
+			plugin.debug("player " + player.getName() + " has enabled VoxelChat!");
+			voxelChat.add(player.getName());
+			return true;
+		}
+	}
 }
