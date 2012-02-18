@@ -88,6 +88,7 @@ public class PersistanceHandler {
 			// put some basic lists
 			obj.put("onTimeout", plugin.chatManager.onTimeout);
 			obj.put("seeAll", plugin.channelManager.seeAll);
+			obj.put("poofed", plugin.channelManager.poofed);
 			
 			// now put the player channels
 			for(String player: plugin.channelManager.players.keySet()) {
@@ -143,6 +144,7 @@ public class PersistanceHandler {
 			if(obj != null) {
 				plugin.chatManager.onTimeout = (ArrayList<String>)obj.get("onTimeout");
 				plugin.channelManager.seeAll = (ArrayList<String>)obj.get("seeAll");
+				plugin.channelManager.poofed = (ArrayList<String>)obj.get("poofed");
 				offlineChannels = (HashMap<String, String>)obj.get("playerChannels");
 				offlineVerbosity = (HashMap<String, Long>)obj.get("playerVerbosity");
 				plugin.chatManager.muted = (HashMap<String, ArrayList<String>>)obj.get("muted");

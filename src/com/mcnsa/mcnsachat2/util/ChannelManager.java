@@ -18,6 +18,8 @@ public class ChannelManager {
 	public HashMap<String, String> players = new HashMap<String, String>();
 	// keep track of who is locked in their channels
 	public ArrayList<String> locked = new ArrayList<String>();
+	// keep track of who is poofed!
+	public ArrayList<String> poofed = new ArrayList<String>();
 	// and the configuration..
 	ConfigManager config = null;
 	
@@ -118,11 +120,20 @@ public class ChannelManager {
 
 		// let them know who's here
 		if(!suppressWho && plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWALL) >= 0) {
-			Player[] channelPlayers = listPlayers(channel);
+			Player[] channelPlayers = listListenerPlayers(channel);
 			String message = new String("&7Players here: ");
 			for(int i = 0; i < channelPlayers.length; i++) {
 				// add the players prefix (colour)
-				message += plugin.permissions.getUser(channelPlayers[i]).getPrefix() + channelPlayers[i].getName() + "&7, ";
+				if(isPoofed(channelPlayers[i])) {
+					// they're poofed!
+					// see if we can see them or not
+					if(plugin.hasPermission(player, "seepoofed")) {
+						message += plugin.permissions.getUser(channelPlayers[i]).getPrefix() + channelPlayers[i].getName() + "&b*&7, ";
+					}
+				}
+				else {
+					message += plugin.permissions.getUser(channelPlayers[i]).getPrefix() + channelPlayers[i].getName() + "&7, ";
+				}
 			}
 			ColourHandler.sendMessage(player, message);
 		}
@@ -389,6 +400,44 @@ public class ChannelManager {
 		return plArr;
 	}
 	
+	public Player[] listListenerPlayers(String channel) {
+		ArrayList<Player> pl = new ArrayList<Player>();
+		for(String player: players.keySet()) {
+			if(players.get(player).equalsIgnoreCase(channel)) {
+				pl.add(plugin.getServer().getPlayer(player));
+			}
+		}
+		// now get everyone who "listens in" on this channel
+		// now include those listening in automatically
+		// first make sure they channel has some default listeners
+		if(!channels.get(channel).listeners.equals("")) {
+			// get a list of all online players
+			Player[] online = plugin.getServer().getOnlinePlayers();
+			for(int i = 0; i < online.length; i++) {
+				// make sure they're not already on the list
+				if(!pl.contains(online[i])) {
+					// check their permissions status!
+					if(plugin.hasPermission(online[i], "listen." + channels.get(channel).listeners)) {
+						// add them!
+						pl.add(online[i]);
+						//plugin.debug("Added " + players[i].getName() + " for being a listener");
+					}
+				}
+			}
+		}
+		
+		// make it into an array
+		Player[] plArr = new Player[pl.size()];
+		for(int i = 0; i < pl.size(); i++) {
+			plArr[i] = pl.get(i);
+		}
+		
+		// and sort
+		Arrays.sort(plArr, new PlayerRankComparator());
+		
+		return plArr;
+	}
+	
 	public boolean toggleLocked(Player player) {
 		if(locked.contains(player.getName())) {
 			//plugin.debug("player " + player.getName() + " has been unlocked from their channel!");
@@ -425,6 +474,23 @@ public class ChannelManager {
 			// and move into it!
 			movePlayer(channel, online[i], true);
 		}
+	}
+	
+	public boolean togglePoof(Player player) {
+		if(poofed.contains(player.getName())) {
+			//plugin.debug("player " + player.getName() + " has been unlocked from their channel!");
+			poofed.remove(player.getName());
+			return false;
+		}
+		else {
+			//plugin.debug("player " + player.getName() + " has been locked in their channel!");
+			poofed.add(player.getName());
+			return true;
+		}
+	}
+	
+	public boolean isPoofed(Player player) {
+		return poofed.contains(player.getName());
 	}
 	
 	// a channel

@@ -15,14 +15,22 @@ public class CommandWho implements Command {
 	}
 
 	public Boolean handle(Player player, String sArgs) {		
-		Player[] players = plugin.channelManager.listPlayers(plugin.channelManager.getPlayerChannel(player));
+		Player[] players = plugin.channelManager.listListenerPlayers(plugin.channelManager.getPlayerChannel(player));
 		
 		String message = new String("&7Players here: ");
 		for(int i = 0; i < players.length; i++) {
 			// add the players prefix (colour)
-			message += plugin.permissions.getUser(players[i]).getPrefix() + players[i].getName() + "&7, ";
+			if(plugin.channelManager.isPoofed(players[i])) {
+				// they're poofed!
+				// see if we can see them or not
+				if(plugin.hasPermission(player, "seepoofed")) {
+					message += plugin.permissions.getUser(players[i]).getPrefix() + players[i].getName() + "&b*&7, ";
+				}
+			}
+			else {
+				message += plugin.permissions.getUser(players[i]).getPrefix() + players[i].getName() + "&7, ";
+			}
 		}
-		
 		ColourHandler.sendMessage(player, message);
 		
 		// and we handled it!
