@@ -78,7 +78,7 @@ public class PlayerListener implements Listener {
 		if(event.isCancelled()) return;
 		
 		// now intercept the chat
-		plugin.chatManager.handleChat(event.getPlayer(), event.getMessage(), false, "");
+		plugin.chatManager.handleChat(event.getPlayer(), event.getMessage(), false, "", true);
 		
 		// and cancel the event!
 		event.setCancelled(true);

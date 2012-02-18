@@ -21,7 +21,7 @@ public class CommandMe implements Command {
 		}
 		
 		// handle the /me
-		plugin.chatManager.handleChat(player, sArgs, true, "");
+		plugin.chatManager.handleChat(player, sArgs, true, "", true);
 		
 		// and we handled it!
 		return true;

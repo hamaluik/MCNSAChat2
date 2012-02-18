@@ -30,7 +30,7 @@ public class ChatManager {
 		channelManager = cm;
 	}
 
-	public void handleChat(Player player, String message, Boolean emote, String toChannel) {
+	public void handleChat(Player player, String message, Boolean emote, String toChannel, Boolean checkColours) {
 		// figure out which channel to speak to
 		String channel = new String(toChannel);
 		if(toChannel.equals("")) {
@@ -61,7 +61,7 @@ public class ChatManager {
 		outgoing = outgoing.replace("%suffix", plugin.permissions.getUser(player).getSuffix());
 		outgoing = outgoing.replace("%player", player.getName());
 		// now process colours..
-		if(!plugin.hasPermission(player, "colour")) {
+		if(checkColours && !plugin.hasPermission(player, "colour")) {
 			message = ColourHandler.stripColours(message);
 		}
 		// and add it

@@ -42,6 +42,7 @@ public class CommandManager {
 		registerCommand(new CommandLock(plugin));
 		registerCommand(new CommandMove(plugin));
 		registerCommand(new CommandPoof(plugin));
+		registerCommand(new CommandRollTheDice(plugin));
 		//plugin.debug("commands all registered!");
 	}
 
@@ -176,7 +177,7 @@ public class CommandManager {
 		// if non-empty message, don't change channel
 		if(!message.trim().equals("")) {
 			// broadcast their message!
-			plugin.chatManager.handleChat(player, message, false, channel);
+			plugin.chatManager.handleChat(player, message, false, channel, true);
 			
 			// return, we're not changing channels
 			return;
