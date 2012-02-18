@@ -51,7 +51,7 @@ public class CommandMute implements Command {
 		else {
 			ColourHandler.sendMessage(player, plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7has been &aunmuted&7!");
 			if(plugin.chatManager.getVerbosity(targetPlayer).compareTo(Verbosity.SHOWSOME) >= 0) {
-				ColourHandler.sendMessage(targetPlayer, plugin.permissions.getUser(player).getPrefix() + player.getName() + " &7has &cunmuted&7 you!");
+				ColourHandler.sendMessage(targetPlayer, plugin.permissions.getUser(player).getPrefix() + player.getName() + " &7has &aunmuted&7 you!");
 			}
 		}
 		
