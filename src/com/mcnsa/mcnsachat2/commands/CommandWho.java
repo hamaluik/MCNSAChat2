@@ -24,11 +24,14 @@ public class CommandWho implements Command {
 				// they're poofed!
 				// see if we can see them or not
 				if(plugin.hasPermission(player, "seepoofed")) {
-					message += plugin.permissions.getUser(players[i]).getPrefix() + players[i].getName() + "&b*&7, ";
+					message += plugin.permissions.getUser(players[i]).getPrefix() + players[i].getName() + "&b*";
 				}
 			}
 			else {
-				message += plugin.permissions.getUser(players[i]).getPrefix() + players[i].getName() + "&7, ";
+				message += plugin.permissions.getUser(players[i]).getPrefix() + players[i].getName();
+			}
+			if(i < players.length - 1) {
+				 message += "&7, ";
 			}
 		}
 		ColourHandler.sendMessage(player, message);

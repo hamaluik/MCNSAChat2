@@ -128,11 +128,14 @@ public class ChannelManager {
 					// they're poofed!
 					// see if we can see them or not
 					if(plugin.hasPermission(player, "seepoofed")) {
-						message += plugin.permissions.getUser(channelPlayers[i]).getPrefix() + channelPlayers[i].getName() + "&b*&7, ";
+						message += plugin.permissions.getUser(channelPlayers[i]).getPrefix() + channelPlayers[i].getName() + "&b*";
 					}
 				}
 				else {
-					message += plugin.permissions.getUser(channelPlayers[i]).getPrefix() + channelPlayers[i].getName() + "&7, ";
+					message += plugin.permissions.getUser(channelPlayers[i]).getPrefix() + channelPlayers[i].getName();
+				}
+				if(i < channelPlayers.length - 1) {
+					 message += "&7, ";
 				}
 			}
 			ColourHandler.sendMessage(player, message);

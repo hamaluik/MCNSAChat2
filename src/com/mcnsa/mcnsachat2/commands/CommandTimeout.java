@@ -20,7 +20,10 @@ public class CommandTimeout implements Command {
 		if(sArgs.trim().equals("")) {
 			String inTimeout = new String("&7Players in timeout: ");
 			for(int i = 0; i < plugin.chatManager.onTimeout.size(); i++) {
-				inTimeout += "&f" + plugin.chatManager.onTimeout.get(i) + "&7, ";
+				inTimeout += "&f" + plugin.chatManager.onTimeout.get(i);
+				if(i < plugin.chatManager.onTimeout.size() - 1) {
+					inTimeout += "&7, ";
+				}
 			}
 			// and alert them
 			ColourHandler.sendMessage(player, inTimeout);

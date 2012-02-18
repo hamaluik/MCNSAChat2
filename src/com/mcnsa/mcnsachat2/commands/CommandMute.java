@@ -24,7 +24,10 @@ public class CommandMute implements Command {
 			Arrays.sort(muted);
 			String message = "&7Players you have muted: ";
 			for(int i = 0; i < muted.length; i++) {
-				message += "&f" + muted[i] + "&7, ";
+				message += "&f" + muted[i];
+				if(i < muted.length - 1) {
+					message += "&7, ";
+				}
 			}
 			ColourHandler.sendMessage(player, message);
 			return true;

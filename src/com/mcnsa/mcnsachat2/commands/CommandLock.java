@@ -24,7 +24,10 @@ public class CommandLock implements Command {
 			Arrays.sort(locked);
 			String message = "&7Players have been locked: ";
 			for(int i = 0; i < locked.length; i++) {
-				message += "&f" + locked[i] + "&7, ";
+				message += "&f" + locked[i];
+				if(i < locked.length - 1) {
+					message += "&7, ";
+				}
 			}
 			ColourHandler.sendMessage(player, message);
 			return true;

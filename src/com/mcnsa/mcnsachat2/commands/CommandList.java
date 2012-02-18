@@ -25,7 +25,10 @@ public class CommandList implements Command {
 			//plugin.debug("channel " + channels[i].name + " has permission: mcnsachat2.channel." + channels[i].permission);
 			if(channels[i].permission.equals("") || plugin.hasPermission(player, "channel." + channels[i].permission)) {
 				// the channel has permissions and we have them!
-				chStr += channels[i].colour + channels[i].name + "&7, ";
+				chStr += channels[i].colour + channels[i].name;
+			}
+			if(i < channels.length - 1) {
+				chStr += "&7, ";
 			}
 		}
 		
