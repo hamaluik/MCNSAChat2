@@ -114,7 +114,7 @@ public class ChannelManager {
 		players.put(player.getName(), channel);
 		
 		// report it to the player!
-		if(!suppressWho && plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWSOME) >= 0) {
+		if(plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWSOME) >= 0) {
 			ColourHandler.sendMessage(player, "&7Welcome to the " + channels.get(channel).colour + channels.get(channel).name + " &7channel!");
 		}
 
