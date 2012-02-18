@@ -113,7 +113,7 @@ public class ChannelManager {
 		
 		// report it to the player!
 		if(!suppressWho && plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWSOME) >= 0) {
-			player.sendMessage(plugin.processColours("&7Welcome to the " + channels.get(channel).colour + channels.get(channel).name + " &7channel!"));
+			ColourHandler.sendMessage(player, "&7Welcome to the " + channels.get(channel).colour + channels.get(channel).name + " &7channel!");
 		}
 
 		// let them know who's here
@@ -124,7 +124,7 @@ public class ChannelManager {
 				// add the players prefix (colour)
 				message += plugin.permissions.getUser(channelPlayers[i]).getPrefix() + channelPlayers[i].getName() + "&7, ";
 			}
-			player.sendMessage(plugin.processColours(message));
+			ColourHandler.sendMessage(player, message);
 		}
 		
 		// and to everyone in the channel
@@ -343,7 +343,7 @@ public class ChannelManager {
 		ArrayList<String> players = channels.get(channel).players;
 		for(int i = 0; i < players.size(); i++) {
 			if(plugin.chatManager.getVerbosity(plugin.getServer().getPlayer(players.get(i))).compareTo(Verbosity.SHOWALL) >= 0) {
-				plugin.getServer().getPlayer(players.get(i)).sendMessage(plugin.processColours("&7Channel &f" + channel + "&7's colour has been changed to: " + colour + ColourHandler.translateColour(colour)));
+				ColourHandler.sendMessage(plugin.getServer().getPlayer(players.get(i)), "&7Channel &f" + channel + "&7's colour has been changed to: " + colour + ColourHandler.translateColour(colour));
 			}
 		}
 	}

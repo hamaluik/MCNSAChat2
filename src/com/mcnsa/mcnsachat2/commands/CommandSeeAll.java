@@ -3,6 +3,7 @@ package com.mcnsa.mcnsachat2.commands;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
+import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
@@ -19,10 +20,10 @@ public class CommandSeeAll implements Command {
 		
 		// and alert them to their status
 		if(seeAll) {
-			player.sendMessage(plugin.processColours("&7You can now see &fALL &7chat channels!"));
+			ColourHandler.sendMessage(player, "&7You can now see &fALL &7chat channels!");
 		}
 		else {
-			player.sendMessage(plugin.processColours("&7You can &fNO LONGER &7see &fALL &7chat channels!"));
+			ColourHandler.sendMessage(player, "&7You can &fNO LONGER &7see &fALL &7chat channels!");
 		}
 		
 		// and we handled it!

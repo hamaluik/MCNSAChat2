@@ -39,7 +39,7 @@ public class CommandColour implements Command {
 		
 		// catch an empty colour string
 		if(col.equals("")) {
-			player.sendMessage(plugin.processColours("&cInvalid colour! &aValid colours: &0black, &1dark blue, &2dark green, &3dark teal, &4dark red, &5purple, &6gold, &7grey, &8dark grey, &9blue, &agreen, &bteal, &cred, &dpink, &eyellow, &fwhite"));
+			ColourHandler.sendMessage(player, "&cInvalid colour! &aValid colours: &0black, &1dark blue, &2dark green, &3dark teal, &4dark red, &5purple, &6gold, &7grey, &8dark grey, &9blue, &agreen, &bteal, &cred, &dpink, &eyellow, &fwhite");
 			return true;
 		}
 		

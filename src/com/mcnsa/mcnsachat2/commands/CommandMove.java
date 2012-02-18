@@ -3,6 +3,7 @@ package com.mcnsa.mcnsachat2.commands;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
+import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 import com.mcnsa.mcnsachat2.util.ChatManager.Verbosity;
@@ -30,7 +31,7 @@ public class CommandMove implements Command {
 		Player targetPlayer = plugin.getServer().getPlayer(args[0]);
 		// make sure they're a valid player
 		if(targetPlayer == null) {
-			player.sendMessage(plugin.processColours("&cError: I could not find the player '&f" + sArgs.trim() + "&c'!"));
+			ColourHandler.sendMessage(player, "&cError: I could not find the player '&f" + sArgs.trim() + "&c'!");
 			return true;
 		}
 
@@ -38,9 +39,9 @@ public class CommandMove implements Command {
 		plugin.channelManager.createChannelIfNotExists(channel);
 		
 		// and return a message
-		player.sendMessage(plugin.processColours(plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7has been moved to channel: " + plugin.channelManager.getChannelColour(channel) + channel));
+		ColourHandler.sendMessage(player, plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7has been moved to channel: " + plugin.channelManager.getChannelColour(channel) + channel);
 		if(plugin.chatManager.getVerbosity(targetPlayer).compareTo(Verbosity.SHOWSOME) >= 0) {
-			targetPlayer.sendMessage(plugin.processColours("&7You have been moved to channel: " + plugin.channelManager.getChannelColour(channel) + channel));
+			ColourHandler.sendMessage(targetPlayer, "&7You have been moved to channel: " + plugin.channelManager.getChannelColour(channel) + channel);
 		}
 		
 		// now move into it!

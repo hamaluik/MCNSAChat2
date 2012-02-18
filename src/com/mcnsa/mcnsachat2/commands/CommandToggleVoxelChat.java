@@ -3,6 +3,7 @@ package com.mcnsa.mcnsachat2.commands;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
+import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
@@ -18,10 +19,10 @@ public class CommandToggleVoxelChat implements Command {
 		
 		// and alert them to their status
 		if(voxelChat) {
-			player.sendMessage(plugin.processColours("&7You can now see chat bubbles!"));
+			ColourHandler.sendMessage(player, "&7You can now see chat bubbles!");
 		}
 		else {
-			player.sendMessage(plugin.processColours("&7You can no longer see chat bubbles!"));
+			ColourHandler.sendMessage(player, "&7You can no longer see chat bubbles!");
 		}
 		
 		// and we handled it!

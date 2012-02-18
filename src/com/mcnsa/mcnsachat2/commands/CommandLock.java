@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
+import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 import com.mcnsa.mcnsachat2.util.ChatManager.Verbosity;
@@ -25,7 +26,7 @@ public class CommandLock implements Command {
 			for(int i = 0; i < locked.length; i++) {
 				message += "&f" + locked[i] + "&7, ";
 			}
-			player.sendMessage(plugin.processColours(message));
+			ColourHandler.sendMessage(player, message);
 			return true;
 		}
 		
@@ -33,7 +34,7 @@ public class CommandLock implements Command {
 		Player targetPlayer = plugin.getServer().getPlayer(sArgs.trim());
 		// make sure they're a valid player
 		if(targetPlayer == null) {
-			player.sendMessage(plugin.processColours("&cError: I could not find the player '&f" + sArgs.trim() + "&c'!"));
+			ColourHandler.sendMessage(player, "&cError: I could not find the player '&f" + sArgs.trim() + "&c'!");
 			return true;
 		}
 		
@@ -42,15 +43,15 @@ public class CommandLock implements Command {
 		
 		// and return a message
 		if(locked) {
-			player.sendMessage(plugin.processColours(plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7has been &clocked &7in their channel!"));
+			ColourHandler.sendMessage(player, plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7has been &clocked &7in their channel!");
 			if(plugin.chatManager.getVerbosity(targetPlayer).compareTo(Verbosity.SHOWSOME) >= 0) {
-				targetPlayer.sendMessage(plugin.processColours("&7You have been &clocked &7in your channel!"));
+				ColourHandler.sendMessage(targetPlayer, "&7You have been &clocked &7in your channel!");
 			}
 		}
 		else {
-			player.sendMessage(plugin.processColours(plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7has been &aunlocked &7from their channel!"));
+			ColourHandler.sendMessage(player, plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7has been &aunlocked &7from their channel!");
 			if(plugin.chatManager.getVerbosity(targetPlayer).compareTo(Verbosity.SHOWSOME) >= 0) {
-				targetPlayer.sendMessage(plugin.processColours("&7You have been &aunlocked &7from your channel!"));
+				ColourHandler.sendMessage(targetPlayer, "&7You have been &aunlocked &7from your channel!");
 			}
 		}
 		

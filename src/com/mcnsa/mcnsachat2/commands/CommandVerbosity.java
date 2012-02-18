@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
 import com.mcnsa.mcnsachat2.util.ChatManager.Verbosity;
+import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
@@ -21,13 +22,13 @@ public class CommandVerbosity implements Command {
 			Verbosity level = plugin.chatManager.getVerbosity(player);
 			// and alert them!
 			if(level == Verbosity.SHOWALL) {
-				player.sendMessage(plugin.processColours("&7Your verbosity level is set to show &fALL &7chat notifications"));
+				ColourHandler.sendMessage(player, "&7Your verbosity level is set to show &fALL &7chat notifications");
 			}
 			else if(level == Verbosity.SHOWSOME) {
-				player.sendMessage(plugin.processColours("&7Your verbosity level is set to show &fSOME &7chat notifications"));
+				ColourHandler.sendMessage(player, "&7Your verbosity level is set to show &fSOME &7chat notifications");
 			}
 			else if(level == Verbosity.SHOWNONE) {
-				player.sendMessage(plugin.processColours("&7Your verbosity level is set to show &fNO &7chat notifications"));
+				ColourHandler.sendMessage(player, "&7Your verbosity level is set to show &fNO &7chat notifications");
 			}
 			return true;
 		}
@@ -54,13 +55,13 @@ public class CommandVerbosity implements Command {
 		
 		// and alert them!
 		if(level == Verbosity.SHOWALL) {
-			player.sendMessage(plugin.processColours("&7Your verbosity level has been set to show &fALL &7chat notifications"));
+			ColourHandler.sendMessage(player, "&7Your verbosity level has been set to show &fALL &7chat notifications");
 		}
 		else if(level == Verbosity.SHOWSOME) {
-			player.sendMessage(plugin.processColours("&7Your verbosity level has been set to show &fSOME &7chat notifications"));
+			ColourHandler.sendMessage(player, "&7Your verbosity level has been set to show &fSOME &7chat notifications");
 		}
 		else if(level == Verbosity.SHOWNONE) {
-			player.sendMessage(plugin.processColours("&7Your verbosity level has been set to show &fNO &7chat notifications"));
+			ColourHandler.sendMessage(player, "&7Your verbosity level has been set to show &fNO &7chat notifications");
 		}
 		
 		// and we handled it!

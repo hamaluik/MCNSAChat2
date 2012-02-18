@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
+import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 import com.mcnsa.mcnsachat2.util.CommandManager.InternalCommand;
@@ -62,10 +63,10 @@ public class CommandHelp implements Command {
 		
 		// and dispense the help!
 		//plugin.debug("dispensing help");
-		player.sendMessage(plugin.processColours("&7--- &fChat Help &7- &fPage &e" + (page + 1) + "&7/&e" + totalPages + " &f---"));
+		ColourHandler.sendMessage(player, "&7--- &fChat Help &7- &fPage &e" + (page + 1) + "&7/&e" + totalPages + " &f---");
 		for(int i = start; i < end; i++) {
-			player.sendMessage(plugin.processColours("&f/" + permCommands.get(i).alias + " &e" + permCommands.get(i).usage));
-			player.sendMessage(plugin.processColours("    &7" + permCommands.get(i).description));
+			ColourHandler.sendMessage(player, "&f/" + permCommands.get(i).alias + " &e" + permCommands.get(i).usage);
+			ColourHandler.sendMessage(player, "    &7" + permCommands.get(i).description);
 		}
 		
 		// and we handled it!

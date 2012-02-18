@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
+import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.ChatManager.Verbosity;
 
 public class PlayerListener implements Listener {
@@ -41,7 +42,7 @@ public class PlayerListener implements Listener {
 			if(plugin.chatManager.getVerbosity(players[i]).compareTo(Verbosity.SHOWSOME) >= 0) {
 				// they want these messages! show them!
 				// TODO: custom join / leave messages
-				players[i].sendMessage(plugin.processColours(plugin.permissions.getUser(event.getPlayer()).getPrefix() + event.getPlayer().getName() + " &ehas joined the game!"));
+				ColourHandler.sendMessage(players[i], plugin.permissions.getUser(event.getPlayer()).getPrefix() + event.getPlayer().getName() + " &ehas joined the game!");
 			}
 		}
 	}
@@ -66,7 +67,7 @@ public class PlayerListener implements Listener {
 			if(plugin.chatManager.getVerbosity(players[i]).compareTo(Verbosity.SHOWSOME) >= 0) {
 				// they want these messages! show them!
 				// TODO: custom join / leave messages
-				players[i].sendMessage(plugin.processColours(plugin.permissions.getUser(event.getPlayer()).getPrefix() + event.getPlayer().getName() + " &ehas left the game!"));
+				ColourHandler.sendMessage(players[i], plugin.permissions.getUser(event.getPlayer()).getPrefix() + event.getPlayer().getName() + " &ehas left the game!");
 			}
 		}
 	}

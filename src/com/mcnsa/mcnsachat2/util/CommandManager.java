@@ -126,7 +126,7 @@ public class CommandManager {
 		if(!commands.get(tokens[0]).permissions.equals("") && !plugin.hasPermission(player, commands.get(tokens[0]).permissions)) {
 			// return a message if they don't have permission
 			plugin.log(player.getName() + " attempted to use command: " + tokens[0] + " without permission!");
-			player.sendMessage(plugin.processColours("&cYou don't have permission to do that!"));
+			ColourHandler.sendMessage(player, "&cYou don't have permission to do that!");
 			// we handled it, but they don't have perms
 			return true;
 		}
@@ -150,7 +150,7 @@ public class CommandManager {
 		
 		// they didn't use it properly! let them know!
 		//plugin.debug("command " + tokens[0] + " NOT handled successfully");
-		player.sendMessage(plugin.processColours("&cInvalid usage! &aCorrect usage: &6/" + commands.get(tokens[0]).alias + " &e" + commands.get(tokens[0]).usage + " &7(" + commands.get(tokens[0]).description + ")"));
+		ColourHandler.sendMessage(player, "&cInvalid usage! &aCorrect usage: &6/" + commands.get(tokens[0]).alias + " &e" + commands.get(tokens[0]).usage + " &7(" + commands.get(tokens[0]).description + ")");
 		return true;
 	}
 	
@@ -158,7 +158,7 @@ public class CommandManager {
 		// make sure they're not locked
 		if(plugin.channelManager.isLocked(player)) {
 			// they can't change channels!
-			player.sendMessage(plugin.processColours("&cYou have been locked in your channel and cannot change channels!"));
+			ColourHandler.sendMessage(player, "&cYou have been locked in your channel and cannot change channels!");
 			return;
 		}
 		
@@ -168,7 +168,7 @@ public class CommandManager {
 		if(!perm.equals("") && !plugin.hasPermission(player, "channel." + perm)) {
 			// return a message if they don't have permission
 			plugin.log(player.getName() + " attempted to change to channel: " + channel + " without permission!");
-			player.sendMessage(plugin.processColours("&cYou don't have permission to do that!"));
+			ColourHandler.sendMessage(player, "&cYou don't have permission to do that!");
 			return;
 		}
 		

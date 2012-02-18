@@ -3,6 +3,7 @@ package com.mcnsa.mcnsachat2.commands;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
+import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
@@ -22,7 +23,7 @@ public class CommandWho implements Command {
 			message += plugin.permissions.getUser(players[i]).getPrefix() + players[i].getName() + "&7, ";
 		}
 		
-		player.sendMessage(plugin.processColours(message));
+		ColourHandler.sendMessage(player, message);
 		
 		// and we handled it!
 		return true;

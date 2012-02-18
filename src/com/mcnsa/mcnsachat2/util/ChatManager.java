@@ -41,7 +41,7 @@ public class ChatManager {
 		// see if they're in timeout
 		if(onTimeout.contains(player.getName())) {
 			// they're in timeout!
-			player.sendMessage(plugin.processColours("&cYou can't talk, because you're in timeout!"));
+			ColourHandler.sendMessage(player, "&cYou can't talk, because you're in timeout!");
 			plugin.log("{timeout} " + player.getName() + ": " + message);
 			return;
 		}
@@ -62,12 +62,12 @@ public class ChatManager {
 		outgoing = outgoing.replace("%player", player.getName());
 		// now process colours..
 		if(!plugin.hasPermission(player, "colour")) {
-			message =  plugin.stripColours(message);
+			message = ColourHandler.stripColours(message);
 		}
 		// and add it
 		outgoing = outgoing.replace("%message", message);
 		// now process the colours
-		outgoing = plugin.processColours(outgoing);
+		outgoing = ColourHandler.processColours(outgoing);
 		// now send it
 		for(int i = 0; i < listeners.size(); i++) {
 			// get the player associated with this name
@@ -88,7 +88,7 @@ public class ChatManager {
 					timeout = timeout.replace("%suffix", plugin.permissions.getUser(player).getSuffix());
 					timeout = timeout.replace("%player", player.getName());
 					timeout = timeout.replace("%message", "&c(You can't hear this because you're in timeout!)");
-					recipient.sendMessage(plugin.processColours(timeout));
+					recipient.sendMessage(ColourHandler.processColours(timeout));
 				}
 			}
 		}
@@ -111,7 +111,7 @@ public class ChatManager {
 		}
 		
 		// and log it
-		plugin.log(plugin.stripColours(outgoing));
+		plugin.log(ColourHandler.stripColours(outgoing));
 	}
 	
 	// toggle whether a player is on timeout or not

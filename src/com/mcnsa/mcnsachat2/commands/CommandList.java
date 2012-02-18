@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
 import com.mcnsa.mcnsachat2.util.ChannelManager.Channel;
+import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
@@ -29,7 +30,7 @@ public class CommandList implements Command {
 		}
 		
 		// and send it!
-		player.sendMessage(plugin.processColours(chStr));
+		ColourHandler.sendMessage(player, chStr);
 		
 		// and we handled it!
 		return true;

@@ -3,6 +3,7 @@ package com.mcnsa.mcnsachat2.commands;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
+import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
@@ -24,7 +25,7 @@ public class CommandSearch implements Command {
 		Player targetPlayer = plugin.getServer().getPlayer(sArgs.trim());
 		// make sure they're a valid player
 		if(targetPlayer == null) {
-			player.sendMessage(plugin.processColours("&cError: I could not find the player '&f" + sArgs.trim() + "&c'!"));
+			ColourHandler.sendMessage(player, "&cError: I could not find the player '&f" + sArgs.trim() + "&c'!");
 			return true;
 		}
 		
@@ -32,7 +33,7 @@ public class CommandSearch implements Command {
 		String channel = plugin.channelManager.getPlayerChannel(targetPlayer);
 		
 		// and return a message
-		player.sendMessage(plugin.processColours(plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7is in channel: " + plugin.channelManager.getChannelColour(channel) + channel));
+		ColourHandler.sendMessage(player, plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7is in channel: " + plugin.channelManager.getChannelColour(channel) + channel);
 		
 		// and we handled it!
 		return true;

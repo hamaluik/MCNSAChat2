@@ -129,16 +129,6 @@ public class MCNSAChat2 extends JavaPlugin {
 			return player.isOp();
 		}
 	}
-
-	// allow for colour tags to be used in strings..
-	public String processColours(String str) {
-		return str.replaceAll("(&([a-f0-9]))", "\u00A7$2");
-	}
-
-	// strip colour tags from strings..
-	public String stripColours(String str) {
-		return str.replaceAll("(&([a-f0-9]))", "").replaceAll("(\u00A7([a-f0-9]))", "");
-	}
 	
 	public boolean playerWithinRadius(Player player1, Player player2, Integer radius) {
 		// make sure they're in the same world

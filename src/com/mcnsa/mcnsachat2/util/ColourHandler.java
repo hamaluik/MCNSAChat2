@@ -1,5 +1,7 @@
 package com.mcnsa.mcnsachat2.util;
 
+import org.bukkit.entity.Player;
+
 public class ColourHandler {
 	// make it a static class) private constructor, static methods
 	private ColourHandler() {}
@@ -66,5 +68,19 @@ public class ColourHandler {
 		else if(name.equalsIgnoreCase("white")) colour = "&f";
 		
 		return colour;
+	}
+
+	// allow for colour tags to be used in strings..
+	public static String processColours(String str) {
+		return str.replaceAll("(&([a-f0-9]))", "\u00A7$2");
+	}
+
+	// strip colour tags from strings..
+	public static String stripColours(String str) {
+		return str.replaceAll("(&([a-f0-9]))", "").replaceAll("(\u00A7([a-f0-9]))", "");
+	}
+	
+	public static void sendMessage(Player player, String message) {
+		player.sendMessage(processColours(message));
 	}
 }

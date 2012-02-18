@@ -3,6 +3,7 @@ package com.mcnsa.mcnsachat2.commands;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
+import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
@@ -20,7 +21,7 @@ public class CommandChannel implements Command {
 		// make sure they're not locked
 		if(plugin.channelManager.isLocked(player)) {
 			// they can't change channels!
-			player.sendMessage(plugin.processColours("&cYou have been locked in your channel and cannot change channels!"));
+			ColourHandler.sendMessage(player, "&cYou have been locked in your channel and cannot change channels!");
 			return true;
 		}
 		
@@ -32,7 +33,7 @@ public class CommandChannel implements Command {
 		if(!perm.equals("") && !plugin.hasPermission(player, "channel." + perm)) {
 			// return a message if they don't have permission
 			plugin.log(player.getName() + " attempted to change to channel: " + channel + " without permission!");
-			player.sendMessage(plugin.processColours("&cYou don't have permission to do that!"));
+			ColourHandler.sendMessage(player, "&cYou don't have permission to do that!");
 			return true;
 		}
 		
