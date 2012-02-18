@@ -101,7 +101,7 @@ public class ChatManager {
 					// get the player info
 					Player pl = plugin.getServer().getPlayer(voxelChat.get(i));
 					
-					plugin.debug("Sending VoxelChat data to player " + pl.getName());
+					//plugin.debug("Sending VoxelChat data to player " + pl.getName());
 					
 					// do this so this manual queueing so we don't overflow the 119 character limit
 					((CraftPlayer)pl).getHandle().netServerHandler.networkManager.queue(new Packet3Chat((new StringBuilder()).append("\247b\247d\247c\247b\247d\247cq?=$name=").append(player.getName()).toString()));
@@ -118,18 +118,27 @@ public class ChatManager {
 	public Boolean toggleTimeout(Player player) {
 		if(onTimeout.contains(player.getName())) {
 			onTimeout.remove(player.getName());
+			plugin.log(player + " is no longer in timeout");
 			return false;
 		}
 		else {
 			onTimeout.add(player.getName());
+			plugin.log(player + " is now in timeout");
 			return true;
 		}
+	}
+	
+	// set the entire onTimeout list (for persistance)
+	@SuppressWarnings("unchecked")
+	public void setTimeout(ArrayList<String> players) {
+		onTimeout.clear();
+		onTimeout = (ArrayList<String>)players.clone();
 	}
 	
 	// enable VoxelChat for a player
 	public void enableVoxelChat(Player player) {
 		if(!voxelChat.contains(player.getName())) {
-			plugin.debug("player " + player.getName() + " has enabled VoxelChat!");
+			//plugin.debug("player " + player.getName() + " has enabled VoxelChat!");
 			voxelChat.add(player.getName());
 		}
 	}
@@ -137,7 +146,7 @@ public class ChatManager {
 	// and remove VoxelChatters when they log off
 	public void disableVoxelChat(Player player) {
 		if(voxelChat.contains(player.getName())) {
-			plugin.debug("player " + player.getName() + " has disabled VoxelChat!");
+			//plugin.debug("player " + player.getName() + " has disabled VoxelChat!");
 			voxelChat.remove(player.getName());
 		}
 	}
@@ -145,12 +154,12 @@ public class ChatManager {
 	// and toggle VoxelChat manually
 	public boolean toggleVoxelChat(Player player) {
 		if(voxelChat.contains(player.getName())) {
-			plugin.debug("player " + player.getName() + " has disabled VoxelChat!");
+			//plugin.debug("player " + player.getName() + " has disabled VoxelChat!");
 			voxelChat.remove(player.getName());
 			return false;
 		}
 		else {
-			plugin.debug("player " + player.getName() + " has enabled VoxelChat!");
+			//plugin.debug("player " + player.getName() + " has enabled VoxelChat!");
 			voxelChat.add(player.getName());
 			return true;
 		}
@@ -158,18 +167,18 @@ public class ChatManager {
 	
 	// set a player's verbosity
 	public void setVerbosity(Player player, Verbosity level) {
-		plugin.debug("Seeing player " + player.getName() + "'s verbosity to: " + level);
+		//plugin.debug("Seeing player " + player.getName() + "'s verbosity to: " + level);
 		verbosity.put(player.getName(), level);
 	}
 	
 	// set a player's verbosity
 	public Verbosity getVerbosity(Player player) {
-		plugin.debug("Getting verbosity for " + player.getName());
+		//plugin.debug("Getting verbosity for " + player.getName());
 		if(!verbosity.containsKey(player.getName())) {
-			plugin.debug("Player did not have verbosity set!");
+			//plugin.debug("Player did not have verbosity set!");
 			setVerbosity(player, Verbosity.SHOWALL);
 		}
-		plugin.debug("Player has verbosity: " + verbosity.get(player.getName()));
+		//plugin.debug("Player has verbosity: " + verbosity.get(player.getName()));
 		return verbosity.get(player.getName());
 	}
 	
@@ -225,6 +234,15 @@ public class ChatManager {
 		
 		// return whether they're on the list or not!
 		return muted.get(muter).contains(mutee);
+	}
+	
+	public void reloadVerbosities() {
+		Player[] online = plugin.getServer().getOnlinePlayers();
+		for(int i = 0; i < online.length; i++) {
+			// get their stored verbosity level
+			Verbosity level = plugin.ph.getOfflineVerbosity(online[i].getName());
+			setVerbosity(online[i], level);
+		}
 	}
 	
 	// keep track of player verbosity

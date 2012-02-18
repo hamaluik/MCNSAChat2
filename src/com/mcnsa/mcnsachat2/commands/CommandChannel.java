@@ -37,7 +37,7 @@ public class CommandChannel implements Command {
 		}
 		
 		// now move into it!
-		plugin.channelManager.movePlayer(channel, player);
+		plugin.channelManager.movePlayer(channel, player, false);
 		
 		return true;
 	}

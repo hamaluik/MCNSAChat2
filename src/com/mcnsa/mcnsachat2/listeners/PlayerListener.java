@@ -21,11 +21,16 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void joinHandler(PlayerJoinEvent event) {
-		// move them into a channel!
-		plugin.channelManager.movePlayer(plugin.config.options.defaultChannel, event.getPlayer());
+		// move them into their channel!
+		String channel = plugin.ph.getOfflineChannel(event.getPlayer().getName());
+		// create the channel if it doesn't exist
+		plugin.channelManager.createChannelIfNotExists(channel);
+		// and move into it!
+		plugin.channelManager.movePlayer(channel, event.getPlayer(), true);
 		
-		// set their verbosity level
-		plugin.chatManager.setVerbosity(event.getPlayer(), Verbosity.SHOWALL);
+		// get their stored verbosity level
+		Verbosity level = plugin.ph.getOfflineVerbosity(event.getPlayer().getName());
+		plugin.chatManager.setVerbosity(event.getPlayer(), level);
 		
 		// turn off the global join notification
 		event.setJoinMessage("");
@@ -43,6 +48,10 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void quitHandler(PlayerQuitEvent event) {
+		// set their persistance
+		plugin.ph.setOfflineChannel(event.getPlayer().getName(), plugin.channelManager.getPlayerChannel(event.getPlayer()));
+		plugin.ph.setOfflineVerbosity(event.getPlayer().getName(), plugin.chatManager.getVerbosity(event.getPlayer()));
+		
 		// remove them from their channel
 		plugin.channelManager.removePlayer(event.getPlayer());
 		// and remove them from the VoxelChat list

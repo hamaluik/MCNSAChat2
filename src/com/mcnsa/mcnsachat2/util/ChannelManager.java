@@ -30,13 +30,6 @@ public class ChannelManager {
 		
 		// set up the hard channels
 		loadHardChannels();
-		
-		// and put players in the proper channel
-		plugin.log("placing players in default channel...");
-		Player[] players = plugin.getServer().getOnlinePlayers();
-		for(int i = 0; i < players.length; i++) {
-			movePlayer(config.options.defaultChannel, players[i]);
-		}
 	}
 	
 	private void loadHardChannels() {
@@ -67,7 +60,7 @@ public class ChannelManager {
 	public Boolean createChannelIfNotExists(String channelName) {
 		// return false if it already existed
 		if(channels.containsKey(channelName)) {
-			plugin.debug("channel " + channelName + " already existed, so it was not created!");
+			//plugin.debug("channel " + channelName + " already existed, so it was not created!");
 			return false;
 		}
 		
@@ -90,12 +83,12 @@ public class ChannelManager {
 			return true;
 		}
 		// we didn't remove anything
-		plugin.debug("channel " + channel + " WAS NOT empty (or was hard) and so stuck around");
+		//plugin.debug("channel " + channel + " WAS NOT empty (or was hard) and so stuck around");
 		return false;
 	}
 	
 	// move a player between channels
-	public Boolean movePlayer(String channel, Player player) {
+	public Boolean movePlayer(String channel, Player player, boolean suppressWho) {
 		// trim the channel name to be sure
 		channel = channel.trim();
 		
@@ -107,7 +100,7 @@ public class ChannelManager {
 		
 		// figure out if they were in a channel to begin with
 		if(players.containsKey(player.getName())) {
-			plugin.debug("player " + player.getName() + " was already in a channel!");
+			//plugin.debug("player " + player.getName() + " was already in a channel!");
 			
 			// remove them from the channel
 			removePlayer(player);
@@ -119,12 +112,12 @@ public class ChannelManager {
 		players.put(player.getName(), channel);
 		
 		// report it to the player!
-		if(plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWSOME) >= 0) {
+		if(!suppressWho && plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWSOME) >= 0) {
 			player.sendMessage(plugin.processColours("&7Welcome to the " + channels.get(channel).colour + channels.get(channel).name + " &7channel!"));
 		}
 
 		// let them know who's here
-		if(plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWALL) >= 0) {
+		if(!suppressWho && plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWALL) >= 0) {
 			Player[] channelPlayers = listPlayers(channel);
 			String message = new String("&7Players here: ");
 			for(int i = 0; i < channelPlayers.length; i++) {
@@ -155,7 +148,7 @@ public class ChannelManager {
 	public void removePlayer(Player player) {
 		// make sure they're tracked
 		if(!players.containsKey(player.getName())) {
-			plugin.debug("player " + player.getName() + " was not tracked, ignoring removal...");
+			//plugin.debug("player " + player.getName() + " was not tracked, ignoring removal...");
 			return;
 		}
 		
@@ -167,7 +160,7 @@ public class ChannelManager {
 		// and remove them from the tracked user list
 		players.remove(player.getName());
 		
-		plugin.debug("player " + player.getName() + " removed from channel " + channel);
+		//plugin.debug("player " + player.getName() + " removed from channel " + channel);
 		
 		// and clear out empty channels
 		removeChannelIfEmpty(channel);
@@ -190,7 +183,7 @@ public class ChannelManager {
 		
 		// add the sender
 		listeners.add(player.getName());
-		plugin.debug("Added " + player.getName() + " for being the sender");
+		//plugin.debug("Added " + player.getName() + " for being the sender");
 		
 		// handle broadcast channels
 		if(channels.get(channel).broadcast) {
@@ -198,7 +191,7 @@ public class ChannelManager {
 			for(int i = 0; i < players.length; i++) {
 				if(!listeners.contains(players[i].getName())) {
 					listeners.add(players[i].getName());
-					plugin.debug("Added " + players[i].getName() + " for being in broadcast");
+					//plugin.debug("Added " + players[i].getName() + " for being in broadcast");
 				}
 			}
 		}
@@ -213,7 +206,7 @@ public class ChannelManager {
 						// make sure they're not muted
 						if(!plugin.chatManager.isPlayerMuted(channels.get(channel).players.get(i), player.getName())) {
 							listeners.add(channels.get(channel).players.get(i));
-							plugin.debug("Added " + channels.get(channel).players.get(i) + " for being in local radius");
+							//plugin.debug("Added " + channels.get(channel).players.get(i) + " for being in local radius");
 						}
 					}
 				}
@@ -229,7 +222,7 @@ public class ChannelManager {
 					if(!plugin.chatManager.isPlayerMuted(channels.get(channel).players.get(i), player.getName())) {
 						// add them!
 						listeners.add(channels.get(channel).players.get(i));
-						plugin.debug("Added " + channels.get(channel).players.get(i) + " for being in the same channel");
+						//plugin.debug("Added " + channels.get(channel).players.get(i) + " for being in the same channel");
 					}
 				}
 			}
@@ -264,12 +257,12 @@ public class ChannelManager {
 				if(!channels.get(channel).listeners.equals("") && plugin.hasPermission(players[i], "listen." + channels.get(channel).listeners)) {
 					// add them!
 					listeners.add(players[i].getName());
-					plugin.debug("Added " + players[i].getName() + " for being a listener");
+					//plugin.debug("Added " + players[i].getName() + " for being a listener");
 				}
 				else if(seeAll.contains(players[i].getName())) {
 					// add them!
 					listeners.add(players[i].getName());
-					plugin.debug("Added " + players[i].getName() + " for having seeAll on");
+					//plugin.debug("Added " + players[i].getName() + " for having seeAll on");
 				}
 			}
 		}
@@ -359,12 +352,21 @@ public class ChannelManager {
 	public Boolean toggleSeeAll(Player player) {
 		if(seeAll.contains(player.getName())) {
 			seeAll.remove(player.getName());
+			plugin.log(player + " no longer has seeall");
 			return false;
 		}
 		else {
 			seeAll.add(player.getName());
+			plugin.log(player + " now has seeall");
 			return true;
 		}
+	}
+	
+	// set the entire seeAll list (for persistance)
+	@SuppressWarnings("unchecked")
+	public void setSeeAll(ArrayList<String> players) {
+		seeAll.clear();
+		seeAll = (ArrayList<String>)players.clone();
 	}
 	
 	public Player[] listPlayers(String channel) {
@@ -389,12 +391,12 @@ public class ChannelManager {
 	
 	public boolean toggleLocked(Player player) {
 		if(locked.contains(player.getName())) {
-			plugin.debug("player " + player.getName() + " has been unlocked from their channel!");
+			//plugin.debug("player " + player.getName() + " has been unlocked from their channel!");
 			locked.remove(player.getName());
 			return false;
 		}
 		else {
-			plugin.debug("player " + player.getName() + " has been locked in their channel!");
+			//plugin.debug("player " + player.getName() + " has been locked in their channel!");
 			locked.add(player.getName());
 			return true;
 		}
@@ -410,6 +412,19 @@ public class ChannelManager {
 			lockedArray[i] = locked.get(i);
 		}
 		return lockedArray;
+	}
+	
+	public void reloadChannels() {
+		// and send people to their appropriate channels
+		Player[] online = plugin.getServer().getOnlinePlayers();
+		for(int i = 0; i < online.length; i++) {
+			// move them into their channel!
+			String channel = plugin.ph.getOfflineChannel(online[i].getName());
+			// create the channel if it doesn't exist
+			createChannelIfNotExists(channel);
+			// and move into it!
+			movePlayer(channel, online[i], true);
+		}
 	}
 	
 	// a channel

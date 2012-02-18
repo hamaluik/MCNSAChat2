@@ -18,7 +18,17 @@ public class CommandVerbosity implements Command {
 		// make sure we have args
 		if(sArgs.length() < 1) {
 			// no args - tell them their verbosity level
-			player.sendMessage(plugin.processColours("&7Your current verbosity level is: &f" + plugin.chatManager.getVerbosity(player)));
+			Verbosity level = plugin.chatManager.getVerbosity(player);
+			// and alert them!
+			if(level == Verbosity.SHOWALL) {
+				player.sendMessage(plugin.processColours("&7Your verbosity level is set to show &fALL &7chat notifications"));
+			}
+			else if(level == Verbosity.SHOWSOME) {
+				player.sendMessage(plugin.processColours("&7Your verbosity level is set to show &fSOME &7chat notifications"));
+			}
+			else if(level == Verbosity.SHOWNONE) {
+				player.sendMessage(plugin.processColours("&7Your verbosity level is set to show &fNO &7chat notifications"));
+			}
 			return true;
 		}
 		

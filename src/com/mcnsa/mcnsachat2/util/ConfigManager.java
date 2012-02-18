@@ -20,31 +20,31 @@ public class ConfigManager {
 	// load the configuration
 	public Boolean load(FileConfiguration config) {
 		// load the chat radius
-		plugin.debug("loading options...");
+		//plugin.debug("loading options...");
 		
 		options.localChatRadius = (float)config.getDouble("local-chat-radius");
-		plugin.debug("local chat radius: " + options.localChatRadius.toString());
+		//plugin.debug("local chat radius: " + options.localChatRadius.toString());
 		
 		options.defaultChannel = config.getString("default-channel");
-		plugin.debug("default channel: " + options.defaultChannel);
+		//plugin.debug("default channel: " + options.defaultChannel);
 		
 		options.defaultColour = ColourHandler.translateName(config.getString("default-colour"));
-		plugin.debug("default colour: " + options.defaultColour.toString());
+		//plugin.debug("default colour: " + options.defaultColour.toString());
 		
 		options.announceTimeouts = config.getBoolean("announce-timeouts");
-		plugin.debug("announce timeouts: " + options.announceTimeouts.toString());
+		//plugin.debug("announce timeouts: " + options.announceTimeouts.toString());
 		
 		options.chatFormat = config.getString("chat-format");
-		plugin.debug("chat format: " + options.chatFormat);
+		//plugin.debug("chat format: " + options.chatFormat);
 		
 		options.emoteFormat = config.getString("emote-format");
-		plugin.debug("emote format: " + options.emoteFormat);
+		//plugin.debug("emote format: " + options.emoteFormat);
 
 		options.spamConfig.messageLimit = (float)config.getDouble("spam.limit");
-		plugin.debug("spam message limit: " + options.spamConfig.messageLimit);
+		//plugin.debug("spam message limit: " + options.spamConfig.messageLimit);
 		
 		options.spamConfig.messagePeriod = (float)config.getDouble("spam.period");
-		plugin.debug("spam message period: " + options.spamConfig.messagePeriod);
+		//plugin.debug("spam message period: " + options.spamConfig.messagePeriod);
 		
 		// now get the hard channels!
 		ConfigurationSection channelSection = config.getConfigurationSection("hard-channels");
@@ -54,29 +54,29 @@ public class ConfigManager {
 		Iterator<String> it = channels.iterator();
 		while(it.hasNext()) {
 			String channelName = it.next();
-			plugin.debug("found hard channel: " + channelName);
+			//plugin.debug("found hard channel: " + channelName);
 			
 			// now create the hard config for this channel
 			ChannelHardConfig channelConfig = new ChannelHardConfig();
 			channelConfig.name = channelName;
 			
 			channelConfig.colour = ColourHandler.translateName(channelSection.getString(channelName + ".colour", "grey"));
-			plugin.debug("\tchannel colour: " + channelConfig.colour);
+			//plugin.debug("\tchannel colour: " + channelConfig.colour);
 			
 			channelConfig.alias = channelSection.getString(channelName + ".alias", "");
-			plugin.debug("\tchannel alias: " + channelConfig.alias);
+			//plugin.debug("\tchannel alias: " + channelConfig.alias);
 			
 			channelConfig.permission = channelSection.getString(channelName + ".permission", "");
-			plugin.debug("\tchannel permission: " + channelConfig.permission);
+			//plugin.debug("\tchannel permission: " + channelConfig.permission);
 			
 			channelConfig.listeners = channelSection.getString(channelName + ".listeners", "");
-			plugin.debug("\tchannel listeners: " + channelConfig.listeners);
+			//plugin.debug("\tchannel listeners: " + channelConfig.listeners);
 			
 			channelConfig.local = channelSection.getBoolean(channelName + ".local", false);
-			plugin.debug("\tchannel local: " + channelConfig.local.toString());
+			//plugin.debug("\tchannel local: " + channelConfig.local.toString());
 			
 			channelConfig.broadcast = channelSection.getBoolean(channelName + ".broadcast", false);
-			plugin.debug("\tchannel broadcast: " + channelConfig.broadcast.toString());
+			//plugin.debug("\tchannel broadcast: " + channelConfig.broadcast.toString());
 			
 			// and add it!
 			options.hardChannels.put(channelName, channelConfig);

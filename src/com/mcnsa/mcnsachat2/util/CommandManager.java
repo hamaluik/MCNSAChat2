@@ -25,7 +25,7 @@ public class CommandManager {
 
 		// develop the list of all commands here!
 		// TODO: dynamically load commands ALA CommandBook
-		plugin.debug("registering commands...");
+		//plugin.debug("registering commands...");
 		registerCommand(new CommandChannel(plugin));
 		registerCommand(new CommandMe(plugin));
 		registerCommand(new CommandList(plugin));
@@ -41,14 +41,14 @@ public class CommandManager {
 		registerCommand(new CommandMute(plugin));
 		registerCommand(new CommandLock(plugin));
 		registerCommand(new CommandMove(plugin));
-		plugin.debug("commands all registered!");
+		//plugin.debug("commands all registered!");
 	}
 
 	// register new command
 	public void registerCommand(Command command) {
 		// get the class
 		Class<? extends Command> cls = command.getClass();
-		plugin.debug("registering command: " + cls.getSimpleName());
+		//plugin.debug("registering command: " + cls.getSimpleName());
 		
 		// get the class's annotations
 		Annotation[] annotations = cls.getAnnotations();
@@ -58,11 +58,11 @@ public class CommandManager {
 				CommandInfo ci = (CommandInfo)annotations[i];
 				
 				// get the deets!
-				plugin.debug("with alias: " + ci.alias());
-				plugin.debug("with perms: " + ci.permission());
-				plugin.debug("with usage: " + ci.usage());
-				plugin.debug("with description: " + ci.description());
-				plugin.debug("with visibility: " + ci.visible());
+				//plugin.debug("with alias: " + ci.alias());
+				//plugin.debug("with perms: " + ci.permission());
+				//plugin.debug("with usage: " + ci.usage());
+				//plugin.debug("with description: " + ci.description());
+				//plugin.debug("with visibility: " + ci.visible());
 				
 				// create the internal command
 				InternalCommand ic = new InternalCommand(ci.alias(), ci.permission(), ci.usage(), ci.description(), ci.visible(), command);
@@ -76,7 +76,7 @@ public class CommandManager {
 
 	// quick method to register a new alias (for a channel)
 	public void registerAlias(String alias, String channel) {
-		plugin.debug("registering alias: " + alias);
+		//plugin.debug("registering alias: " + alias);
 		
 		// add it to the list!
 		aliases.put(alias, channel);
@@ -85,7 +85,7 @@ public class CommandManager {
 	// handle commands
 	public Boolean handleCommand(Player player, String command) {
 		// get the actual command
-		plugin.debug(player.getName() + " sent command: " + command);
+		//plugin.debug(player.getName() + " sent command: " + command);
 		
 		// strip off the proceeding "/"
 		command = command.substring(1);
@@ -103,7 +103,7 @@ public class CommandManager {
 		// check to see if it's an alias first
 		if(aliases.containsKey(tokens[0])) {
 			// handle the alias
-			plugin.debug("handling alias: " + tokens[0]);
+			//plugin.debug("handling alias: " + tokens[0]);
 			// get the arguments
 			String args = new String("");
 			if(command.length() > 1 + tokens[0].length()) {
@@ -118,7 +118,7 @@ public class CommandManager {
 		// find the command
 		if(!commands.containsKey(tokens[0])) {
 			// we're not handling it
-			plugin.debug("not handling command: " + tokens[0]);
+			//plugin.debug("not handling command: " + tokens[0]);
 			return false;
 		}
 		
@@ -133,23 +133,23 @@ public class CommandManager {
 		
 		// we have the command, send it in!
 		String sArgs = new String("");
-		plugin.debug("handling command: " + tokens[0]);
+		//plugin.debug("handling command: " + tokens[0]);
 		// make sure we have args
 		if(command.length() > (1 + tokens[0].length())) {
 			// substring out the args
 			sArgs = command.substring(1 + tokens[0].length());
-			plugin.debug("with arguments: " + sArgs);
+			//plugin.debug("with arguments: " + sArgs);
 		}
 		
 		// and handle the command!
 		if(commands.get(tokens[0]).command.handle(player, sArgs)) {
 			// we handled it!
-			plugin.debug("command " + tokens[0] + " handled successfully!");
+			//plugin.debug("command " + tokens[0] + " handled successfully!");
 			return true;
 		}
 		
 		// they didn't use it properly! let them know!
-		plugin.debug("command " + tokens[0] + " NOT handled successfully");
+		//plugin.debug("command " + tokens[0] + " NOT handled successfully");
 		player.sendMessage(plugin.processColours("&cInvalid usage! &aCorrect usage: &6/" + commands.get(tokens[0]).alias + " &e" + commands.get(tokens[0]).usage + " &7(" + commands.get(tokens[0]).description + ")"));
 		return true;
 	}
@@ -182,13 +182,13 @@ public class CommandManager {
 		}
 		
 		// ok, change their channel
-		plugin.channelManager.movePlayer(channel, player);
+		plugin.channelManager.movePlayer(channel, player, false);
 	}
 	
 	// return a sorted list of commands
 	public InternalCommand[] listCommands() {
 		// count the number of invisible commands
-		plugin.debug("counting number of invisible commands");
+		//plugin.debug("counting number of invisible commands");
 		int numInvisible = 0;
 		for(String cmd: commands.keySet()) {
 			if(!commands.get(cmd).visible) {
@@ -197,12 +197,12 @@ public class CommandManager {
 		}
 		
 		// create the list
-		plugin.debug("creating command list array");
+		//plugin.debug("creating command list array");
 		InternalCommand[] cList = new InternalCommand[commands.size() - numInvisible];
 		
 		// get them all!
 		int i = 0;
-		plugin.debug("getting all visible commands");
+		//plugin.debug("getting all visible commands");
 		for(String cmd: commands.keySet()) {
 			// add only the visible ones!
 			if(commands.get(cmd).visible) {
@@ -212,7 +212,7 @@ public class CommandManager {
 		}
 		
 		// sort the array
-		plugin.debug("sorting command list");
+		//plugin.debug("sorting command list");
 		Arrays.sort(cList, new CommandComp());
 		
 		// and return!

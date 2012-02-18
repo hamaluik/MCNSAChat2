@@ -33,15 +33,18 @@ public class MCNSAChat2 extends JavaPlugin {
 	// and keep track of the chat and channel handlers
 	public ChannelManager channelManager = null;
 	public ChatManager chatManager = null;
+	
+	// and peristance!
+	public PersistanceHandler ph = null;
 
 	public void onEnable() {
 		// set up permissions
 		this.setupPermissions();
 		
 		// set up
-		debug("loading configuration manager..");
+		//debug("loading configuration manager..");
 		config = new ConfigManager(this);
-		debug("loading command manager..");
+		//debug("loading command manager..");
 		commandManager = new CommandManager(this);
 
 		// load configuration
@@ -54,6 +57,9 @@ public class MCNSAChat2 extends JavaPlugin {
 			getServer().getPluginManager().disablePlugin(this);
 		}
 		this.saveConfig();
+		
+		// set persistance handler
+		ph = new PersistanceHandler(this);
 
 		// set up listeners
 		playerListener = new PlayerListener(this);
@@ -68,19 +74,19 @@ public class MCNSAChat2 extends JavaPlugin {
 		chatManager.setChannelManager(channelManager);
 		
 		// and load the persistance
-		/*PersistanceHandler ph = new PersistanceHandler(this);
-		ph.readPersistance();*/
-
+		log("loading persistance..");
+		ph.readPersistance();
+		
+		// and send people to their appropriate channels (in case of reload)
+		channelManager.reloadChannels();
+		chatManager.reloadVerbosities();
+		
 		// routines for when the plugin gets enabled
 		log("plugin enabled!");
 	}
 
 	public void onDisable() {
-		/*PersistanceHandler ph = new PersistanceHandler(this);
-		ph.updateSeeAll(channelManager.seeAll);
-		ph.updateTimeout(chatManager.onTimeout);
-		ph.updatePlayers(channelManager.players);
-		ph.writePersistance();*/
+		ph.writePersistance();
 		
 		// shut the plugin down
 		log("plugin disabled!");
@@ -99,7 +105,7 @@ public class MCNSAChat2 extends JavaPlugin {
 	// for debugging
 	// (disable for final release)
 	public void debug(String info) {
-		//log.info("[MCNSAChat2] <DEBUG> " + info);
+		log.info("[MCNSAChat2] <DEBUG> " + info);
 	}
 
 	// load the permissions plugin
