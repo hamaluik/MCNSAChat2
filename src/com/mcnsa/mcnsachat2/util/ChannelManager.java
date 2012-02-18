@@ -529,7 +529,7 @@ public class ChannelManager {
 			if(ra < rb)
 				return 1;
 			else if(ra == rb)
-				return 0;
+				return a.getName().compareToIgnoreCase(b.getName());
 			else {
 				return -1;
 			}
