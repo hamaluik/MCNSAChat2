@@ -1,5 +1,7 @@
 package com.mcnsa.mcnsachat2.util;
 
+import java.util.Random;
+
 import org.bukkit.entity.Player;
 
 public class ColourHandler {
@@ -82,5 +84,14 @@ public class ColourHandler {
 	
 	public static void sendMessage(Player player, String message) {
 		player.sendMessage(processColours(message));
+	}
+	
+	public static String randomColour() {
+		// get a random number
+		Random generator = new Random();
+		Integer roll = generator.nextInt(16);
+		// convert to hex string
+		// and return!
+		return "&" + Integer.toHexString(roll);
 	}
 }

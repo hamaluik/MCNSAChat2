@@ -21,6 +21,12 @@ public class ChatManager {
 	public HashMap<String, Verbosity> verbosity = new HashMap<String, Verbosity>();
 	// keep track of who has who muted
 	public HashMap<String, ArrayList<String>> muted = new HashMap<String, ArrayList<String>>();
+	// keep track of "fun" options
+	protected boolean raveMode = false;
+	// keep track of all possible ranks for confusion mode
+	// TODO: deal with confusion mode
+	private ArrayList<String> confusionRanks = new ArrayList<String>();
+	protected boolean confusionMode = false;
 
 	public ChatManager(MCNSAChat2 instance) {
 		plugin = instance;
@@ -64,6 +70,16 @@ public class ChatManager {
 		if(checkColours && !plugin.hasPermission(player, "colour")) {
 			message = ColourHandler.stripColours(message);
 		}
+		
+		// handle rave mode
+		if(raveMode) {
+			String raveMessage = new String("");
+			for(int i = 0; i < message.length(); i++) {
+				raveMessage += ColourHandler.randomColour() + message.charAt(i);
+			}
+			message = raveMessage;
+		}
+		
 		// and add it
 		outgoing = outgoing.replace("%message", message);
 		// now process the colours
@@ -243,6 +259,11 @@ public class ChatManager {
 			Verbosity level = plugin.ph.getOfflineVerbosity(online[i].getName());
 			setVerbosity(online[i], level);
 		}
+	}
+	
+	public Boolean toggleRaveMode() {
+		raveMode = !raveMode;
+		return raveMode;
 	}
 	
 	// keep track of player verbosity
