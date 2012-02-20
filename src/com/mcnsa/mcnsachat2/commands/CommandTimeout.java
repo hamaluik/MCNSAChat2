@@ -45,7 +45,7 @@ public class CommandTimeout implements Command {
 		
 		// and alert them to their status
 		if(onTimeout) {
-			ColourHandler.sendMessage(player, "&f" + targetPlayer.getName() + " &7is now on &fTIMEOUT&7! DON'T FORGET TO REMOVE THEIR TIMEOUT STATUS (no timer is implemented yet)!");
+			ColourHandler.sendMessage(player, plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7is now on &fTIMEOUT&7! DON'T FORGET TO REMOVE THEIR TIMEOUT STATUS (no timer is implemented yet)!");
 			ColourHandler.sendMessage(targetPlayer, "&cYou have been placed in timeout for being naughty. No more chat for you.");
 			plugin.log(player.getName() + " placed " + targetPlayer.getName() + " in timeout!");
 			
@@ -54,7 +54,7 @@ public class CommandTimeout implements Command {
 				Player[] players = plugin.getServer().getOnlinePlayers();
 				for(int i = 0; i < players.length; i++) {
 					if(plugin.chatManager.getVerbosity(players[i]).compareTo(Verbosity.SHOWALL) >= 0) {
-						ColourHandler.sendMessage(players[i], "Attention&7: &f" + targetPlayer.getName() + " &7has been placed in timeout for being &cnaughty&7!");
+						ColourHandler.sendMessage(players[i], "Attention&7: " + plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7has been placed in timeout for being &cnaughty&7!");
 					}
 				}
 			}
@@ -69,7 +69,7 @@ public class CommandTimeout implements Command {
 				Player[] players = plugin.getServer().getOnlinePlayers();
 				for(int i = 0; i < players.length; i++) {
 					if(plugin.chatManager.getVerbosity(players[i]).compareTo(Verbosity.SHOWALL) >= 0) {
-						ColourHandler.sendMessage(players[i], "Attention&7: &f" + targetPlayer.getName() + " &7has been removed from timeout for being &anice&7!");
+						ColourHandler.sendMessage(players[i], "Attention&7: " + plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7has been removed from timeout for being &anice&7!");
 					}
 				}
 			}

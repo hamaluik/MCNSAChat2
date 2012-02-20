@@ -11,8 +11,11 @@
 #		%player		the players name
 #		%message	the message
 # spam:
-#     limit: number of messages sent
-#     period: within the given time period
+#     chat-limit: number of messages sent
+#     chat-period: within the given time period (in seconds)
+#     min-online-time: minimum time (in seconds) a player must be online before they can quit
+#     mini-ban-time: time (in minutes) a player is prevented from rejoining if they're spamming
+#     mini-ban-message: the message sent to players who get mini-banned
 # hard channels
 #	channel name:
 #		colour: <colour name>
@@ -30,8 +33,11 @@ announce-timeouts: true
 chat-format: "<%channel&f> [%prefix%suffix&f] %player: &7%message"
 emote-format: "<%channel&f> [%prefix%suffix&f] *%player &7%message"
 spam:
-  limit: 5
-  period: 3
+  chat-limit: 4
+  chat-period: 2
+  min-online-time: 3
+  mini-ban-time: 2
+  mini-ban-message: "You're spamming us - please stop. You may try again in a few minutes."
 hard-channels:
   G:
     colour: grey

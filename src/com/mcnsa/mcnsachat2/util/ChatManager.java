@@ -68,7 +68,30 @@ public class ChatManager {
 		// and get a list of everyone who is listening in
 		ArrayList<String> listeners = channelManager.getAllListeners(channel, player);
 
-		// TODO: check for spam
+		// check for spam
+		if(plugin.spamManager.checkChatSpam(player)) {
+			// they're spamming!
+			// send them to timeout!
+			if(!inTimeout(player)) {
+				// (only if they're not already there..)
+				toggleTimeout(player);
+				
+				String colouredName = plugin.permissions.getUser(player).getPrefix() + player.getName();
+				
+				// announce it to the server?
+				if(plugin.config.options.announceTimeouts) {
+					Player[] players = plugin.getServer().getOnlinePlayers();
+					for(int i = 0; i < players.length; i++) {
+						if(plugin.chatManager.getVerbosity(players[i]).compareTo(Verbosity.SHOWALL) >= 0) {
+							ColourHandler.sendMessage(players[i], "Attention&7: &f" + colouredName + " &7has been placed in timeout for &4spamming&7!");
+						}
+					}
+				}
+			}
+			
+			// get out of here
+			return;
+		}
 
 		// now send the message out!
 		String outgoing = new String(plugin.config.options.chatFormat);
@@ -167,6 +190,11 @@ public class ChatManager {
 			plugin.log(player + " is now in timeout");
 			return true;
 		}
+	}
+	
+	// see if a player is in timeout
+	public Boolean inTimeout(Player player) {
+		return onTimeout.contains(player.getName());
 	}
 	
 	// set the entire onTimeout list (for persistance)
