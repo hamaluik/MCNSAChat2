@@ -17,10 +17,10 @@ public class CommandConfusion implements Command {
 	public Boolean handle(Player player, String sArgs) {
 		Boolean confusionMode = plugin.chatManager.toggleConfusionMode();
 		if(confusionMode) {
-			ColourHandler.sendMessage(player, "confusion mode has been activated!");
+			ColourHandler.sendMessage(player, "&7confusion mode has been activated!");
 		}
 		else {
-			ColourHandler.sendMessage(player, "confusion mode has been de-activated!");
+			ColourHandler.sendMessage(player, "&7confusion mode has been de-activated!");
 		}
 		
 		// and we handled it!
