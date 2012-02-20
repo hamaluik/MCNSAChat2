@@ -33,6 +33,7 @@ public class MCNSAChat2 extends JavaPlugin {
 	// and keep track of the chat and channel handlers
 	public ChannelManager channelManager = null;
 	public ChatManager chatManager = null;
+	public SpamManager spamManager = null;
 	
 	// and peristance!
 	public PersistanceHandler ph = null;
@@ -72,6 +73,9 @@ public class MCNSAChat2 extends JavaPlugin {
 		
 		// and set the chat manager's channel manager
 		chatManager.setChannelManager(channelManager);
+		
+		// and the spam manager..
+		spamManager = new SpamManager(this);
 		
 		// and load the persistance
 		log("loading persistance..");
