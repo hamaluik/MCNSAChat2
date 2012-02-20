@@ -82,6 +82,10 @@ Here is the default configuration file:
 |/cverbose \<all:some:none\>||toggle how verbose chat is (hide/show game join/leave notifications, hide/show channel join/leave notifications, etc|
 |/cmute \<player\>|mcnsachat2.mute|toggles whether you have personally muted \<player\>|
 |/clock [player]|mcnsachat2.lock|toggle whether a player is locked from changing channels (or lists who is currently locked if no arguments are given)|
+|/cpoof|mcnsachat2.poof|toggles whether you are chat poofed or not|
+|/rtd [# sides]|mcnsachat2.rtd|rolls an [#]-sided die (default: 6)|
+|/crave|mcnsachat2.rave|toggles rave mode in your channel|
+|/confusion|mcnsachat2.confusion|toggles confusion mode in your channel|
 
 ### Verbosity Levels ##
 |**Level**|**Effect**|
@@ -94,19 +98,18 @@ Here is the default configuration file:
 |**Command**|**Effect**|
 |:----------|:---------|
 |/cht \<player\> \<time\>|automatically timed timeouts|
-|/chpoof|toggles whether you are chat poofed or not|
 |/chlisten \<channel\>|toggle listening on a specific channel|
 
 ### General Permissions
 |**Permission Node**|**Effect**|
 |:------------------|:---------|
 |mcnsachat2.colour|Allows a player to use colour tags in their message (ie: &a, &c, etc)|
+|mcnsachat2.seepoofed|Allows a player to see players who are poofed|
+|mcnsachat2.ignorespam|Ignore spam checks on players who have this permission|
 
 ## TODO List ##
 * Implement '*' player selector
-* Implement data peristance across relogs & reloads
 * Implement auto-timed timeouts
-* Implement mod poofing in channels
 * Implement per-channel listening
 * Potentially make verbosity levels finer?
 * Add multiple aliases to commands (/c, /ch, do the same thing, etc)

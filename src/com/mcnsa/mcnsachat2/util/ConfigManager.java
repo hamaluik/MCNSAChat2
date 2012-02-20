@@ -40,11 +40,20 @@ public class ConfigManager {
 		options.emoteFormat = config.getString("emote-format");
 		//plugin.debug("emote format: " + options.emoteFormat);
 
-		options.spamConfig.messageLimit = (float)config.getDouble("spam.limit");
+		options.spamConfig.messageLimit = (float)config.getDouble("spam.chat-limit");
 		//plugin.debug("spam message limit: " + options.spamConfig.messageLimit);
 		
-		options.spamConfig.messagePeriod = (float)config.getDouble("spam.period");
+		options.spamConfig.messagePeriod = (float)config.getDouble("spam.chat-period") * 1000;
 		//plugin.debug("spam message period: " + options.spamConfig.messagePeriod);
+
+		options.spamConfig.minOnlineTime = (float)config.getDouble("spam.min-online-time") * 1000;
+		plugin.debug("options.spamConfig.minOnlineTime = " + options.spamConfig.minOnlineTime);
+		
+		options.spamConfig.miniBanTime = (float)config.getDouble("spam.mini-ban-time") * 60000;
+		plugin.debug("options.spamConfig.miniBanTime = " + options.spamConfig.miniBanTime);
+		
+		options.spamConfig.miniBanMessage = config.getString("spam.mini-ban-message");
+		plugin.debug("options.spamConfig.miniBanMessage = " + options.spamConfig.miniBanMessage);
 		
 		// now get the hard channels!
 		ConfigurationSection channelSection = config.getConfigurationSection("hard-channels");
@@ -101,18 +110,23 @@ public class ConfigManager {
 		public Boolean announceTimeouts = true;
 		public String chatFormat = new String("<%channel&f> [%prefix%suffix&f] %player: &7%message");
 		public String emoteFormat = new String("<%channel&f> [%prefix%suffix&f] %player: &7%message");
-		public SpamConfig spamConfig = new SpamConfig(5.0f, 3.0f);
+		public SpamConfig spamConfig = new SpamConfig();//new SpamConfig(5.0f, 3000f, 5000f, 120000f);
 	}
 
 	// spam configurations
 	public class SpamConfig {
 		public Float messageLimit = new Float(5);
 		public Float messagePeriod = new Float(3);
+		public Float minOnlineTime = new Float(5);
+		public Float miniBanTime = new Float(2);
+		public String miniBanMessage = new String("gtfo");
 
-		public SpamConfig(Float limit, Float period) {
+		/*public SpamConfig(Float limit, Float period, Float online, Float banTime) {
 			messageLimit = limit;
 			messagePeriod = period;
-		}
+			minOnlineTime = online;
+			miniBanTime = banTime;
+		}*/
 	}
 
 	// hard-channel configurations

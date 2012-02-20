@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
@@ -20,8 +21,17 @@ public class PlayerListener implements Listener {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void loginHandler(PlayerLoginEvent event) {
+		// see if they're even allowed to join!
+		if(!plugin.spamManager.canPlayerJoin(event.getPlayer())) {
+			event.disallow(PlayerLoginEvent.Result.KICK_BANNED, plugin.config.options.spamConfig.miniBanMessage);
+		}
+	}
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void joinHandler(PlayerJoinEvent event) {
+		
 		// move them into their channel!
 		String channel = plugin.ph.getOfflineChannel(event.getPlayer().getName());
 		// create the channel if it doesn't exist
@@ -49,6 +59,9 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void quitHandler(PlayerQuitEvent event) {
+		// update their spam status
+		plugin.spamManager.playerQuit(event.getPlayer());
+		
 		// set their persistance
 		plugin.ph.setOfflineChannel(event.getPlayer().getName(), plugin.channelManager.getPlayerChannel(event.getPlayer()));
 		plugin.ph.setOfflineVerbosity(event.getPlayer().getName(), plugin.chatManager.getVerbosity(event.getPlayer()));
