@@ -62,6 +62,11 @@ public class CommandRollTheDice implements Command {
 			}
 		}
 		
+		// make sure they stay within bounds
+		if(num < 0 || max < 0 || num > 20000 || max > 100000) {
+			return false;
+		}
+		
 		Random generator = new Random();
 		Integer sum = 0;
 		for(int i = 0; i < num; i++) {
@@ -70,10 +75,10 @@ public class CommandRollTheDice implements Command {
 		
 		// and announce!
 		if(silent) {
-			ColourHandler.sendMessage(player, "&7You rolled a &e" + sum + " &7on your &f" + num + "&7d" + max + " &7roll!");
+			ColourHandler.sendMessage(player, "&7You rolled a &e" + sum + " &7on your &f" + num + "&7d&f" + max + " &7roll!");
 		}
 		else {
-			plugin.chatManager.handleChat(player, ColourHandler.processColours("rolled a &e" + sum + " &7on their &f" + num + "&7d" + max + " &7roll!"), true, "", false);
+			plugin.chatManager.handleChat(player, ColourHandler.processColours("rolled a &e" + sum + " &7on their &f" + num + "&7d&f" + max + " &7roll!"), true, "", false);
 		}
 		
 		// and we handled it!
