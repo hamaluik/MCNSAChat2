@@ -496,6 +496,48 @@ public class ChannelManager {
 		return poofed.contains(player.getName());
 	}
 	
+	public Boolean toggleRaveMode(String channel) {
+		if(!channels.containsKey(channel)) {
+			return false;
+		}
+		return channels.get(channel).toggleRaveMode();
+	}
+	
+	public Boolean hasRaveMode(String channel) {
+		if(!channels.containsKey(channel)) {
+			return false;
+		}
+		return channels.get(channel).raveMode;
+	}
+	
+	public Boolean toggleRainbowMode(String channel) {
+		if(!channels.containsKey(channel)) {
+			return false;
+		}
+		return channels.get(channel).toggleRainbowMode();
+	}
+	
+	public Boolean hasRainbowMode(String channel) {
+		if(!channels.containsKey(channel)) {
+			return false;
+		}
+		return channels.get(channel).rainbowMode;
+	}
+	
+	public Boolean toggleConfusionMode(String channel) {
+		if(!channels.containsKey(channel)) {
+			return false;
+		}
+		return channels.get(channel).toggleConfusionMode();
+	}
+	
+	public Boolean hasConfusionMode(String channel) {
+		if(!channels.containsKey(channel)) {
+			return false;
+		}
+		return channels.get(channel).confusionMode;
+	}
+	
 	// a channel
 	public class Channel {
 		public String name = new String("");
@@ -506,11 +548,30 @@ public class ChannelManager {
 		public String listeners = new String("");
 		public Boolean local = false;
 		public Boolean broadcast = false;
+		// keep track of "fun" options
+		public boolean raveMode = false;
+		public boolean rainbowMode = false;
+		public boolean confusionMode = false;
 		
 		public ArrayList<String> players = new ArrayList<String>();
 		
 		public Channel(String _name) {
 			name = _name;
+		}
+		
+		public Boolean toggleRaveMode() {			
+			raveMode = !raveMode;
+			return raveMode;
+		}
+		
+		public Boolean toggleRainbowMode() {			
+			rainbowMode = !rainbowMode;
+			return rainbowMode;
+		}
+		
+		public Boolean toggleConfusionMode() {
+			confusionMode = !confusionMode;
+			return confusionMode;
 		}
 	}
 	

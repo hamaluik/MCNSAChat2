@@ -15,7 +15,7 @@ public class CommandRaveMode implements Command {
 	}
 
 	public Boolean handle(Player player, String sArgs) {
-		Boolean raveMode = plugin.chatManager.toggleRaveMode();
+		Boolean raveMode = plugin.channelManager.toggleRaveMode(plugin.channelManager.getPlayerChannel(player));
 		if(raveMode) {
 			ColourHandler.sendMessage(player, "&cR&aa&eV&be &7mode has been activated!");
 		}

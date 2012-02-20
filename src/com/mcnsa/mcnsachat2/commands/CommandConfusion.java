@@ -15,7 +15,7 @@ public class CommandConfusion implements Command {
 	}
 
 	public Boolean handle(Player player, String sArgs) {
-		Boolean confusionMode = plugin.chatManager.toggleConfusionMode();
+		Boolean confusionMode = plugin.channelManager.toggleConfusionMode(plugin.channelManager.getPlayerChannel(player));
 		if(confusionMode) {
 			ColourHandler.sendMessage(player, "&7confusion mode has been activated!");
 		}

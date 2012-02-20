@@ -5,6 +5,8 @@ import java.util.Random;
 import org.bukkit.entity.Player;
 
 public class ColourHandler {
+	static Integer nextColour = new Integer(-1);
+	
 	// make it a static class) private constructor, static methods
 	private ColourHandler() {}
 
@@ -89,9 +91,18 @@ public class ColourHandler {
 	public static String randomColour() {
 		// get a random number
 		Random generator = new Random();
-		Integer roll = generator.nextInt(16);
+		Integer roll = generator.nextInt(15) + 1; // don't use black
 		// convert to hex string
 		// and return!
 		return "&" + Integer.toHexString(roll);
+	}
+	
+	public static String rainbowColour() {
+		// get the next colour
+		nextColour += 1;
+		if(nextColour >= 16) {
+			nextColour = 0;
+		}
+		return "&" + Integer.toHexString(nextColour);
 	}
 }
