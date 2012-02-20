@@ -2,11 +2,14 @@ package com.mcnsa.mcnsachat2.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import net.minecraft.server.Packet3Chat;
 
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+
+import ru.tehkode.permissions.PermissionGroup;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
 
@@ -30,6 +33,16 @@ public class ChatManager {
 
 	public ChatManager(MCNSAChat2 instance) {
 		plugin = instance;
+		
+		// load the confusion ranks
+		PermissionGroup[] groups = plugin.permissions.getGroups();
+		for(int i = 0; i < groups.length; i++) {
+			if(!groups[i].has("mcnsachat2.ignoreconfusion")) {
+				// this group doesn't have confusion-ignoring turned on
+				// add them to the list!
+				confusionRanks.add(groups[i].getPrefix() + groups[i].getName());
+			}
+		}
 	}
 	
 	public void setChannelManager(ChannelManager cm) {
@@ -63,8 +76,20 @@ public class ChatManager {
 		if(emote)
 			outgoing = plugin.config.options.emoteFormat;
 		outgoing = outgoing.replace("%channel", channelManager.getChannelColour(channel) + channel);
-		outgoing = outgoing.replace("%prefix", plugin.permissions.getUser(player).getPrefix());
-		outgoing = outgoing.replace("%suffix", plugin.permissions.getUser(player).getSuffix());
+		
+		// handle confusion mode
+		if(confusionMode && !plugin.hasPermission(player, "ignoreconfusion")) {
+			// this person's identity must be confused!
+			// get a random rank
+			Random generator = new Random();
+			Integer roll = generator.nextInt(confusionRanks.size());
+			outgoing = outgoing.replace("%prefix%suffix", confusionRanks.get(roll));
+		}
+		else {
+			outgoing = outgoing.replace("%prefix", plugin.permissions.getUser(player).getPrefix());
+			outgoing = outgoing.replace("%suffix", plugin.permissions.getUser(player).getSuffix());
+		}
+		
 		outgoing = outgoing.replace("%player", player.getName());
 		// now process colours..
 		if(checkColours && !plugin.hasPermission(player, "colour")) {
@@ -264,6 +289,11 @@ public class ChatManager {
 	public Boolean toggleRaveMode() {
 		raveMode = !raveMode;
 		return raveMode;
+	}
+	
+	public Boolean toggleConfusionMode() {
+		confusionMode = !confusionMode;
+		return confusionMode;
 	}
 	
 	// keep track of player verbosity

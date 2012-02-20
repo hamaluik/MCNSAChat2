@@ -43,6 +43,8 @@ public class CommandManager {
 		registerCommand(new CommandMove(plugin));
 		registerCommand(new CommandPoof(plugin));
 		registerCommand(new CommandRollTheDice(plugin));
+		registerCommand(new CommandRaveMode(plugin));
+		registerCommand(new CommandConfusion(plugin));
 		//plugin.debug("commands all registered!");
 	}
 
