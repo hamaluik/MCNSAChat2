@@ -24,12 +24,8 @@ public class ChatManager {
 	public HashMap<String, Verbosity> verbosity = new HashMap<String, Verbosity>();
 	// keep track of who has who muted
 	public HashMap<String, ArrayList<String>> muted = new HashMap<String, ArrayList<String>>();
-	// keep track of "fun" options
-	protected boolean raveMode = false;
 	// keep track of all possible ranks for confusion mode
-	// TODO: deal with confusion mode
 	private ArrayList<String> confusionRanks = new ArrayList<String>();
-	protected boolean confusionMode = false;
 
 	public ChatManager(MCNSAChat2 instance) {
 		plugin = instance;
@@ -101,7 +97,7 @@ public class ChatManager {
 		outgoing = outgoing.replace("%channel", channelManager.getChannelColour(channel) + channel);
 		
 		// handle confusion mode
-		if(confusionMode && !plugin.hasPermission(player, "ignoreconfusion")) {
+		if(plugin.channelManager.hasConfusionMode(channel) && !plugin.hasPermission(player, "ignoreconfusion")) {
 			// this person's identity must be confused!
 			// get a random rank
 			Random generator = new Random();
@@ -120,12 +116,20 @@ public class ChatManager {
 		}
 		
 		// handle rave mode
-		if(raveMode) {
+		if(plugin.channelManager.hasRaveMode(channel)) {
 			String raveMessage = new String("");
 			for(int i = 0; i < message.length(); i++) {
 				raveMessage += ColourHandler.randomColour() + message.charAt(i);
 			}
 			message = raveMessage;
+		}
+		// handle rainbow mode
+		else if(plugin.channelManager.hasRainbowMode(channel)) {
+			String rainbowMessage = new String("");
+			for(int i = 0; i < message.length(); i++) {
+				rainbowMessage += ColourHandler.rainbowColour() + message.charAt(i);
+			}
+			message = rainbowMessage;
 		}
 		
 		// and add it
@@ -312,16 +316,6 @@ public class ChatManager {
 			Verbosity level = plugin.ph.getOfflineVerbosity(online[i].getName());
 			setVerbosity(online[i], level);
 		}
-	}
-	
-	public Boolean toggleRaveMode() {
-		raveMode = !raveMode;
-		return raveMode;
-	}
-	
-	public Boolean toggleConfusionMode() {
-		confusionMode = !confusionMode;
-		return confusionMode;
 	}
 	
 	// keep track of player verbosity
