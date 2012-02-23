@@ -46,6 +46,7 @@ public class CommandManager {
 		registerCommand(new CommandRaveMode(plugin));
 		registerCommand(new CommandRainbowMode(plugin));
 		registerCommand(new CommandConfusion(plugin));
+		registerCommand(new CommandLockdown(plugin));
 		//plugin.debug("commands all registered!");
 	}
 

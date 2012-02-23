@@ -38,6 +38,7 @@ spam:
   min-online-time: 3
   mini-ban-time: 2
   mini-ban-message: "You're spamming us - please stop. You may try again in a few minutes."
+  lockdown-message: "We're not allowing guests at the moment, please try again later!"
 hard-channels:
   G:
     colour: grey

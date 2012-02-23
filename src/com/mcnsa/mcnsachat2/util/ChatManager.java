@@ -163,6 +163,7 @@ public class ChatManager {
 		
 		// now, take care of those who have VoxelChat
 		if(!emote) {
+			message = ColourHandler.processColours(message);
 			for(int i = 0; i < voxelChat.size(); i++) {
 				// make sure that voxelChat player is listening!
 				if(listeners.contains(voxelChat.get(i))) {

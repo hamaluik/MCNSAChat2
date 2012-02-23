@@ -47,13 +47,16 @@ public class ConfigManager {
 		//plugin.debug("spam message period: " + options.spamConfig.messagePeriod);
 
 		options.spamConfig.minOnlineTime = (float)config.getDouble("spam.min-online-time") * 1000;
-		plugin.debug("options.spamConfig.minOnlineTime = " + options.spamConfig.minOnlineTime);
+		//plugin.debug("options.spamConfig.minOnlineTime = " + options.spamConfig.minOnlineTime);
 		
 		options.spamConfig.miniBanTime = (float)config.getDouble("spam.mini-ban-time") * 60000;
-		plugin.debug("options.spamConfig.miniBanTime = " + options.spamConfig.miniBanTime);
+		//plugin.debug("options.spamConfig.miniBanTime = " + options.spamConfig.miniBanTime);
 		
 		options.spamConfig.miniBanMessage = config.getString("spam.mini-ban-message");
-		plugin.debug("options.spamConfig.miniBanMessage = " + options.spamConfig.miniBanMessage);
+		//plugin.debug("options.spamConfig.miniBanMessage = " + options.spamConfig.miniBanMessage);
+		
+		options.spamConfig.lockdownMessage = config.getString("spam.lockdown-message");
+		//plugin.debug("options.spamConfig.miniBanMessage = " + options.spamConfig.miniBanMessage);
 		
 		// now get the hard channels!
 		ConfigurationSection channelSection = config.getConfigurationSection("hard-channels");
@@ -120,6 +123,7 @@ public class ConfigManager {
 		public Float minOnlineTime = new Float(5);
 		public Float miniBanTime = new Float(2);
 		public String miniBanMessage = new String("gtfo");
+		public String lockdownMessage = new String("gtfo");
 
 		/*public SpamConfig(Float limit, Float period, Float online, Float banTime) {
 			messageLimit = limit;

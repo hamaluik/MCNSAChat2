@@ -10,9 +10,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import ru.tehkode.permissions.PermissionGroup;
+
 import com.mcnsa.mcnsachat2.MCNSAChat2;
 import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.ChatManager.Verbosity;
+import com.mcnsa.mcnsachat2.util.SpamManager.MiniBanReason;
 
 public class PlayerListener implements Listener {
 	MCNSAChat2 plugin = null;
@@ -24,8 +27,12 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void loginHandler(PlayerLoginEvent event) {
 		// see if they're even allowed to join!
-		if(!plugin.spamManager.canPlayerJoin(event.getPlayer())) {
+		MiniBanReason result = plugin.spamManager.canPlayerJoin(event.getPlayer());
+		if(result == MiniBanReason.SPAM) {
 			event.disallow(PlayerLoginEvent.Result.KICK_BANNED, plugin.config.options.spamConfig.miniBanMessage);
+		}
+		else if(result == MiniBanReason.LOCKDOWN) {
+			event.disallow(PlayerLoginEvent.Result.KICK_BANNED, plugin.config.options.spamConfig.lockdownMessage);
 		}
 	}
 	
@@ -54,6 +61,18 @@ public class PlayerListener implements Listener {
 				// TODO: custom join / leave messages
 				ColourHandler.sendMessage(players[i], plugin.permissions.getUser(event.getPlayer()).getPrefix() + event.getPlayer().getName() + " &ehas joined the game!");
 			}
+		}
+		
+		// and warn them of lockdowns
+		if(plugin.spamManager.onLockdown() && plugin.chatManager.getVerbosity(event.getPlayer()).compareTo(Verbosity.SHOWSOME) >= 0) {
+			PermissionGroup[] groups = plugin.permissions.getGroups();
+			String strGroups = new String("");
+			for(int i = 0; i < groups.length; i++) {
+				if(!groups[i].has("mcnsachat2.ignorelockdown")) {
+					strGroups += groups[i].getPrefix() + groups[i].getName() + "&7, ";
+				}
+			}
+			ColourHandler.sendMessage(event.getPlayer(), "&4ATTENTION!!! &fLockdown mode is activated! The following ranks are temporarily barred from joining the server: " + strGroups);
 		}
 	}
 	
