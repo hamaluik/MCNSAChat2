@@ -1,3 +1,4 @@
+# universe-name: the name of this universe in networked chat
 # local-chat-radius: radius of local chat channel (in blocks)
 # default-channel: default chat channel that new users will join
 # default-colour: default new channel colour
@@ -5,11 +6,16 @@
 # chat-format: the format chat will be printed in
 # emote-format: the format emotes will be printed in
 # 	** for the above 2, use the following substitutions:
+#		%universe	the players universe
 #		%channel	the players channel
 #		%prefix		the players prefix (from PermissionsEx)
 #		%suffix		the players suffix (from PermissionsEx)
 #		%player		the players name
 #		%message	the message
+# network:
+#		enable: <true/false> (defaults to false)
+#		host-name:	the ip/dns of the chatserver host (probably "localhost")
+#		host-port:	the port the chatserver lives on in the host 
 # spam:
 #     chat-limit: number of messages sent
 #     chat-period: within the given time period (in seconds)
@@ -20,18 +26,24 @@
 #	channel name:
 #		colour: <colour name>
 #		alias: <alias> (for example, alias = "g", type "/g" to switch to channel G
-#		local: <true/false> (optional)
-#		broadcast: <true/false> (optional)
+#		local: <true/false> (optional, defaults to false)
+#		broadcast: <true/false> (optional, defaults to false)
+#		networked: <true/false> (optional, defaults to false)
 #		permission: <permission node> permission node to get into the channel (optional)
 #						final permission string will be: "mcnsachat2.channel.<permission node>"
 #		listeners: <permission node> permission node to automatically listen in on the channel (optional)
 #						final permission string will be: "mcnsachat2.listen.<permission node>"
+universe-name: s
 local-chat-radius: 200
 default-channel: G
 default-colour: grey
 announce-timeouts: true
-chat-format: "<%channel&f> [%prefix%suffix&f] %player: &7%message"
-emote-format: "<%channel&f> [%prefix%suffix&f] *%player &7%message"
+chat-format: "<%channel.%universe&f> [%prefix%suffix&f] %player: &7%message"
+emote-format: "<%channel.%universe&f> [%prefix%suffix&f] *%player &7%message"
+network:
+  enable: false
+  host-name: localhost
+  host-port: 9345
 spam:
   chat-limit: 4
   chat-period: 2
@@ -43,6 +55,7 @@ hard-channels:
   G:
     colour: grey
     alias: g
+    networked: true
   L:
     colour: pink
     alias: lo
@@ -52,13 +65,16 @@ hard-channels:
     alias: bc
     permission: broadcast
     broadcast: true
+    networked: true
   MOD:
     colour: purple
     alias: m
     permission: mod
     listeners: mod
+    networked: true
   ADMIN:
     colour: green
     alias: a
     permission: admin
     listeners: admin
+    networked: true
