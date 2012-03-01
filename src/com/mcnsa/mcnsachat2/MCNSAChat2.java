@@ -1,6 +1,7 @@
 package com.mcnsa.mcnsachat2;
 
 import com.mcnsa.mcnsachat2.listeners.PlayerListener;
+import com.mcnsa.mcnsachat2.net.NetworkManager;
 import com.mcnsa.mcnsachat2.util.*;
 
 import java.util.List;
@@ -34,6 +35,9 @@ public class MCNSAChat2 extends JavaPlugin {
 	public ChannelManager channelManager = null;
 	public ChatManager chatManager = null;
 	public SpamManager spamManager = null;
+	
+	// our network layer
+	public NetworkManager netManager = null;
 	
 	// and peristance!
 	public PersistanceHandler ph = null;
@@ -77,6 +81,10 @@ public class MCNSAChat2 extends JavaPlugin {
 		// and the spam manager..
 		spamManager = new SpamManager(this);
 		
+		// and the network manager..
+		// TODO: load values from config
+		netManager = new NetworkManager(this, "localhost", 9345);
+		
 		// and load the persistance
 		log("loading persistance..");
 		ph.readPersistance();
@@ -84,6 +92,15 @@ public class MCNSAChat2 extends JavaPlugin {
 		// and send people to their appropriate channels (in case of reload)
 		channelManager.reloadChannels();
 		chatManager.reloadVerbosities();
+		
+		// attempt to connect to the local server
+		if(!netManager.connect()) {
+			// we failed to connect, set the netManager to null
+			// so we don't try to interact with it anymore
+			netManager = null;
+			
+			// TODO: try to reconnect after a minute or something
+		}
 		
 		// routines for when the plugin gets enabled
 		log("plugin enabled!");
@@ -109,7 +126,7 @@ public class MCNSAChat2 extends JavaPlugin {
 	// for debugging
 	// (disable for final release)
 	public void debug(String info) {
-		//log.info("[MCNSAChat2] <DEBUG> " + info);
+		log.info("[MCNSAChat2] <DEBUG> " + info);
 	}
 
 	// load the permissions plugin

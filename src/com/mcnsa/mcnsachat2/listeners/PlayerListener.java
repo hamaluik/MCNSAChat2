@@ -109,6 +109,10 @@ public class PlayerListener implements Listener {
 		// if the chat is cancelled, back out
 		if(event.isCancelled()) return;
 		
+		// send to our network layer
+		// TODO:
+		plugin.netManager.sendMessage("derp:G:" + event.getPlayer().getName() + ":" + event.getMessage());
+		
 		// now intercept the chat
 		plugin.chatManager.handleChat(event.getPlayer(), event.getMessage(), false, "", true);
 		
