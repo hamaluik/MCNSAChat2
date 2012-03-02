@@ -248,7 +248,7 @@ public class ChannelManager {
 	}
 	
 	// this time, include EVERYONE who will hear it!
-	public ArrayList<String> getAllListeners(String channel, Player player) {
+	public ArrayList<String> getAllListeners(String channel, String player) {
 		// trim the channel name to be sure
 		channel = channel.trim();
 		
@@ -259,7 +259,11 @@ public class ChannelManager {
 		}
 		
 		// a list of all normal listeners
-		ArrayList<String> listeners = getListeners(channel, player);
+		// see if the player is online on this server
+		ArrayList<String> listeners = new ArrayList<String>();
+		if(plugin.getServer().getPlayer(player) != null) {
+			listeners = getListeners(channel, plugin.getServer().getPlayer(player));
+		}
 		
 		// now include those listening in automatically
 		// get a list of all online players
@@ -288,6 +292,10 @@ public class ChannelManager {
 	public String getPlayerChannel(Player player) {
 		if(!players.containsKey(player.getName())) return "";
 		return players.get(player.getName());
+	}
+	public String getPlayerChannel(String player) {
+		if(!players.containsKey(player)) return "";
+		return players.get(player);
 	}
 	
 	// get a channel's colour
