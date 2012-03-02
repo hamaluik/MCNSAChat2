@@ -180,6 +180,54 @@ public class ChannelManager {
 		removeChannelIfEmpty(channel);
 	}
 	
+	// use this for networked chat!
+	// get a list of everyone who can hear the chat
+	// (excluding those who are listening in)
+	public ArrayList<String> getListeners(String channel, String sender) {
+		// trim the channel name to be sure
+		channel = channel.trim();
+		
+		// make sure the channel exists and that it's valid
+		if(!channels.containsKey(channel) || channel.equals("")) {
+			plugin.error("attempted to get listeners for non-existant channel: " + channel);
+			return new ArrayList<String>();
+		}
+		
+		// a list of all listeners
+		ArrayList<String> listeners = new ArrayList<String>();
+		
+		// handle broadcast channels
+		if(channels.get(channel).broadcast) {
+			Player[] players = plugin.getServer().getOnlinePlayers();
+			for(int i = 0; i < players.length; i++) {
+				if(!listeners.contains(players[i].getName())) {
+					listeners.add(players[i].getName());
+					//plugin.debug("Added " + players[i].getName() + " for being in broadcast");
+				}
+			}
+		}
+		// ignore local channels
+		// handle normal channels
+		else {
+			// add everyone in the channel
+			for(int i = 0; i < channels.get(channel).players.size(); i++) {
+				// only add them if they're not already there
+				if(!listeners.contains(channels.get(channel).players.get(i))) {
+					// make sure they're not muted
+					if(!plugin.chatManager.isPlayerMuted(channels.get(channel).players.get(i), sender)) {
+						// add them!
+						listeners.add(channels.get(channel).players.get(i));
+						//plugin.debug("Added " + channels.get(channel).players.get(i) + " for being in the same channel");
+					}
+				}
+			}
+		}
+		
+		
+		// and return!
+		return listeners;
+	}
+	
 	// get a list of everyone who can hear the chat
 	// (excluding those who are listening in)
 	public ArrayList<String> getListeners(String channel, Player player) {
@@ -248,7 +296,7 @@ public class ChannelManager {
 	}
 	
 	// this time, include EVERYONE who will hear it!
-	public ArrayList<String> getAllListeners(String channel, String player) {
+	public ArrayList<String> getAllListeners(String channel, Player player) {
 		// trim the channel name to be sure
 		channel = channel.trim();
 		
@@ -261,9 +309,48 @@ public class ChannelManager {
 		// a list of all normal listeners
 		// see if the player is online on this server
 		ArrayList<String> listeners = new ArrayList<String>();
-		if(plugin.getServer().getPlayer(player) != null) {
-			listeners = getListeners(channel, plugin.getServer().getPlayer(player));
+		listeners = getListeners(channel, player);
+		
+		// now include those listening in automatically
+		// get a list of all online players
+		Player[] players = plugin.getServer().getOnlinePlayers();
+		for(int i = 0; i < players.length; i++) {
+			// make sure they're not already on the list
+			if(!listeners.contains(players[i].getName())) {
+				// check their permissions and seeall status!
+				if(!channels.get(channel).listeners.equals("") && plugin.hasPermission(players[i], "listen." + channels.get(channel).listeners)) {
+					// add them!
+					listeners.add(players[i].getName());
+					//plugin.debug("Added " + players[i].getName() + " for being a listener");
+				}
+				else if(seeAll.contains(players[i].getName())) {
+					// add them!
+					listeners.add(players[i].getName());
+					//plugin.debug("Added " + players[i].getName() + " for having seeAll on");
+				}
+			}
 		}
+		
+		return listeners;
+	}
+	
+	// use this for networked chat!
+	// this time, include EVERYONE who will hear it!
+	// need to include the sender to see if they've been muted
+	public ArrayList<String> getAllListeners(String channel, String sender) {
+		// trim the channel name to be sure
+		channel = channel.trim();
+		
+		// make sure the channel exists and that it's valid
+		if(!channels.containsKey(channel) || channel.equals("")) {
+			plugin.error("attempted to get listeners for non-existant channel: " + channel);
+			return new ArrayList<String>();
+		}
+		
+		// a list of all normal listeners
+		// see if the player is online on this server
+		ArrayList<String> listeners = new ArrayList<String>();
+		listeners = getListeners(channel, sender);
 		
 		// now include those listening in automatically
 		// get a list of all online players

@@ -4,6 +4,8 @@ import java.util.Random;
 
 import org.bukkit.entity.Player;
 
+import com.mcnsa.mcnsachat2.MCNSAChat2;
+
 public class ColourHandler {
 	static Integer nextColour = new Integer(0);
 	
@@ -86,6 +88,13 @@ public class ColourHandler {
 	
 	public static void sendMessage(Player player, String message) {
 		player.sendMessage(processColours(message));
+	}
+	
+	public static void sendMessage(MCNSAChat2 plugin, String name, String message) {
+		Player player = plugin.getServer().getPlayer(name);
+		if(player != null) {
+			player.sendMessage(processColours(message));
+		}
 	}
 	
 	public static String randomColour() {

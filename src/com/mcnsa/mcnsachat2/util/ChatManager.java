@@ -44,25 +44,20 @@ public class ChatManager {
 	public void setChannelManager(ChannelManager cm) {
 		channelManager = cm;
 	}
-	
-	public void handleChat(Player player, String message, Boolean emote, String toChannel, Boolean checkColours) {
-		// forward the chat
-		handleChat(player.getName(), plugin.permissions.getUser(player).getPrefix(), plugin.permissions.getUser(player).getSuffix(), emote, toChannel, checkColours);
-	}
 
-	public void handleChat(String playerName, String prefix, String suffix, String message, Boolean emote, String toChannel, Boolean checkColours) {
+	public void handleChat(Player player, String message, Boolean emote, String toChannel, Boolean checkColours) {
 		// figure out which channel to speak to
 		String channel = new String(toChannel);
 		if(toChannel.equals("")) {
 			// figure out which channel the player is in
-			channel = channelManager.getPlayerChannel(playerName);
+			channel = channelManager.getPlayerChannel(player);
 		}
 		
 		// see if they're in timeout
-		if(onTimeout.contains(playerName)) {
+		if(onTimeout.contains(player.getName())) {
 			// they're in timeout!
 			ColourHandler.sendMessage(player, "&cYou can't talk, because you're in timeout!");
-			plugin.log("{timeout} " + playerName + ": " + message);
+			plugin.log("{timeout} " + player.getName() + ": " + message);
 			return;
 		}
 
@@ -186,6 +181,63 @@ public class ChatManager {
 		
 		// and log it
 		plugin.log(ColourHandler.stripColours(outgoing));
+	}
+	
+	public void handleNetworkChat(String channel, String player, String prefix, String suffix, String message, Boolean emote) {
+		// we are receiving networked chat!
+		
+		// get all the listeners for this channel
+		ArrayList<String> listeners = channelManager.getAllListeners(channel, player);
+		
+		// don't have to check for spam (will be done on the remote server instance)
+
+		// now send the message out!
+		String outgoing = new String(plugin.config.options.chatFormat);
+		// change the format if it's an emote
+		if(emote)
+			outgoing = plugin.config.options.emoteFormat;
+		// now do all the replacements
+		outgoing = outgoing.replace("%channel", channelManager.getChannelColour(channel) + channel);
+		outgoing = outgoing.replace("%prefix",  prefix);
+		outgoing = outgoing.replace("%suffix", suffix);
+		outgoing = outgoing.replace("%player", player);
+		
+		// don't have to check colours, will be done remotely
+		
+		// and add it
+		outgoing = outgoing.replace("%message", message);
+		// now process the colours
+		outgoing = ColourHandler.processColours(outgoing);
+		
+		// now send it out!
+		for(int i = 0; i < listeners.size(); i++) {
+			// get the player associated with this name
+			Player recipient = plugin.getServer().getPlayer(listeners.get(i));
+			if(recipient != null) {				
+				if(!onTimeout.contains(listeners.get(i))) {
+					// pass along the message to anyone who's not in timeout
+					recipient.sendMessage(outgoing);	
+				}
+				else {
+					// uh-oh, they're in timeout!
+					String timeout = new String(plugin.config.options.chatFormat);
+					// change the format if it's an emote
+					if(emote)
+						timeout = plugin.config.options.emoteFormat;
+					timeout = timeout.replace("%channel", channelManager.getChannelColour(channel) + channel);
+					timeout = timeout.replace("%prefix", prefix);
+					timeout = timeout.replace("%suffix", suffix);
+					timeout = timeout.replace("%player", player);
+					timeout = timeout.replace("%message", "&c(You can't hear this because you're in timeout!)");
+					recipient.sendMessage(ColourHandler.processColours(timeout));
+				}
+			}
+		}
+		
+		// don't handle chat bubbles (they're not even on this server!)
+		
+		// and log it
+		plugin.log("{net} " + ColourHandler.stripColours(outgoing));
 	}
 	
 	// toggle whether a player is on timeout or not
