@@ -66,32 +66,15 @@ public class NetworkManager {
 	}
 	
 	public void receiveMessage(String message) {
-		// parse the message first
-		String[] parts = message.split(":", 4);
-		// part 0: world
-		// part 1: channel
-		// part 2: formatted name
-		// part 3: message
-		
-		// make sure we receieved a valid message
-		if(parts.length != 4) {
-			plugin.debug("receieved bad message: " + message);
-			return;
-		}
-		plugin.debug("received message: " + message);
-		
-		// TODO: actual chat
-		// for now, just announce to all players on the server
-		Player[] players = plugin.getServer().getOnlinePlayers();
-		for(int i = 0; i < players.length; i++) {
-			ColourHandler.sendMessage(players[i], parts[2] + ": " + parts[3]);
-		}
+		// just pass it off to the chat manager
+		plugin.chatManager.handleNetworkChat(message);
 	}
 	
 	public void disconnect() {
 		// TODO: more disconnect stuff
 		try {
 			connection.close();
+			outStream.close();
 		}
 		catch (IOException e) {
 			plugin.error("error disconnecting from the host: " + e.getMessage());

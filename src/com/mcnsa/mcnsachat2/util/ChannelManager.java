@@ -46,6 +46,7 @@ public class ChannelManager {
 			channel.listeners = config.options.hardChannels.get(key).listeners;
 			channel.local = config.options.hardChannels.get(key).local;
 			channel.broadcast = config.options.hardChannels.get(key).broadcast;
+			channel.networked = config.options.hardChannels.get(key).networked;
 			
 			// register the alias
 			plugin.commandManager.registerAlias(channel.alias, key);
@@ -591,6 +592,13 @@ public class ChannelManager {
 		return poofed.contains(player.getName());
 	}
 	
+	public boolean isNetworked(String channel) {
+		if(!channels.containsKey(channel)) {
+			return false;
+		}
+		return channels.get(channel).networked;
+	}
+	
 	public Boolean toggleRaveMode(String channel) {
 		if(!channels.containsKey(channel)) {
 			return false;
@@ -643,6 +651,7 @@ public class ChannelManager {
 		public String listeners = new String("");
 		public Boolean local = false;
 		public Boolean broadcast = false;
+		public Boolean networked = false;
 		// keep track of "fun" options
 		public boolean raveMode = false;
 		public boolean rainbowMode = false;

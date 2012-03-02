@@ -45,7 +45,7 @@ public class ChatManager {
 		channelManager = cm;
 	}
 
-	public void handleChat(Player player, String message, Boolean emote, String toChannel, Boolean checkColours) {
+	public boolean handleChat(Player player, String message, Boolean emote, String toChannel, Boolean checkColours) {
 		// figure out which channel to speak to
 		String channel = new String(toChannel);
 		if(toChannel.equals("")) {
@@ -58,7 +58,7 @@ public class ChatManager {
 			// they're in timeout!
 			ColourHandler.sendMessage(player, "&cYou can't talk, because you're in timeout!");
 			plugin.log("{timeout} " + player.getName() + ": " + message);
-			return;
+			return false;
 		}
 
 		// and get a list of everyone who is listening in
@@ -86,7 +86,7 @@ public class ChatManager {
 			}
 			
 			// get out of here
-			return;
+			return false;
 		}
 
 		// now send the message out!
@@ -94,6 +94,9 @@ public class ChatManager {
 		// change the format if it's an emote
 		if(emote)
 			outgoing = plugin.config.options.emoteFormat;
+		
+		// universe and channel replacements
+		outgoing = outgoing.replace("%universe", plugin.config.options.universeName);
 		outgoing = outgoing.replace("%channel", channelManager.getChannelColour(channel) + channel);
 		
 		// handle confusion mode
@@ -181,10 +184,66 @@ public class ChatManager {
 		
 		// and log it
 		plugin.log(ColourHandler.stripColours(outgoing));
+		
+		// they spoke, so send it off to network chat
+		return true;
 	}
 	
-	public void handleNetworkChat(String channel, String player, String prefix, String suffix, String message, Boolean emote) {
+	public void sendNetworkChat(Player player, String message, Boolean emote, String toChannel, Boolean checkColours) {
+		// first off, figure out which channel to send to
+		// to make sure that it's network-enabled
+		String channel = new String(toChannel);
+		if(toChannel.equals("")) {
+			// figure out which channel the player is in
+			channel = channelManager.getPlayerChannel(player);
+		}
+		
+		// if it's not a networked channel, we don't care
+		if(!channelManager.isNetworked(channel)) {
+			return;
+		}
+		
+		// it is networked! ok to send!
+		String outgoing = new String("");
+		outgoing += plugin.config.options.universeName + ":";
+		outgoing += channel + ":";
+		outgoing += player.getName() + ":";
+		outgoing += plugin.permissions.getUser(player).getPrefix() + ":";
+		outgoing += plugin.permissions.getUser(player).getSuffix() + ":";
+		outgoing += (emote ? "1" : "0") + ":";
+		// now sort out colours
+		if(checkColours && !plugin.hasPermission(player, "colour")) {
+			message = ColourHandler.stripColours(message);
+		}
+		outgoing += message;
+		
+		// now send it off to the network manager!
+		plugin.netManager.sendMessage(outgoing);
+		
+		// and we're done!
+	}
+	
+	public void handleNetworkChat(String message) {
 		// we are receiving networked chat!
+		// first, split it into parts
+		// parts = [universe, channel, player, prefix, suffix, emote, message]
+		String[] parts = message.split(":", 7);
+				
+		// make sure we receieved a valid message
+		if(parts.length != 7) {
+			plugin.debug("receieved network message: " + message);
+			return;
+		}
+		plugin.debug("received network message: " + message);
+		
+		// now sort out the parameters
+		String universe = parts[0];
+		String channel = parts[1];
+		String player = parts[2];
+		String prefix = parts[3];
+		String suffix = parts[4];
+		Boolean emote = parts[5].equals("1");
+		message = parts[6];
 		
 		// get all the listeners for this channel
 		ArrayList<String> listeners = channelManager.getAllListeners(channel, player);
@@ -197,6 +256,7 @@ public class ChatManager {
 		if(emote)
 			outgoing = plugin.config.options.emoteFormat;
 		// now do all the replacements
+		outgoing = outgoing.replace("%universe", universe);
 		outgoing = outgoing.replace("%channel", channelManager.getChannelColour(channel) + channel);
 		outgoing = outgoing.replace("%prefix",  prefix);
 		outgoing = outgoing.replace("%suffix", suffix);

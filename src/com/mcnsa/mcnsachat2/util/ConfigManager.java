@@ -22,6 +22,8 @@ public class ConfigManager {
 		// load the chat radius
 		//plugin.debug("loading options...");
 		
+		options.universeName = config.getString("universe-name");
+		
 		options.localChatRadius = (float)config.getDouble("local-chat-radius");
 		//plugin.debug("local chat radius: " + options.localChatRadius.toString());
 		
@@ -39,6 +41,12 @@ public class ConfigManager {
 		
 		options.emoteFormat = config.getString("emote-format");
 		//plugin.debug("emote format: " + options.emoteFormat);
+		
+		options.networkConfig.enabled = config.getBoolean("network.enable", false);
+		
+		options.networkConfig.hostName = config.getString("network.host-name", "localhost");
+		
+		options.networkConfig.hostPort = config.getInt("network.host-port", 9345);
 
 		options.spamConfig.messageLimit = (float)config.getDouble("spam.chat-limit");
 		//plugin.debug("spam message limit: " + options.spamConfig.messageLimit);
@@ -90,6 +98,8 @@ public class ConfigManager {
 			channelConfig.broadcast = channelSection.getBoolean(channelName + ".broadcast", false);
 			//plugin.debug("\tchannel broadcast: " + channelConfig.broadcast.toString());
 			
+			channelConfig.networked = channelSection.getBoolean(channelName + ".networked", false);
+			
 			// and add it!
 			options.hardChannels.put(channelName, channelConfig);
 		}
@@ -107,13 +117,22 @@ public class ConfigManager {
 	// create a "class" in here to store config options!
 	public class ConfigOptions {
 		public HashMap<String, ChannelHardConfig> hardChannels = new HashMap<String, ChannelHardConfig>();
+		public String universeName = new String("");
 		public Float localChatRadius = new Float(200);
 		public String defaultChannel = new String("");
 		public String defaultColour = new String("grey");
 		public Boolean announceTimeouts = true;
 		public String chatFormat = new String("<%channel&f> [%prefix%suffix&f] %player: &7%message");
 		public String emoteFormat = new String("<%channel&f> [%prefix%suffix&f] %player: &7%message");
-		public SpamConfig spamConfig = new SpamConfig();//new SpamConfig(5.0f, 3000f, 5000f, 120000f);
+		public NetworkConfig networkConfig = new NetworkConfig();
+		public SpamConfig spamConfig = new SpamConfig();
+	}
+	
+	// network configurations
+	public class NetworkConfig {
+		public Boolean enabled = new Boolean(false);
+		public String hostName = new String("localhost");
+		public Integer hostPort = new Integer(9345);
 	}
 
 	// spam configurations
@@ -124,13 +143,6 @@ public class ConfigManager {
 		public Float miniBanTime = new Float(2);
 		public String miniBanMessage = new String("gtfo");
 		public String lockdownMessage = new String("gtfo");
-
-		/*public SpamConfig(Float limit, Float period, Float online, Float banTime) {
-			messageLimit = limit;
-			messagePeriod = period;
-			minOnlineTime = online;
-			miniBanTime = banTime;
-		}*/
 	}
 
 	// hard-channel configurations
@@ -142,5 +154,6 @@ public class ConfigManager {
 		public Boolean local = false;
 		public String alias = new String("");
 		public Boolean broadcast = false;
+		public Boolean networked = false;
 	}
 }

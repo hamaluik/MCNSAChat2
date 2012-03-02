@@ -82,8 +82,9 @@ public class MCNSAChat2 extends JavaPlugin {
 		spamManager = new SpamManager(this);
 		
 		// and the network manager..
-		// TODO: load values from config
-		netManager = new NetworkManager(this, "localhost", 9345);
+		if(config.options.networkConfig.enabled) {
+			netManager = new NetworkManager(this, config.options.networkConfig.hostName, config.options.networkConfig.hostPort);
+		}
 		
 		// and load the persistance
 		log("loading persistance..");
@@ -94,7 +95,7 @@ public class MCNSAChat2 extends JavaPlugin {
 		chatManager.reloadVerbosities();
 		
 		// attempt to connect to the local server
-		if(!netManager.connect()) {
+		if(netManager != null && !netManager.connect()) {
 			// we failed to connect, set the netManager to null
 			// so we don't try to interact with it anymore
 			netManager = null;
