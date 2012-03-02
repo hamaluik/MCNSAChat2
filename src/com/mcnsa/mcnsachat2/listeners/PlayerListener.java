@@ -109,17 +109,26 @@ public class PlayerListener implements Listener {
 		// if the chat is cancelled, back out
 		if(event.isCancelled()) return;
 		
-		// now intercept the chat
-		Boolean isSpamming = plugin.chatManager.handleChat(event.getPlayer(), event.getMessage(), false, "", true);
-
-		// only if they're not spamming / on timeout and the network layer is enabled!
-		if(!isSpamming && plugin.netManager != null) {
-			// send to our network layer
-			plugin.chatManager.sendNetworkChat(event.getPlayer(), event.getMessage(), false, "", true);
-		}
-		
 		// and cancel the event!
 		event.setCancelled(true);
+		
+		// now intercept the chat
+		boolean chatSent = plugin.chatManager.handleChat(event.getPlayer(), event.getMessage(), false, "", true);
+		
+		if(!chatSent) {
+			plugin.debug("no network message (chat not sent)");
+			return;
+		}
+
+		// only if they're not spamming / on timeout and the network layer is enabled!
+		if(plugin.netManager != null) {
+			// send to our network layer
+			plugin.debug("sending network chat");
+			plugin.chatManager.sendNetworkChat(event.getPlayer(), event.getMessage(), false, "", true);
+		}
+		else {
+			plugin.debug("message not broadcasted due to netManager being null");
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST)

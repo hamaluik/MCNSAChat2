@@ -83,7 +83,9 @@ public class MCNSAChat2 extends JavaPlugin {
 		
 		// and the network manager..
 		if(config.options.networkConfig.enabled) {
+			debug("network is enabled, creating object..");
 			netManager = new NetworkManager(this, config.options.networkConfig.hostName, config.options.networkConfig.hostPort);
+			debug("network manager instantiated!");
 		}
 		
 		// and load the persistance
@@ -100,6 +102,8 @@ public class MCNSAChat2 extends JavaPlugin {
 			// so we don't try to interact with it anymore
 			netManager = null;
 			
+			log("failed to connect to the chat server!");
+			
 			// TODO: try to reconnect after a minute or something
 		}
 		
@@ -114,6 +118,7 @@ public class MCNSAChat2 extends JavaPlugin {
 		if(netManager != null) {
 			netManager.disconnect();
 			netManager = null;
+			debug("Net manager disconnected and set to null");
 		}
 		
 		// shut the plugin down

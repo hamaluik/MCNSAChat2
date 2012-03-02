@@ -46,12 +46,14 @@ public class ChatManager {
 	}
 
 	public boolean handleChat(Player player, String message, Boolean emote, String toChannel, Boolean checkColours) {
+		plugin.debug("handling chat");
 		// figure out which channel to speak to
 		String channel = new String(toChannel);
 		if(toChannel.equals("")) {
 			// figure out which channel the player is in
 			channel = channelManager.getPlayerChannel(player);
 		}
+		plugin.debug("\tplayer is talking to channel: " + channel);
 		
 		// see if they're in timeout
 		if(onTimeout.contains(player.getName())) {
@@ -63,6 +65,7 @@ public class ChatManager {
 
 		// and get a list of everyone who is listening in
 		ArrayList<String> listeners = channelManager.getAllListeners(channel, player);
+		plugin.debug("\tlisteners acquired");
 
 		// check for spam
 		if(plugin.spamManager.checkChatSpam(player)) {
@@ -86,8 +89,10 @@ public class ChatManager {
 			}
 			
 			// get out of here
+			plugin.log(player.getName() + " was detected of spam!");
 			return false;
 		}
+		plugin.debug("\tno spam detected");
 
 		// now send the message out!
 		String outgoing = new String(plugin.config.options.chatFormat);
@@ -139,6 +144,9 @@ public class ChatManager {
 		outgoing = outgoing.replace("%message", message);
 		// now process the colours
 		outgoing = ColourHandler.processColours(outgoing);
+		
+		plugin.debug("\toutgoing message formatted: " + outgoing);
+		
 		// now send it
 		for(int i = 0; i < listeners.size(); i++) {
 			// get the player associated with this name
@@ -200,6 +208,7 @@ public class ChatManager {
 		
 		// if it's not a networked channel, we don't care
 		if(!channelManager.isNetworked(channel)) {
+			plugin.debug("channel " + channel + " isn't networked, so no broadcast!");
 			return;
 		}
 		

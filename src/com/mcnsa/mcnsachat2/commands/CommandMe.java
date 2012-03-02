@@ -21,7 +21,22 @@ public class CommandMe implements Command {
 		}
 		
 		// handle the /me
-		plugin.chatManager.handleChat(player, sArgs, true, "", true);
+		boolean chatSent = plugin.chatManager.handleChat(player, sArgs, true, "", true);
+		
+		if(!chatSent) {
+			plugin.debug("no network message (chat not sent)");
+			return true;
+		}
+
+		// only if they're not spamming / on timeout and the network layer is enabled!
+		if(plugin.netManager != null) {
+			// send to our network layer
+			plugin.debug("sending network chat");
+			plugin.chatManager.sendNetworkChat(player, sArgs, true, "", true);
+		}
+		else {
+			plugin.debug("message not broadcasted due to netManager being null");
+		}
 		
 		// and we handled it!
 		return true;

@@ -83,7 +83,7 @@ public class NetworkManager {
 		// broadcast to the server
 		Player[] players = plugin.getServer().getOnlinePlayers();
 		for(int i = 0; i < players.length; i++) {
-			ColourHandler.sendMessage(players[i], "&4This universe has lost its to the chat server!");
+			ColourHandler.sendMessage(players[i], "&4This universe has lost its connection to the chat server!");
 		}
 	}
 }
