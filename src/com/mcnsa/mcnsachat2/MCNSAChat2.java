@@ -110,6 +110,12 @@ public class MCNSAChat2 extends JavaPlugin {
 	public void onDisable() {
 		ph.writePersistance();
 		
+		// and turn off the network layer
+		if(netManager != null) {
+			netManager.disconnect();
+			netManager = null;
+		}
+		
 		// shut the plugin down
 		log("plugin disabled!");
 	}
