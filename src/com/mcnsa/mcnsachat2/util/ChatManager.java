@@ -44,20 +44,25 @@ public class ChatManager {
 	public void setChannelManager(ChannelManager cm) {
 		channelManager = cm;
 	}
-
+	
 	public void handleChat(Player player, String message, Boolean emote, String toChannel, Boolean checkColours) {
+		// forward the chat
+		handleChat(player.getName(), plugin.permissions.getUser(player).getPrefix(), plugin.permissions.getUser(player).getSuffix(), emote, toChannel, checkColours);
+	}
+
+	public void handleChat(String playerName, String prefix, String suffix, String message, Boolean emote, String toChannel, Boolean checkColours) {
 		// figure out which channel to speak to
 		String channel = new String(toChannel);
 		if(toChannel.equals("")) {
 			// figure out which channel the player is in
-			channel = channelManager.getPlayerChannel(player);
+			channel = channelManager.getPlayerChannel(playerName);
 		}
 		
 		// see if they're in timeout
-		if(onTimeout.contains(player.getName())) {
+		if(onTimeout.contains(playerName)) {
 			// they're in timeout!
 			ColourHandler.sendMessage(player, "&cYou can't talk, because you're in timeout!");
-			plugin.log("{timeout} " + player.getName() + ": " + message);
+			plugin.log("{timeout} " + playerName + ": " + message);
 			return;
 		}
 
@@ -97,7 +102,7 @@ public class ChatManager {
 		outgoing = outgoing.replace("%channel", channelManager.getChannelColour(channel) + channel);
 		
 		// handle confusion mode
-		if(plugin.channelManager.hasConfusionMode(channel) && !plugin.hasPermission(player, "ignoreconfusion")) {
+		if(plugin.channelManager.channelExists(channel) && plugin.channelManager.hasConfusionMode(channel) && !plugin.hasPermission(player, "ignoreconfusion")) {
 			// this person's identity must be confused!
 			// get a random rank
 			Random generator = new Random();
@@ -116,7 +121,7 @@ public class ChatManager {
 		}
 		
 		// handle rave mode
-		if(plugin.channelManager.hasRaveMode(channel)) {
+		if(plugin.channelManager.channelExists(channel) && plugin.channelManager.hasRaveMode(channel)) {
 			String raveMessage = new String("");
 			for(int i = 0; i < message.length(); i++) {
 				raveMessage += ColourHandler.randomColour() + message.charAt(i);
@@ -124,7 +129,7 @@ public class ChatManager {
 			message = raveMessage;
 		}
 		// handle rainbow mode
-		else if(plugin.channelManager.hasRainbowMode(channel)) {
+		else if(plugin.channelManager.channelExists(channel) && plugin.channelManager.hasRainbowMode(channel)) {
 			String rainbowMessage = new String("");
 			for(int i = 0; i < message.length(); i++) {
 				rainbowMessage += ColourHandler.rainbowColour() + message.charAt(i);
