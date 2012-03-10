@@ -53,7 +53,7 @@ public class NetworkManager {
 	public void sendMessage(String message) {
 		try {
 			// and write a message
-			plugin.debug("writing '" + message + "' to connection...");
+			plugin.debug("{outgoing} " + message);
 			outStream.writeBytes(message + "\n");
 			// flush to ensure it gets sent
 			outStream.flush();

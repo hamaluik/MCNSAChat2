@@ -41,12 +41,15 @@ public class CommandManager {
 		registerCommand(new CommandMute(plugin));
 		registerCommand(new CommandLock(plugin));
 		registerCommand(new CommandMove(plugin));
-		registerCommand(new CommandPoof(plugin));
+		registerCommand(new CommandCPoof(plugin));
 		registerCommand(new CommandRollTheDice(plugin));
 		registerCommand(new CommandRaveMode(plugin));
 		registerCommand(new CommandRainbowMode(plugin));
 		registerCommand(new CommandConfusion(plugin));
 		registerCommand(new CommandLockdown(plugin));
+		registerCommand(new CommandVanish(plugin));
+		registerCommand(new CommandVanished(plugin));
+		registerCommand(new CommandPoof(plugin));
 		//plugin.debug("commands all registered!");
 	}
 

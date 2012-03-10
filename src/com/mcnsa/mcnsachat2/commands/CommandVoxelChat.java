@@ -17,6 +17,13 @@ public class CommandVoxelChat implements Command {
 		// handle the hidden command!
 		plugin.chatManager.enableVoxelChat(player);
 		
+		// now send them a list of player colours
+		Player[] players = plugin.getServer().getOnlinePlayers();
+		for(int i = 0; i < players.length; i++) {
+			player.sendMessage("\247c\247a\2471\2473\247d\247eq?=$vp=" + players[i].getName() + "," + plugin.permissions.getUser(players[i]).getPrefix().replace("&", ""));
+		}
+		// now send the list
+		
 		// and we handled it!
 		return true;
 	}

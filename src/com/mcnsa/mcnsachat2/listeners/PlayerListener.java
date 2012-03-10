@@ -74,6 +74,14 @@ public class PlayerListener implements Listener {
 			}
 			ColourHandler.sendMessage(event.getPlayer(), "&4ATTENTION!!! &fLockdown mode is activated! The following ranks are temporarily barred from joining the server: " + strGroups);
 		}
+		
+		// now send coloured names to those with voxelchat
+		for(int i = 0; i < plugin.chatManager.voxelChat.size(); i++) {
+			Player target = plugin.getServer().getPlayerExact(plugin.chatManager.voxelChat.get(i));
+			if(target != null) {
+				target.sendMessage("\247c\247a\2471\2473\247d\247eq?=$vp=" + event.getPlayer().getName() + "," + plugin.permissions.getUser(event.getPlayer()).getPrefix().replace("&", ""));
+			}
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -111,6 +119,11 @@ public class PlayerListener implements Listener {
 		
 		// and cancel the event!
 		event.setCancelled(true);
+		
+		// filter the annoying rei's minimap
+		if(event.getMessage().startsWith("u00")) {
+			return;
+		}
 		
 		// now intercept the chat
 		boolean chatSent = plugin.chatManager.handleChat(event.getPlayer(), event.getMessage(), false, "", true);

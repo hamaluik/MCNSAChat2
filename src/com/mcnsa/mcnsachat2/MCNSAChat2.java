@@ -39,6 +39,9 @@ public class MCNSAChat2 extends JavaPlugin {
 	// our network layer
 	public NetworkManager netManager = null;
 	
+	// for handling vanishing
+	public VanishManager vanishManager = null;
+	
 	// and peristance!
 	public PersistanceHandler ph = null;
 
@@ -88,6 +91,9 @@ public class MCNSAChat2 extends JavaPlugin {
 			debug("network manager instantiated!");
 		}
 		
+		// now the vanish manager
+		vanishManager = new VanishManager(this);
+		
 		// and load the persistance
 		log("loading persistance..");
 		ph.readPersistance();
@@ -95,6 +101,7 @@ public class MCNSAChat2 extends JavaPlugin {
 		// and send people to their appropriate channels (in case of reload)
 		channelManager.reloadChannels();
 		chatManager.reloadVerbosities();
+		vanishManager.refreshAllVanished();
 		
 		// attempt to connect to the local server
 		if(netManager != null && !netManager.connect()) {
@@ -138,7 +145,7 @@ public class MCNSAChat2 extends JavaPlugin {
 	// for debugging
 	// (disable for final release)
 	public void debug(String info) {
-		log.info("[MCNSAChat2] <DEBUG> " + info);
+		//log.info("[MCNSAChat2] <DEBUG> " + info);
 	}
 
 	// load the permissions plugin

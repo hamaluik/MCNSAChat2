@@ -116,11 +116,18 @@ public class PersistanceHandler {
 			}
 			obj.put("muted", mutedObj);
 			
+			// now vanished
+			ArrayList<String> vanished = new ArrayList<String>();
+			for(int i = 0; i < plugin.vanishManager.vanishedPlayers.size(); i++) {
+				vanished.add(plugin.vanishManager.vanishedPlayers.get(i).getName());
+			}
+			obj.put("vanished", vanished);
+			
 			out.print(obj);
 			
 			out.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			plugin.error("failed to write persistance: " + e.getMessage());
 		}
 	}
 	
@@ -148,6 +155,17 @@ public class PersistanceHandler {
 				offlineChannels = (HashMap<String, String>)obj.get("playerChannels");
 				offlineVerbosity = (HashMap<String, Long>)obj.get("playerVerbosity");
 				plugin.chatManager.muted = (HashMap<String, ArrayList<String>>)obj.get("muted");
+				
+				// load the vanished
+				ArrayList<String> vanished = (ArrayList<String>)obj.get("vanished");
+				plugin.vanishManager.vanishedPlayers.clear();
+				for(int i = 0; i < vanished.size(); i++) {
+					if(plugin.getServer().getPlayerExact(vanished.get(i)) != null) {
+						// only if the player still exists
+						plugin.vanishManager.vanishedPlayers.add(plugin.getServer().getPlayerExact(vanished.get(i)));
+					}
+				}
+				
 				/*plugin.debug("loaded verbosities:");
 				for(String player: offlineVerbosity.keySet()) {
 					plugin.debug("loaded verbosity of " + offlineVerbosity.get(player) + " for player: " + player);
@@ -155,7 +173,7 @@ public class PersistanceHandler {
 			}
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			plugin.error("failed to read persistance: " + e.getMessage());
 		}
 	}
 }
