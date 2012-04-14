@@ -44,6 +44,9 @@ public class MCNSAChat2 extends JavaPlugin {
 	
 	// and peristance!
 	public PersistanceHandler ph = null;
+	
+	// manage herobrines
+	public HerobrineSpawner herobrineSpawner = null;
 
 	public void onEnable() {
 		// set up permissions
@@ -93,6 +96,9 @@ public class MCNSAChat2 extends JavaPlugin {
 		
 		// now the vanish manager
 		vanishManager = new VanishManager(this);
+		
+		// herobrine..
+		herobrineSpawner = new HerobrineSpawner(this);
 		
 		// and load the persistance
 		log("loading persistance..");
