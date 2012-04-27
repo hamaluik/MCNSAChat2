@@ -80,6 +80,26 @@ public class ColourHandler {
 	public static String processColours(String str) {
 		return str.replaceAll("(&([a-f0-9]))", "\u00A7$2");
 	}
+	
+	public static String processConsoleColours(String str) {
+		str = str.replaceAll("&0", "\033[30;47m");
+		str = str.replaceAll("&1", "\033[34;40m");
+		str = str.replaceAll("&2", "\033[32;40m");
+		str = str.replaceAll("&3", "\033[36;40m");
+		str = str.replaceAll("&4", "\033[31;40m");
+		str = str.replaceAll("&5", "\033[35;40m");
+		str = str.replaceAll("&6", "\033[33;40m");
+		str = str.replaceAll("&7", "\033[37;40m");
+		str = str.replaceAll("&8", "\033[30;1;47m");
+		str = str.replaceAll("&9", "\033[34;1;40m");
+		str = str.replaceAll("&a", "\033[32;1;40m");
+		str = str.replaceAll("&b", "\033[36;1;40m");
+		str = str.replaceAll("&c", "\033[31;1;40m");
+		str = str.replaceAll("&d", "\033[35;1;40m");
+		str = str.replaceAll("&e", "\033[33;1;40m");
+		str = str.replaceAll("&f", "\033[37;1;40m");
+		return str;
+	}
 
 	// strip colour tags from strings..
 	public static String stripColours(String str) {
@@ -95,6 +115,10 @@ public class ColourHandler {
 		if(player != null) {
 			player.sendMessage(processColours(message));
 		}
+	}
+	
+	public static void consoleMessage(MCNSAChat2 plugin, String message) {
+		plugin.log().info(ColourHandler.processConsoleColours(message));
 	}
 	
 	public static String randomColour() {

@@ -191,7 +191,7 @@ public class ChatManager {
 		}
 		
 		// and log it
-		plugin.log(ColourHandler.stripColours(outgoing));
+		plugin.log(outgoing);
 		
 		// they spoke, so send it off to network chat
 		return true;
@@ -306,7 +306,7 @@ public class ChatManager {
 		// don't handle chat bubbles (they're not even on this server!)
 		
 		// and log it
-		plugin.log("{net} " + ColourHandler.stripColours(outgoing));
+		plugin.log("{net} " + outgoing);
 	}
 	
 	// toggle whether a player is on timeout or not

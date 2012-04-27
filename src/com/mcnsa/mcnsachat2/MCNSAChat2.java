@@ -137,15 +137,21 @@ public class MCNSAChat2 extends JavaPlugin {
 		// shut the plugin down
 		log("plugin disabled!");
 	}
+	
+	public Logger log() {
+		return log;
+	}
 
 	// for simpler logging
 	public void log(String info) {
-		log.info("[MCNSAChat2] " + info);
+		//log.info("[MCNSAChat2] " + info);
+		ColourHandler.consoleMessage(this, "[MCNSAChat2] " + info);
 	}
 
 	// for error reporting
 	public void error(String info) {
-		log.info("[MCNSAChat2] <ERROR> " + info);
+		//log.info("[MCNSAChat2] <ERROR> " + info);
+		ColourHandler.consoleMessage(this, "[MCNSAChat2] <ERROR> " + info);
 	}
 
 	// for debugging
