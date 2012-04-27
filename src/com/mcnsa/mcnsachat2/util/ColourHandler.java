@@ -2,6 +2,9 @@ package com.mcnsa.mcnsachat2.util;
 
 import java.util.Random;
 
+import jline.ANSIBuffer.ANSICodes;
+
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
@@ -82,23 +85,40 @@ public class ColourHandler {
 	}
 	
 	public static String processConsoleColours(String str) {
-		str = str.replaceAll("&0", "\033[30;47m");
-		str = str.replaceAll("&1", "\033[34;40m");
-		str = str.replaceAll("&2", "\033[32;40m");
-		str = str.replaceAll("&3", "\033[36;40m");
-		str = str.replaceAll("&4", "\033[31;40m");
-		str = str.replaceAll("&5", "\033[35;40m");
-		str = str.replaceAll("&6", "\033[33;40m");
-		str = str.replaceAll("&7", "\033[37;40m");
-		str = str.replaceAll("&8", "\033[30;1;47m");
-		str = str.replaceAll("&9", "\033[34;1;40m");
-		str = str.replaceAll("&a", "\033[32;1;40m");
-		str = str.replaceAll("&b", "\033[36;1;40m");
-		str = str.replaceAll("&c", "\033[31;1;40m");
-		str = str.replaceAll("&d", "\033[35;1;40m");
-		str = str.replaceAll("&e", "\033[33;1;40m");
-		str = str.replaceAll("&f", "\033[37;1;40m");
-		return str;
+		/*str = str.replaceAll("&0", "\033[30;1m");
+		str = str.replaceAll("&1", "\033[34m");
+		str = str.replaceAll("&2", "\033[32m");
+		str = str.replaceAll("&3", "\033[36m");
+		str = str.replaceAll("&4", "\033[31m");
+		str = str.replaceAll("&5", "\033[35m");
+		str = str.replaceAll("&6", "\033[33m");
+		str = str.replaceAll("&7", "\033[37m");
+		str = str.replaceAll("&8", "\033[30;1m");
+		str = str.replaceAll("&9", "\033[34;1m");
+		str = str.replaceAll("&a", "\033[32;1m");
+		str = str.replaceAll("&b", "\033[36;1m");
+		str = str.replaceAll("&c", "\033[31;1m");
+		str = str.replaceAll("&d", "\033[35;1m");
+		str = str.replaceAll("&e", "\033[33;1m");
+		str = str.replaceAll("&f", "\033[37;1m");
+		return str + "\033[0m";*/
+		str = str.replaceAll("&0", ChatColor.BLACK.toString());
+		str = str.replaceAll("&1", ChatColor.DARK_BLUE.toString());
+		str = str.replaceAll("&2", ChatColor.DARK_GREEN.toString());
+		str = str.replaceAll("&3", ChatColor.DARK_AQUA.toString());
+		str = str.replaceAll("&4", ChatColor.DARK_RED.toString());
+		str = str.replaceAll("&5", ChatColor.DARK_PURPLE.toString());
+		str = str.replaceAll("&6", ChatColor.GOLD.toString());
+		str = str.replaceAll("&7", ChatColor.GRAY.toString());
+		str = str.replaceAll("&8", ChatColor.DARK_GRAY.toString());
+		str = str.replaceAll("&9", ChatColor.BLUE.toString());
+		str = str.replaceAll("&a", ChatColor.GREEN.toString());
+		str = str.replaceAll("&b", ChatColor.AQUA.toString());
+		str = str.replaceAll("&c", ChatColor.RED.toString());
+		str = str.replaceAll("&d", ChatColor.LIGHT_PURPLE.toString());
+		str = str.replaceAll("&e", ChatColor.YELLOW.toString());
+		str = str.replaceAll("&f", ChatColor.WHITE.toString());
+		return str + ANSICodes.attrib(0);
 	}
 
 	// strip colour tags from strings..
@@ -118,7 +138,8 @@ public class ColourHandler {
 	}
 	
 	public static void consoleMessage(MCNSAChat2 plugin, String message) {
-		plugin.log().info(ColourHandler.processConsoleColours(message));
+		//plugin.log().info(ColourHandler.processConsoleColours(message));
+		System.out.println(ColourHandler.processConsoleColours(message));
 	}
 	
 	public static String randomColour() {
