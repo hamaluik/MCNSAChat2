@@ -86,7 +86,7 @@ public class PersistanceHandler {
 			JSONObject obj = new JSONObject();
 			
 			// put some basic lists
-			obj.put("onTimeout", plugin.chatManager.onTimeout);
+			//obj.put("onTimeout", plugin.chatManager.onTimeout);
 			obj.put("seeAll", plugin.channelManager.seeAll);
 			obj.put("poofed", plugin.channelManager.poofed);
 			
@@ -149,7 +149,7 @@ public class PersistanceHandler {
 			
 			// and grab the objects!
 			if(obj != null) {
-				plugin.chatManager.onTimeout = (ArrayList<String>)obj.get("onTimeout");
+				//plugin.chatManager.onTimeout = (ArrayList<String>)obj.get("onTimeout");
 				plugin.channelManager.seeAll = (ArrayList<String>)obj.get("seeAll");
 				plugin.channelManager.poofed = (ArrayList<String>)obj.get("poofed");
 				offlineChannels = (HashMap<String, String>)obj.get("playerChannels");

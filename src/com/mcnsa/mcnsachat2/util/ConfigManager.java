@@ -35,6 +35,11 @@ public class ConfigManager {
 		
 		options.announceTimeouts = config.getBoolean("announce-timeouts");
 		//plugin.debug("announce timeouts: " + options.announceTimeouts.toString());
+
+		options.inTimeoutMessage = config.getString("in-timeout-message");
+		options.removedFromTimeoutMessage = config.getString("removed-from-timeout-message");
+		options.timeoutExpiredMessage = config.getString("timeout-expired-message");
+		options.sentToTimeoutMessage = config.getString("sent-to-timeout-message");
 		
 		options.chatFormat = config.getString("chat-format");
 		//plugin.debug("chat format: " + options.chatFormat);
@@ -65,6 +70,9 @@ public class ConfigManager {
 		
 		options.spamConfig.lockdownMessage = config.getString("spam.lockdown-message");
 		//plugin.debug("options.spamConfig.miniBanMessage = " + options.spamConfig.miniBanMessage);
+		
+		options.spamConfig.timeoutTime = (float)config.getDouble("spam.timeout-time") * 60;
+		//plugin.debug("options.spamConfig.timeoutTime = " + options.spamConfig.timeoutTime);
 		
 		// now get the hard channels!
 		ConfigurationSection channelSection = config.getConfigurationSection("hard-channels");
@@ -122,6 +130,10 @@ public class ConfigManager {
 		public String defaultChannel = new String("");
 		public String defaultColour = new String("grey");
 		public Boolean announceTimeouts = true;
+		public String inTimeoutMessage = new String("%player was sent to timeout for %time for %reason");
+		public String removedFromTimeoutMessage = new String("%player was removed from timeout!");
+		public String timeoutExpiredMessage = new String("%player is no longer in timeout!");
+		public String sentToTimeoutMessage = new String("You have been sent to timeout for %time for %reason");
 		public String chatFormat = new String("<%channel&f> [%prefix%suffix&f] %player: &7%message");
 		public String emoteFormat = new String("<%channel&f> [%prefix%suffix&f] %player: &7%message");
 		public NetworkConfig networkConfig = new NetworkConfig();
@@ -141,6 +153,7 @@ public class ConfigManager {
 		public Float messagePeriod = new Float(3);
 		public Float minOnlineTime = new Float(5);
 		public Float miniBanTime = new Float(2);
+		public Float timeoutTime = new Float(5);
 		public String miniBanMessage = new String("gtfo");
 		public String lockdownMessage = new String("gtfo");
 	}

@@ -2,9 +2,10 @@ package com.mcnsa.mcnsachat2.util;
 
 import java.util.Random;
 
-import jline.ANSIBuffer.ANSICodes;
+//import jline.ANSIBuffer.ANSICodes;
 
 import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.command.ColouredConsoleSender;
 import org.bukkit.entity.Player;
 
 import com.mcnsa.mcnsachat2.MCNSAChat2;
@@ -81,7 +82,7 @@ public class ColourHandler {
 
 	// allow for colour tags to be used in strings..
 	public static String processColours(String str) {
-		return str.replaceAll("(&([a-f0-9]))", "\u00A7$2");
+		return processConsoleColours(str);//str.replaceAll("(&([a-f0-9]))", "\u00A7$2");
 	}
 	
 	public static String processConsoleColours(String str) {
@@ -118,7 +119,7 @@ public class ColourHandler {
 		str = str.replaceAll("&d", ChatColor.LIGHT_PURPLE.toString());
 		str = str.replaceAll("&e", ChatColor.YELLOW.toString());
 		str = str.replaceAll("&f", ChatColor.WHITE.toString());
-		return str + ANSICodes.attrib(0);
+		return str;
 	}
 
 	// strip colour tags from strings..
@@ -139,7 +140,8 @@ public class ColourHandler {
 	
 	public static void consoleMessage(MCNSAChat2 plugin, String message) {
 		//plugin.log().info(ColourHandler.processConsoleColours(message));
-		System.out.println(ColourHandler.processConsoleColours(message));
+		//System.out.println(ColourHandler.processConsoleColours(message));
+		ColouredConsoleSender.getInstance().sendMessage(ColourHandler.processConsoleColours(message));
 	}
 	
 	public static String randomColour() {

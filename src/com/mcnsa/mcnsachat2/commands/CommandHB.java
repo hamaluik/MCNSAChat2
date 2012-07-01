@@ -9,15 +9,17 @@ import com.mcnsa.mcnsachat2.util.CommandInfo;
 
 @CommandInfo(alias = "hb", permission = "hb", visible = false)
 public class CommandHB implements Command {
+	@SuppressWarnings("unused")
 	private static MCNSAChat2 plugin = null;
 	public CommandHB(MCNSAChat2 instance) {
 		plugin = instance;
 	}
 
 	public Boolean handle(Player player, String sArgs) {		
-		ColourHandler.sendMessage(player, "&3Attempting to spawn HB on you..");
+		/*ColourHandler.sendMessage(player, "&3Attempting to spawn HB on you..");
 		plugin.herobrineSpawner.registerPlayer(player);
-		plugin.herobrineSpawner.run();
+		plugin.herobrineSpawner.run();*/
+		ColourHandler.sendMessage(player, "&3oOo");
 		
 		// and we handled it!
 		return true;

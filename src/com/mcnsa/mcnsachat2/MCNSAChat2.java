@@ -5,6 +5,7 @@ import com.mcnsa.mcnsachat2.net.NetworkManager;
 import com.mcnsa.mcnsachat2.util.*;
 
 import java.util.List;
+import java.util.Timer;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -47,6 +48,9 @@ public class MCNSAChat2 extends JavaPlugin {
 	
 	// manage herobrines
 	public HerobrineSpawner herobrineSpawner = null;
+	
+	// manage timeout timers
+	public Timer timeoutTimer = null;
 
 	public void onEnable() {
 		// set up permissions
@@ -98,7 +102,7 @@ public class MCNSAChat2 extends JavaPlugin {
 		vanishManager = new VanishManager(this);
 		
 		// herobrine..
-		herobrineSpawner = new HerobrineSpawner(this);
+		//herobrineSpawner = new HerobrineSpawner(this);
 		
 		// and load the persistance
 		log("loading persistance..");
@@ -108,6 +112,10 @@ public class MCNSAChat2 extends JavaPlugin {
 		channelManager.reloadChannels();
 		chatManager.reloadVerbosities();
 		vanishManager.refreshAllVanished();
+		
+		// start the clock for timeout timers
+		timeoutTimer = new Timer();
+		timeoutTimer.scheduleAtFixedRate(chatManager.new TimeoutTimerTask(chatManager), 0, 1000);
 		
 		// attempt to connect to the local server
 		if(netManager != null && !netManager.connect()) {
@@ -151,7 +159,7 @@ public class MCNSAChat2 extends JavaPlugin {
 	// for error reporting
 	public void error(String info) {
 		//log.info("[MCNSAChat2] <ERROR> " + info);
-		ColourHandler.consoleMessage(this, "[MCNSAChat2] <ERROR> " + info);
+		ColourHandler.consoleMessage(this, "[MCNSAChat2] &c<ERROR> " + info);
 	}
 
 	// for debugging
@@ -195,5 +203,27 @@ public class MCNSAChat2 extends JavaPlugin {
 			}
 		}
 		return false;
+	}
+	
+	public String formatTime(long time) {
+		long weeks = time / 604800;
+		time -= (weeks * 604800);
+		long days = time / 86400;
+		time -= (days * 86400);
+		long hours = time / 3600;
+		time -= (hours * 3600);
+		long minutes = time / 60;
+		time -= (minutes * 60);
+		long seconds = time;
+		
+		String str = "";
+		if(weeks > 0) str += weeks + "w";
+		if(days > 0) str += days + "d";
+		if(hours > 0) str += hours + "h";
+		if(minutes > 0) str += minutes + "m";
+		if(seconds > 0) str += seconds + "s";
+		if(str.length() == 0) str = "0s";
+		
+		return str;
 	}
 }

@@ -7,7 +7,7 @@ import com.mcnsa.mcnsachat2.util.ColourHandler;
 import com.mcnsa.mcnsachat2.util.Command;
 import com.mcnsa.mcnsachat2.util.CommandInfo;
 
-@CommandInfo(alias = "cs", permission = "seeall", usage = "", description = "toggles whether or not you can see all chat")
+@CommandInfo(alias = "cseeall", permission = "seeall", usage = "", description = "toggles whether or not you can see all chat")
 public class CommandSeeAll implements Command {
 	private static MCNSAChat2 plugin = null;
 	public CommandSeeAll(MCNSAChat2 instance) {

@@ -1,8 +1,10 @@
 package com.mcnsa.mcnsachat2.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.TimerTask;
 
 import net.minecraft.server.Packet3Chat;
 
@@ -16,8 +18,8 @@ import com.mcnsa.mcnsachat2.MCNSAChat2;
 public class ChatManager {
 	MCNSAChat2 plugin = null;
 	ChannelManager channelManager = null;
-	// a list of all players that are on timeout
-	public ArrayList<String> onTimeout = new ArrayList<String>();
+	// hashmap of how much time is left for players on timeout
+	public HashMap<String, Long> timeoutTimers = new HashMap<String, Long>();
 	// a list of all players that have VoxelChat installed
 	public ArrayList<String> voxelChat = new ArrayList<String>();
 	// keep track of the verbosity level for players
@@ -56,9 +58,9 @@ public class ChatManager {
 		plugin.debug("\tplayer is talking to channel: " + channel);
 		
 		// see if they're in timeout
-		if(onTimeout.contains(player.getName())) {
+		if(timeoutTimers.containsKey(player.getName())) {
 			// they're in timeout!
-			ColourHandler.sendMessage(player, "&cYou can't talk, because you're in timeout!");
+			ColourHandler.sendMessage(player, "&cYou can't talk, because you're in timeout with &f" + plugin.formatTime(timeoutTimers.get(player.getName())) + " &cleft!");
 			plugin.log("{timeout} " + player.getName() + ": " + message);
 			return false;
 		}
@@ -73,7 +75,7 @@ public class ChatManager {
 			// send them to timeout!
 			if(!inTimeout(player)) {
 				// (only if they're not already there..)
-				toggleTimeout(player);
+				setTimeout(player, plugin.config.options.spamConfig.timeoutTime.longValue());
 				
 				String colouredName = plugin.permissions.getUser(player).getPrefix() + player.getName();
 				
@@ -152,23 +154,24 @@ public class ChatManager {
 			// get the player associated with this name
 			Player recipient = plugin.getServer().getPlayer(listeners.get(i));
 			if(recipient != null) {				
-				if(!onTimeout.contains(listeners.get(i))) {
+				if(!timeoutTimers.containsKey(listeners.get(i))) {
 					// pass along the message to anyone who's not in timeout
 					recipient.sendMessage(outgoing);	
 				}
-				else {
+				/*else {
 					// uh-oh, they're in timeout!
 					String timeout = new String(plugin.config.options.chatFormat);
 					// change the format if it's an emote
 					if(emote)
 						timeout = plugin.config.options.emoteFormat;
+					timeout = timeout.replace("%universe", plugin.config.options.universeName);
 					timeout = timeout.replace("%channel", channelManager.getChannelColour(channel) + channel);
 					timeout = timeout.replace("%prefix", plugin.permissions.getUser(player).getPrefix());
 					timeout = timeout.replace("%suffix", plugin.permissions.getUser(player).getSuffix());
 					timeout = timeout.replace("%player", player.getName());
 					timeout = timeout.replace("%message", "&c(You can't hear this because you're in timeout!)");
 					recipient.sendMessage(ColourHandler.processColours(timeout));
-				}
+				}*/
 			}
 		}
 		
@@ -197,143 +200,72 @@ public class ChatManager {
 		return true;
 	}
 	
-	public void sendNetworkChat(Player player, String message, Boolean emote, String toChannel, Boolean checkColours) {
-		// first off, figure out which channel to send to
-		// to make sure that it's network-enabled
-		String channel = new String(toChannel);
-		if(toChannel.equals("")) {
-			// figure out which channel the player is in
-			channel = channelManager.getPlayerChannel(player);
+	// set player on a timeout
+	public void setTimeout(Player player, Long time) {
+		if(!timeoutTimers.containsKey(player.getName())) {
+			timeoutTimers.put(player.getName(), time);
+			plugin.log(player.getName() + " is now in timeout");
 		}
-		
-		// if it's not a networked channel, we don't care
-		if(!channelManager.isNetworked(channel)) {
-			plugin.debug("channel " + channel + " isn't networked, so no broadcast!");
-			return;
-		}
-		
-		// it is networked! ok to send!
-		String outgoing = new String("");
-		outgoing += plugin.config.options.universeName + ":";
-		outgoing += channel + ":";
-		outgoing += player.getName() + ":";
-		outgoing += plugin.permissions.getUser(player).getPrefix() + ":";
-		outgoing += plugin.permissions.getUser(player).getSuffix() + ":";
-		outgoing += (emote ? "1" : "0") + ":";
-		// now sort out colours
-		if(checkColours && !plugin.hasPermission(player, "colour")) {
-			message = ColourHandler.stripColours(message);
-		}
-		outgoing += message;
-		
-		// now send it off to the network manager!
-		plugin.netManager.sendMessage(outgoing);
-		
-		// and we're done!
 	}
 	
-	public void handleNetworkChat(String message) {
-		// we are receiving networked chat!
-		// first, split it into parts
-		// parts = [universe, channel, player, prefix, suffix, emote, message]
-		String[] parts = message.split(":", 7);
-				
-		// make sure we receieved a valid message
-		if(parts.length != 7) {
-			plugin.debug("receieved network message: " + message);
-			return;
-		}
-		plugin.debug("received network message: " + message);
-		
-		// now sort out the parameters
-		String universe = parts[0];
-		String channel = parts[1];
-		String player = parts[2];
-		String prefix = parts[3];
-		String suffix = parts[4];
-		Boolean emote = parts[5].equals("1");
-		message = parts[6];
-		
-		// get all the listeners for this channel
-		ArrayList<String> listeners = channelManager.getAllListeners(channel, player);
-		
-		// don't have to check for spam (will be done on the remote server instance)
-
-		// now send the message out!
-		String outgoing = new String(plugin.config.options.chatFormat);
-		// change the format if it's an emote
-		if(emote)
-			outgoing = plugin.config.options.emoteFormat;
-		// now do all the replacements
-		outgoing = outgoing.replace("%universe", universe);
-		outgoing = outgoing.replace("%channel", channelManager.getChannelColour(channel) + channel);
-		outgoing = outgoing.replace("%prefix",  prefix);
-		outgoing = outgoing.replace("%suffix", suffix);
-		outgoing = outgoing.replace("%player", player);
-		
-		// don't have to check colours, will be done remotely
-		
-		// and add it
-		outgoing = outgoing.replace("%message", message);
-		// now process the colours
-		outgoing = ColourHandler.processColours(outgoing);
-		
-		// now send it out!
-		for(int i = 0; i < listeners.size(); i++) {
-			// get the player associated with this name
-			Player recipient = plugin.getServer().getPlayer(listeners.get(i));
-			if(recipient != null) {				
-				if(!onTimeout.contains(listeners.get(i))) {
-					// pass along the message to anyone who's not in timeout
-					recipient.sendMessage(outgoing);	
-				}
-				else {
-					// uh-oh, they're in timeout!
-					String timeout = new String(plugin.config.options.chatFormat);
-					// change the format if it's an emote
-					if(emote)
-						timeout = plugin.config.options.emoteFormat;
-					timeout = timeout.replace("%channel", channelManager.getChannelColour(channel) + channel);
-					timeout = timeout.replace("%prefix", prefix);
-					timeout = timeout.replace("%suffix", suffix);
-					timeout = timeout.replace("%player", player);
-					timeout = timeout.replace("%message", "&c(You can't hear this because you're in timeout!)");
-					recipient.sendMessage(ColourHandler.processColours(timeout));
-				}
-			}
-		}
-		
-		// don't handle chat bubbles (they're not even on this server!)
-		
-		// and log it
-		plugin.log("{net} " + outgoing);
-	}
-	
-	// toggle whether a player is on timeout or not
-	public Boolean toggleTimeout(Player player) {
-		if(onTimeout.contains(player.getName())) {
-			onTimeout.remove(player.getName());
-			plugin.log(player + " is no longer in timeout");
-			return false;
-		}
-		else {
-			onTimeout.add(player.getName());
-			plugin.log(player + " is now in timeout");
-			return true;
+	// take a player off timeout
+	public void clearTimeout(Player player) {
+		if(timeoutTimers.containsKey(player.getName())) {
+			timeoutTimers.remove(player.getName());
+			plugin.log(player.getName() + " is no longer in timeout");
 		}
 	}
 	
 	// see if a player is in timeout
 	public Boolean inTimeout(Player player) {
-		return onTimeout.contains(player.getName());
+		return timeoutTimers.containsKey(player.getName());
+	}
+	public Boolean inTimeout(String player) {
+		return timeoutTimers.containsKey(player);
+	}
+	
+	// update the timeout timers, taking care of anyone getting cleared from timeout
+	public void updateTimeoutTimers() {
+		// loop over all players currently on timeout
+		for(String name: timeoutTimers.keySet()) {
+			// see if the person is online
+			Player player = plugin.getServer().getPlayer(name);
+			if(player != null && Arrays.asList(plugin.getServer().getOnlinePlayers()).contains(player)) {
+				// yup, they're online
+				// get their timer!
+				timeoutTimers.put(name, timeoutTimers.get(name) - 1);
+				if(timeoutTimers.get(name) <= 0L) {
+					// time for them to come off timeout!
+					this.clearTimeout(player);
+					
+					// and inform things
+					ColourHandler.sendMessage(player, "&aYou are no longer in timeout! You may talk again.");
+					
+					String message = plugin.config.options.timeoutExpiredMessage;
+					message = message.replaceAll("%prefix", plugin.permissions.getUser(player).getPrefix());
+					message = message.replaceAll("%suffix", plugin.permissions.getUser(player).getSuffix());
+					message = message.replaceAll("%player", player.getName());
+					
+					// announce it to the server?
+					if(plugin.config.options.announceTimeouts) {
+						Player[] players = plugin.getServer().getOnlinePlayers();
+						for(int i = 0; i < players.length; i++) {
+							if(plugin.chatManager.getVerbosity(players[i]).compareTo(Verbosity.SHOWALL) >= 0) {
+								ColourHandler.sendMessage(players[i], message);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	// set the entire onTimeout list (for persistance)
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	public void setTimeout(ArrayList<String> players) {
 		onTimeout.clear();
 		onTimeout = (ArrayList<String>)players.clone();
-	}
+	}*/
 	
 	// enable VoxelChat for a player
 	public void enableVoxelChat(Player player) {
@@ -448,5 +380,24 @@ public class ChatManager {
 	// keep track of player verbosity
 	public enum Verbosity {
 		SHOWNONE, SHOWSOME, SHOWALL
+	}
+	
+	// timeout timer class
+	public class TimeoutTimerTask extends TimerTask {
+		private ChatManager chatManager = null;
+		
+		public TimeoutTimerTask(ChatManager _chatManager) {
+			chatManager = _chatManager;
+		}
+
+		@Override
+		public void run() {
+			try {
+				chatManager.updateTimeoutTimers();
+			}
+			catch(Exception e) {
+				chatManager.plugin.error("Timeout timer crashed: " + e.getMessage());
+			}
+		}
 	}
 }
