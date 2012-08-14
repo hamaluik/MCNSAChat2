@@ -91,7 +91,7 @@ public class ChannelManager {
 	}
 	
 	// move a player between channels
-	public Boolean movePlayer(String channel, Player player, boolean suppressWho) {
+	public Boolean movePlayer(String channel, Player player, boolean suppressWhoAndWelcome) {
 		// trim the channel name to be sure
 		channel = channel.trim();
 		
@@ -115,12 +115,12 @@ public class ChannelManager {
 		players.put(player.getName(), channel);
 		
 		// report it to the player!
-		if(plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWSOME) >= 0) {
+		if(!suppressWhoAndWelcome && plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWSOME) >= 0) {
 			ColourHandler.sendMessage(player, "&7Welcome to the " + channels.get(channel).colour + channels.get(channel).name + " &7channel!");
 		}
 
 		// let them know who's here
-		if(!suppressWho && plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWALL) >= 0) {
+		if(!suppressWhoAndWelcome && plugin.chatManager.getVerbosity(player).compareTo(Verbosity.SHOWALL) >= 0) {
 			Player[] channelPlayers = listListenerPlayers(channel);
 			String message = new String("&7Players here: ");
 			for(int i = 0; i < channelPlayers.length; i++) {
