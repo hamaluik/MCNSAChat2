@@ -200,6 +200,119 @@ public class ChatManager {
 		return true;
 	}
 	
+	public void sendNetworkChat(Player player, String message, Boolean emote, String toChannel, Boolean checkColours) {
+		// first off, figure out which channel to send to
+		// to make sure that it's network-enabled
+		String channel = new String(toChannel);
+		if(toChannel.equals("")) {
+			// figure out which channel the player is in
+			channel = channelManager.getPlayerChannel(player);
+		}
+		
+		// if it's not a networked channel, we don't care
+		if(!channelManager.isNetworked(channel)) {
+			plugin.debug("channel " + channel + " isn't networked, so no broadcast!");
+			return;
+		}
+		
+		// it is networked! ok to send!
+		String outgoing = new String("");
+		outgoing += plugin.config.options.universeName + ":";
+		outgoing += channel + ":";
+		outgoing += player.getName() + ":";
+		outgoing += plugin.permissions.getUser(player).getPrefix() + ":";
+		outgoing += plugin.permissions.getUser(player).getSuffix() + ":";
+		outgoing += (emote ? "1" : "0") + ":";
+		// now sort out colours
+		if(checkColours && !plugin.hasPermission(player, "colour")) {
+			message = ColourHandler.stripColours(message);
+		}
+		outgoing += message;
+		
+		// now send it off to the network manager!
+		plugin.netManager.sendMessage(outgoing);
+		
+		// and we're done!
+	}
+	
+	public void handleNetworkChat(String message) {
+		// we are receiving networked chat!
+		// first, split it into parts
+		// parts = [universe, channel, player, prefix, suffix, emote, message]
+		String[] parts = message.split(":", 7);
+				
+		// make sure we receieved a valid message
+		if(parts.length != 7) {
+			plugin.debug("receieved network message: " + message);
+			return;
+		}
+		plugin.debug("received network message: " + message);
+		
+		// now sort out the parameters
+		String universe = parts[0];
+		String channel = parts[1];
+		String player = parts[2];
+		String prefix = parts[3];
+		String suffix = parts[4];
+		Boolean emote = parts[5].equals("1");
+		message = parts[6];
+		
+		// get all the listeners for this channel
+		ArrayList<String> listeners = channelManager.getAllListeners(channel, player);
+		
+		// don't have to check for spam (will be done on the remote server instance)
+
+		// now send the message out!
+		String outgoing = new String(plugin.config.options.chatFormat);
+		// change the format if it's an emote
+		if(emote)
+			outgoing = plugin.config.options.emoteFormat;
+		// now do all the replacements
+		outgoing = outgoing.replace("%universe", universe);
+		outgoing = outgoing.replace("%channel", channelManager.getChannelColour(channel) + channel);
+		outgoing = outgoing.replace("%prefix",  prefix);
+		outgoing = outgoing.replace("%suffix", suffix);
+		outgoing = outgoing.replace("%player", player);
+		
+		// don't have to check colours, will be done remotely
+		
+		// and add it
+		outgoing = outgoing.replace("%message", message);
+		// now process the colours
+		outgoing = ColourHandler.processColours(outgoing);
+		
+		// now send it out!
+		for(int i = 0; i < listeners.size(); i++) {
+			// get the player associated with this name
+			Player recipient = plugin.getServer().getPlayer(listeners.get(i));
+			if(recipient != null) {				
+				if(!timeoutTimers.containsKey(listeners.get(i))) {
+					// pass along the message to anyone who's not in timeout
+					recipient.sendMessage(outgoing);	
+				}
+				else {
+					// uh-oh, they're in timeout!
+					String timeout = new String(plugin.config.options.chatFormat);
+					// change the format if it's an emote
+					if(emote)
+						timeout = plugin.config.options.emoteFormat;
+					timeout = timeout.replace("%universe", universe);
+					timeout = timeout.replace("%channel", channelManager.getChannelColour(channel) + channel);
+					timeout = timeout.replace("%prefix", prefix);
+					timeout = timeout.replace("%suffix", suffix);
+					timeout = timeout.replace("%player", player);
+					timeout = timeout.replace("%message", "&c(You can't hear this because you're in timeout!)");
+					recipient.sendMessage(ColourHandler.processColours(timeout));
+				}
+			}
+		}
+		
+		// don't handle chat bubbles (they're not even on this server!)
+		
+		// and log it
+		plugin.log("{net} " + outgoing);
+	}
+	
 	// set player on a timeout
 	public void setTimeout(Player player, Long time) {
 		if(!timeoutTimers.containsKey(player.getName())) {
