@@ -35,6 +35,9 @@ public class ConfigManager {
 		
 		options.announceTimeouts = config.getBoolean("announce-timeouts");
 		//plugin.debug("announce timeouts: " + options.announceTimeouts.toString());
+		
+		options.announceLeaves = config.getBoolean("announce-leaves");
+		//plugin.debug("announce leaves: " + options.announceLeaves.toString());
 
 		options.inTimeoutMessage = config.getString("in-timeout-message");
 		options.removedFromTimeoutMessage = config.getString("removed-from-timeout-message");
@@ -130,6 +133,7 @@ public class ConfigManager {
 		public String defaultChannel = new String("");
 		public String defaultColour = new String("grey");
 		public Boolean announceTimeouts = true;
+		public Boolean announceLeaves = true;
 		public String inTimeoutMessage = new String("%player was sent to timeout for %time for %reason");
 		public String removedFromTimeoutMessage = new String("%player was removed from timeout!");
 		public String timeoutExpiredMessage = new String("%player is no longer in timeout!");

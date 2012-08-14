@@ -38,6 +38,7 @@ local-chat-radius: 200
 default-channel: G
 default-colour: grey
 announce-timeouts: true
+announce-leaves: true
 chat-format: "<%channel.%universe&f> [%prefix%suffix&f] %player: &7%message"
 emote-format: "<%channel.%universe&f> [%prefix%suffix&f] *%player &7%message"
 network:
