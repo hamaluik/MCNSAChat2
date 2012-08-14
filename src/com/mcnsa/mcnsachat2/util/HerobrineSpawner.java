@@ -6,7 +6,7 @@ import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
+//import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
@@ -174,7 +174,7 @@ public class HerobrineSpawner implements Runnable {
 			
 			// and spawn herobrine
 			target.sendMessage("\247c\247a\2471\2473\247d\247eh?=$hb=" + x + "," + y + "," + z);
-			target.getWorld().spawnCreature(new Location(target.getWorld(), (double)x+1d, (double)y, (double)z), EntityType.SNOWMAN);
+			//target.getWorld().spawnCreature(new Location(target.getWorld(), (double)x+1d, (double)y, (double)z), EntityType.SNOWMAN);
 		}
 	}
 	
