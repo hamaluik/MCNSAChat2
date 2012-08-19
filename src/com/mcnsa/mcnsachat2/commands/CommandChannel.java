@@ -26,7 +26,7 @@ public class CommandChannel implements Command {
 		}
 		
 		// create the channel if it doesn't exist
-		plugin.channelManager.createChannelIfNotExists(channel);
+		channel = plugin.channelManager.createChannelIfNotExists(channel);
 		
 		// first up: check their perms
 		String perm = plugin.channelManager.getPermission(channel);

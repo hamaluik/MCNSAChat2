@@ -2,13 +2,11 @@ package com.mcnsa.mcnsachat2.util;
 
 import java.util.Random;
 
-//import jline.ANSIBuffer.ANSICodes;
-
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.command.ColouredConsoleSender;
 import org.bukkit.entity.Player;
-
-import com.mcnsa.mcnsachat2.MCNSAChat2;
 
 public class ColourHandler {
 	static Integer nextColour = new Integer(0);
@@ -36,6 +34,12 @@ public class ColourHandler {
 		else if(name.equalsIgnoreCase("&d")) colour = "pink";
 		else if(name.equalsIgnoreCase("&e")) colour = "yellow";
 		else if(name.equalsIgnoreCase("&f")) colour = "white";
+		else if(name.equalsIgnoreCase("&k")) colour = "magic";
+		else if(name.equalsIgnoreCase("&l")) colour = "bold";
+		else if(name.equalsIgnoreCase("&m")) colour = "strikethrough";
+		else if(name.equalsIgnoreCase("&n")) colour = "underlined";
+		else if(name.equalsIgnoreCase("&o")) colour = "italics";
+		else if(name.equalsIgnoreCase("&r")) colour = "reset";
 		
 		return colour;
 	}
@@ -76,33 +80,25 @@ public class ColourHandler {
 		else if(name.equalsIgnoreCase("pink")) colour = "&d";
 		else if(name.equalsIgnoreCase("yellow")) colour = "&e";
 		else if(name.equalsIgnoreCase("white")) colour = "&f";
+		else if(name.equalsIgnoreCase("random")) colour = "&k";
+		else if(name.equalsIgnoreCase("magic")) colour = "&k";
+		else if(name.equalsIgnoreCase("bold")) colour = "&l";
+		else if(name.equalsIgnoreCase("strike")) colour = "&m";
+		else if(name.equalsIgnoreCase("strikethrough")) colour = "&m";
+		else if(name.equalsIgnoreCase("underline")) colour = "&n";
+		else if(name.equalsIgnoreCase("italics")) colour = "&o";
+		else if(name.equalsIgnoreCase("italic")) colour = "&o";
+		else if(name.equalsIgnoreCase("reset")) colour = "&r";
 		
 		return colour;
 	}
 
 	// allow for colour tags to be used in strings..
 	public static String processColours(String str) {
-		return processConsoleColours(str);//str.replaceAll("(&([a-f0-9]))", "\u00A7$2");
+		return processConsoleColours(str);
 	}
 	
 	public static String processConsoleColours(String str) {
-		/*str = str.replaceAll("&0", "\033[30;1m");
-		str = str.replaceAll("&1", "\033[34m");
-		str = str.replaceAll("&2", "\033[32m");
-		str = str.replaceAll("&3", "\033[36m");
-		str = str.replaceAll("&4", "\033[31m");
-		str = str.replaceAll("&5", "\033[35m");
-		str = str.replaceAll("&6", "\033[33m");
-		str = str.replaceAll("&7", "\033[37m");
-		str = str.replaceAll("&8", "\033[30;1m");
-		str = str.replaceAll("&9", "\033[34;1m");
-		str = str.replaceAll("&a", "\033[32;1m");
-		str = str.replaceAll("&b", "\033[36;1m");
-		str = str.replaceAll("&c", "\033[31;1m");
-		str = str.replaceAll("&d", "\033[35;1m");
-		str = str.replaceAll("&e", "\033[33;1m");
-		str = str.replaceAll("&f", "\033[37;1m");
-		return str + "\033[0m";*/
 		str = str.replaceAll("&0", ChatColor.BLACK.toString());
 		str = str.replaceAll("&1", ChatColor.DARK_BLUE.toString());
 		str = str.replaceAll("&2", ChatColor.DARK_GREEN.toString());
@@ -119,28 +115,53 @@ public class ColourHandler {
 		str = str.replaceAll("&d", ChatColor.LIGHT_PURPLE.toString());
 		str = str.replaceAll("&e", ChatColor.YELLOW.toString());
 		str = str.replaceAll("&f", ChatColor.WHITE.toString());
+		str = str.replaceAll("&k", ChatColor.MAGIC.toString());
+		str = str.replaceAll("&l", ChatColor.BOLD.toString());
+		str = str.replaceAll("&m", ChatColor.STRIKETHROUGH.toString());
+		str = str.replaceAll("&n", ChatColor.UNDERLINE.toString());
+		str = str.replaceAll("&o", ChatColor.ITALIC.toString());
+		str = str.replaceAll("&r", ChatColor.RESET.toString());
 		return str;
 	}
 
 	// strip colour tags from strings..
 	public static String stripColours(String str) {
-		return str.replaceAll("(&([a-f0-9]))", "").replaceAll("(\u00A7([a-f0-9]))", "");
+		return str.replaceAll("(&([a-f0-9klmnor]))", "").replaceAll("(\u00A7([a-f0-9klmnor]))", "");
 	}
 	
 	public static void sendMessage(Player player, String message) {
+		if(message.length() < 1) {
+			return;
+		}
 		player.sendMessage(processColours(message));
 	}
 	
-	public static void sendMessage(MCNSAChat2 plugin, String name, String message) {
+	public static void sendMessage(CommandSender sender, String message) {
+		if(message.length() < 1) {
+			return;
+		}
+		if(sender instanceof Player) {
+			sender.sendMessage(processColours(message));
+		}
+		else {
+			consoleMessage(message);
+		}
+	}
+	
+	public static void sendMessage(JavaPlugin plugin, String name, String message) {
+		if(message.length() < 1) {
+			return;
+		}
 		Player player = plugin.getServer().getPlayer(name);
 		if(player != null) {
 			player.sendMessage(processColours(message));
 		}
 	}
 	
-	public static void consoleMessage(MCNSAChat2 plugin, String message) {
-		//plugin.log().info(ColourHandler.processConsoleColours(message));
-		//System.out.println(ColourHandler.processConsoleColours(message));
+	public static void consoleMessage(String message) {
+		if(message.length() < 1) {
+			return;
+		}
 		ColouredConsoleSender.getInstance().sendMessage(ColourHandler.processConsoleColours(message));
 	}
 	

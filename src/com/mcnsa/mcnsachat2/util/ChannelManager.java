@@ -60,11 +60,14 @@ public class ChannelManager {
 		return channels.containsKey(channelName);
 	}
 	
-	public Boolean createChannelIfNotExists(String channelName) {
-		// return false if it already existed
-		if(channels.containsKey(channelName)) {
-			//plugin.debug("channel " + channelName + " already existed, so it was not created!");
-			return false;
+	public String createChannelIfNotExists(String channelName) {
+		// see if the channel already exists or not (case-insensitive)
+		for(String channel: channels.keySet()) {
+			if(channel.equalsIgnoreCase(channelName)) {
+				// yup, it exists
+				// return it's name
+				return channel;
+			}
 		}
 		
 		// create the new channel
@@ -75,7 +78,8 @@ public class ChannelManager {
 		channels.put(channelName, channel);
 		
 		// yup, we created a new channel!
-		return true;
+		// return the name of the channel
+		return channelName;
 	}
 	
 	public Boolean removeChannelIfEmpty(String channel) {

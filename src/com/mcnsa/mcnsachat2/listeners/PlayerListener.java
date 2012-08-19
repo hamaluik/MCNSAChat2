@@ -38,7 +38,6 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void joinHandler(PlayerJoinEvent event) {
-		
 		// move them into their channel!
 		String channel = plugin.ph.getOfflineChannel(event.getPlayer().getName());
 		// create the channel if it doesn't exist
