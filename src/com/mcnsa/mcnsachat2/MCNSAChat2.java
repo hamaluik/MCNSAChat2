@@ -153,13 +153,13 @@ public class MCNSAChat2 extends JavaPlugin {
 	// for simpler logging
 	public void log(String info) {
 		//log.info("[MCNSAChat2] " + info);
-		ColourHandler.consoleMessage(this, "[MCNSAChat2] " + info);
+		ColourHandler.consoleMessage("[MCNSAChat2] " + info);
 	}
 
 	// for error reporting
 	public void error(String info) {
 		//log.info("[MCNSAChat2] <ERROR> " + info);
-		ColourHandler.consoleMessage(this, "[MCNSAChat2] &c<ERROR> " + info);
+		ColourHandler.consoleMessage("[MCNSAChat2] &c<ERROR> " + info);
 	}
 
 	// for debugging
