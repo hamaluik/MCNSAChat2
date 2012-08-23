@@ -41,6 +41,12 @@ public class CommandMute implements Command {
 			return true;
 		}
 		
+		// see if the targeted player CAN be muted
+		if(plugin.hasPermission(targetPlayer, "ignoremute")) {
+			ColourHandler.sendMessage(player, "&cError: You're not allowed to mute '&f" + sArgs.trim() + "&c'!");
+			return true;
+		}
+		
 		// toggle their muted status
 		boolean muted = plugin.chatManager.toggleMuted(player, targetPlayer);
 		
@@ -50,12 +56,18 @@ public class CommandMute implements Command {
 			if(plugin.chatManager.getVerbosity(targetPlayer).compareTo(Verbosity.SHOWSOME) >= 0) {
 				ColourHandler.sendMessage(targetPlayer, plugin.permissions.getUser(player).getPrefix() + player.getName() + " &7has &cmuted&7 you!");
 			}
+			
+			// log it to console
+			plugin.log(player.getName() + " muted " + targetPlayer.getName());
 		}
 		else {
 			ColourHandler.sendMessage(player, plugin.permissions.getUser(targetPlayer).getPrefix() + targetPlayer.getName() + " &7has been &aunmuted&7!");
 			if(plugin.chatManager.getVerbosity(targetPlayer).compareTo(Verbosity.SHOWSOME) >= 0) {
 				ColourHandler.sendMessage(targetPlayer, plugin.permissions.getUser(player).getPrefix() + player.getName() + " &7has &aunmuted&7 you!");
 			}
+			
+			// log it to console
+			plugin.log(player.getName() + " unmuted " + targetPlayer.getName());
 		}
 		
 		// and we handled it!

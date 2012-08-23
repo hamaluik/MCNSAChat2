@@ -38,6 +38,13 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void joinHandler(PlayerJoinEvent event) {
+		// TODO: move to a different plugin!
+		// should they be allowed to fly?
+		if(plugin.hasPermission(event.getPlayer(), "fly")) {
+			event.getPlayer().setAllowFlight(true);
+			plugin.log("Allowing flight for " + event.getPlayer().getName());
+		}
+		
 		// move them into their channel!
 		String channel = plugin.ph.getOfflineChannel(event.getPlayer().getName());
 		// create the channel if it doesn't exist
