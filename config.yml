@@ -39,11 +39,10 @@ default-channel: G
 default-colour: grey
 announce-timeouts: true
 announce-leaves: true
-in-timeout-message: '%prefix%player &chas been sent to timeout for %f%time &cfor %reason'
+in-timeout-message: '%prefix%player &chas been sent to timeout for &f%time &cfor %reason'
 removed-from-timeout-message: '%prefix%player &ahas been removed from timeout'
-timeout-expired-message: '%player%prefix&a\'s timeout has expired'
-sent-to-timeout-message: '&cYou have been sent to timeout for %f%time &cfor %reason'
-chat-format: "<%channel&f> %universe[%prefix%suffix&f] %player: &7%message"
+timeout-expired-message: '%prefix%player&7''s timeout has &aexpired'
+sent-to-timeout-message: '&cYou have been sent to timeout for &f%time &cfor %reason'
 emote-format: "<%channel&f> %universe*%prefix%player &f%message"
 network:
   enable: false
