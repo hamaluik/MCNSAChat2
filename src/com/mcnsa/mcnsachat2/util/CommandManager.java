@@ -51,6 +51,7 @@ public class CommandManager {
 		registerCommand(new CommandVanished(plugin));
 		registerCommand(new CommandPoof(plugin));
 		registerCommand(new CommandHB(plugin));
+		registerCommand(new CommandReload(plugin));
 		//plugin.debug("commands all registered!");
 	}
 

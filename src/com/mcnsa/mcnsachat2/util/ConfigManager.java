@@ -39,15 +39,15 @@ public class ConfigManager {
 		options.announceLeaves = config.getBoolean("announce-leaves");
 		//plugin.debug("announce leaves: " + options.announceLeaves.toString());
 
-		options.inTimeoutMessage = config.getString("in-timeout-message");
-		options.removedFromTimeoutMessage = config.getString("removed-from-timeout-message");
-		options.timeoutExpiredMessage = config.getString("timeout-expired-message");
-		options.sentToTimeoutMessage = config.getString("sent-to-timeout-message");
+		options.inTimeoutMessage = config.getString("in-timeout-message", "%prefix%player &chas been sent to timeout for %f%time &cfor %reason");
+		options.removedFromTimeoutMessage = config.getString("removed-from-timeout-message", "%prefix%player &ahas been removed from timeout");
+		options.timeoutExpiredMessage = config.getString("timeout-expired-message", "%player%prefix&a\'s timeout has expired");
+		options.sentToTimeoutMessage = config.getString("sent-to-timeout-message", "&cYou have been sent to timeout for %f%time &cfor %reason");
 		
-		options.chatFormat = config.getString("chat-format");
+		options.chatFormat = config.getString("chat-format", "<%channel&f> %universe[%prefix%suffix&f] %player: &7%message");
 		//plugin.debug("chat format: " + options.chatFormat);
 		
-		options.emoteFormat = config.getString("emote-format");
+		options.emoteFormat = config.getString("emote-format", "<%channel&f> %universe*%prefix%player &f%message");
 		//plugin.debug("emote format: " + options.emoteFormat);
 		
 		options.networkConfig.enabled = config.getBoolean("network.enable", false);
